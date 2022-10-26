@@ -1,7 +1,7 @@
 baseurl = "/"
 languageCode = "en-us"
 title = "Lambda"
-theme = "hugo-future-imperfect"
+theme = "ananke"
 preserveTaxonomyNames = true
 paginate = 3
 disqusShortname = "blog-khfo0axv59"

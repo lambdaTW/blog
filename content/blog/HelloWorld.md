@@ -40,13 +40,7 @@ makepkg -sir .
 ### 設定 Golang
 - 按下安裝 vscode 建議的 extension (選擇 `install`)
 
-{{< img-post path="date" file="GolangInstallExtensions.jpg" alt="GolangInstallExtensions" type="center" >}}
-
-
 - 重新載入 vscode (選擇 `reload`)
-
-{{< img-post path="date" file="GolangVSCodeReload.jpg" alt="GolangVSCodeReload" type="center" >}}
-
 
 ## 寫下你的第一支程式
 ### 進入你的家目錄中的 go/src 資料夾 裡面建立你的第一支程式的目錄 `hello`
@@ -60,10 +54,6 @@ code main.go
 ```
 ### 按下存檔 (ctl+s)，隨便打字
 ### 看到右下角叫你安裝套件把它全裝 (`install all`)
-
-
-{{< img-post path="date" file="GolangInstallCommands.jpg" alt="GolangInstallCommands" type="center" >}}
-
 
 ### 等它一下然後重開
 
