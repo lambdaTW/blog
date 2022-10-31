@@ -1,7 +1,6 @@
 ---
 title: "AWS Architecture Study Buzzdial"
 date: 2022-10-26T21:21:46+08:00
-draft: true
 ---
 ## 簡介
 Buzzdial 是一家製作電視 Live 節目即時互動的公司，可以想像主持人問答，在家中看電視的你也可以使用 App 與其他相同收看電視的人們互相交流，目前已經找不到網站，看起來應該是已經收掉了，但是還是可以找到[相關資訊](https://nz.linkedin.com/company/buzzdial?trk=public_profile_experience-item_profile-section-card_image-click)
