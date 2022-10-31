@@ -2,7 +2,7 @@
 第一步：寫一個簡單的 HTTP server 相信大家都不會。。。當然就是要 google
 關鍵字 ： golang http
 第一篇就會看到官方的 library 的連結囉！
-開一個新專案 cd $GOPATH/src/ mkdir router touch main.go 依照官方網站的提示寫出一個簡單的 HTTP 服務 package main import ( &#34;fmt&#34; &#34;net/http&#34; &#34;html&#34; &#34;log&#34; ) func main() { http.HandleFunc(&#34;/bar&#34;, func(w http.ResponseWriter, r *http.Request) { fmt.Fprintf(w, &#34;Hello, %q&#34;, html."><meta name=generator content="Hugo 0.104.3"><meta name=robots content="noindex, nofollow"><link rel=stylesheet href=/ananke/css/main.min.css><meta property="og:title" content="GolangHTTPHandler"><meta property="og:description" content="簡易復刻出的 Golang HTTP HandleFunc 身為一個 web 狗，用新語言寫個 router 也是應該的，Golang 本身在寫 HTTP 服務就有極大的優勢，官方自帶的 library 就很好用了，以至於到目前為止的統計大部分的人還是直接使用原生的 library 而非使用框架，但是 router 這部份就統計看來已經有了大方向， Mux 是目前大多數人使用的 router 框架，這邊我們玩一下 Golang 原生的 handler 讓它可以和原生的 HandleFunc 有一樣的感覺
+開一個新專案 cd $GOPATH/src/ mkdir router touch main.go 依照官方網站的提示寫出一個簡單的 HTTP 服務 package main import ( &#34;fmt&#34; &#34;net/http&#34; &#34;html&#34; &#34;log&#34; ) func main() { http.HandleFunc(&#34;/bar&#34;, func(w http.ResponseWriter, r *http.Request) { fmt.Fprintf(w, &#34;Hello, %q&#34;, html."><meta name=generator content="Hugo 0.105.0"><meta name=robots content="noindex, nofollow"><link rel=stylesheet href=/ananke/css/main.min.css><meta property="og:title" content="GolangHTTPHandler"><meta property="og:description" content="簡易復刻出的 Golang HTTP HandleFunc 身為一個 web 狗，用新語言寫個 router 也是應該的，Golang 本身在寫 HTTP 服務就有極大的優勢，官方自帶的 library 就很好用了，以至於到目前為止的統計大部分的人還是直接使用原生的 library 而非使用框架，但是 router 這部份就統計看來已經有了大方向， Mux 是目前大多數人使用的 router 框架，這邊我們玩一下 Golang 原生的 handler 讓它可以和原生的 HandleFunc 有一樣的感覺
 第一步：寫一個簡單的 HTTP server 相信大家都不會。。。當然就是要 google
 關鍵字 ： golang http
 第一篇就會看到官方的 library 的連結囉！
