@@ -13,7 +13,7 @@ canonifyURLs = true
 
 [params]
   # Sets the meta tag description
-  description          = "This blog is about Python, Golang, Django, IT etc."
+  description          = "This blog is about Python, Golang, Django, IT, Architecture etc."
   # Sets the navbarTitle that appears in the top left of the navigation bar
   navbarTitle          = "lambda"
   # Sets where "View More Posts" links
