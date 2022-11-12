@@ -1,7 +1,481 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>django on Lambda</title><link>/tags/django/</link><description>Recent content in django on Lambda</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 25 Jan 2020 00:00:00 +0000</lastBuildDate><atom:link href="/tags/django/index.xml" rel="self" type="application/rss+xml"/><item><title>How to fix no route found error on Django Channels</title><link>/blog/how-to-fix-no-route-found-error-on-django-channels/</link><pubDate>Sat, 25 Jan 2020 00:00:00 +0000</pubDate><guid>/blog/how-to-fix-no-route-found-error-on-django-channels/</guid><description>Issue description Django Channels 對於不存在的路徑存取，全部會拋出錯誤，而不是一般性的警告處理，所以如果和我一樣在 Djangoo Channels 有裝上 Sentry ，而且伺服器在被惡意嘗試路徑時就會看到一堆 ValueError: No route found for path '...'. 的錯誤資訊，好處是知道被打了，壞處就是會噴錢（如果不是自己 Hosting）。
-Fix it Make HandleRouteNotFoundMiddleware for this issue from datetime import datetime from logging import getLogger from django.urls.exceptions import Resolver404 logger = getLogger(__file__) class HandleRouteNotFoundMiddleware: def __init__(self, inner): self.inner = inner def __call__(self, scope): try: inner_instance = self.inner(scope) return inner_instance except (Resolver404, ValueError) as e: if &amp;#39;No route found for path&amp;#39; not in str(e) and \ scope[&amp;#34;type&amp;#34;] not in [&amp;#39;http&amp;#39;, &amp;#39;websocket&amp;#39;]: raise e logger.</description></item><item><title>Create a GIN index with Django on AWS RDS</title><link>/blog/create-a-gin-index-with-django-on-aws-rds/</link><pubDate>Fri, 26 Apr 2019 00:00:00 +0000</pubDate><guid>/blog/create-a-gin-index-with-django-on-aws-rds/</guid><description>GIN What is it GIN 是一種 INDEX 可以幫助加速全文搜索的速度
+Fix it Make HandleRouteNotFoundMiddleware for this issue from datetime import datetime from logging import getLogger from django.urls.exceptions import Resolver404 logger = getLogger(__file__) class HandleRouteNotFoundMiddleware: def __init__(self, inner): self.inner = inner def __call__(self, scope): try: inner_instance = self.inner(scope) return inner_instance except (Resolver404, ValueError) as e: if &amp;#39;No route found for path&amp;#39; not in str(e) and \ scope[&amp;#34;type&amp;#34;] not in [&amp;#39;http&amp;#39;, &amp;#39;websocket&amp;#39;]: raise e logger.</description><content>&lt;h1 id="issue-description">Issue description&lt;/h1>
+&lt;p>Django Channels 對於不存在的路徑存取，全部會拋出錯誤，而不是一般性的警告處理，所以如果和我一樣在 Djangoo Channels 有裝上 Sentry ，而且伺服器在被惡意嘗試路徑時就會看到一堆 &lt;code>ValueError: No route found for path '...'.&lt;/code> 的錯誤資訊，好處是知道被打了，壞處就是會噴錢（如果不是自己 Hosting）。&lt;/p>
+&lt;h1 id="fix-it">Fix it&lt;/h1>
+&lt;h2 id="make-handleroutenotfoundmiddleware-for-this-issue">Make &lt;code>HandleRouteNotFoundMiddleware&lt;/code> for this issue&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> datetime &lt;span style="color:#f92672">import&lt;/span> datetime
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> logging &lt;span style="color:#f92672">import&lt;/span> getLogger
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> django.urls.exceptions &lt;span style="color:#f92672">import&lt;/span> Resolver404
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>logger &lt;span style="color:#f92672">=&lt;/span> getLogger(__file__)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">HandleRouteNotFoundMiddleware&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> __init__(self, inner):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> self&lt;span style="color:#f92672">.&lt;/span>inner &lt;span style="color:#f92672">=&lt;/span> inner
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> __call__(self, scope):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">try&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> inner_instance &lt;span style="color:#f92672">=&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>inner(scope)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> inner_instance
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">except&lt;/span> (Resolver404, &lt;span style="color:#a6e22e">ValueError&lt;/span>) &lt;span style="color:#66d9ef">as&lt;/span> e:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> &lt;span style="color:#e6db74">&amp;#39;No route found for path&amp;#39;&lt;/span> &lt;span style="color:#f92672">not&lt;/span> &lt;span style="color:#f92672">in&lt;/span> str(e) &lt;span style="color:#f92672">and&lt;/span> \
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> scope[&lt;span style="color:#e6db74">&amp;#34;type&amp;#34;&lt;/span>] &lt;span style="color:#f92672">not&lt;/span> &lt;span style="color:#f92672">in&lt;/span> [&lt;span style="color:#e6db74">&amp;#39;http&amp;#39;&lt;/span>, &lt;span style="color:#e6db74">&amp;#39;websocket&amp;#39;&lt;/span>]:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">raise&lt;/span> e
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> logger&lt;span style="color:#f92672">.&lt;/span>warning(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">f&lt;/span>&lt;span style="color:#e6db74">&amp;#39;&lt;/span>&lt;span style="color:#e6db74">{&lt;/span>datetime&lt;span style="color:#f92672">.&lt;/span>now()&lt;span style="color:#e6db74">}&lt;/span>&lt;span style="color:#e6db74"> - &lt;/span>&lt;span style="color:#e6db74">{&lt;/span>e&lt;span style="color:#e6db74">}&lt;/span>&lt;span style="color:#e6db74"> - &lt;/span>&lt;span style="color:#e6db74">{&lt;/span>scope&lt;span style="color:#e6db74">}&lt;/span>&lt;span style="color:#e6db74">&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> )
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> scope[&lt;span style="color:#e6db74">&amp;#34;type&amp;#34;&lt;/span>] &lt;span style="color:#f92672">==&lt;/span> &lt;span style="color:#e6db74">&amp;#34;http&amp;#34;&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>handle_http_route_error
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">elif&lt;/span> scope[&lt;span style="color:#e6db74">&amp;#34;type&amp;#34;&lt;/span>] &lt;span style="color:#f92672">==&lt;/span> &lt;span style="color:#e6db74">&amp;#34;websocket&amp;#34;&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>handle_ws_route_error
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">async&lt;/span> &lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">handle_ws_route_error&lt;/span>(self, receive, send):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">await&lt;/span> send({&lt;span style="color:#e6db74">&amp;#34;type&amp;#34;&lt;/span>: &lt;span style="color:#e6db74">&amp;#34;websocket.close&amp;#34;&lt;/span>})
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">async&lt;/span> &lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">handle_http_route_error&lt;/span>(self, receive, send):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">await&lt;/span> send({
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;type&amp;#34;&lt;/span>: &lt;span style="color:#e6db74">&amp;#34;http.response.start&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;status&amp;#34;&lt;/span>: &lt;span style="color:#ae81ff">404&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;headers&amp;#34;&lt;/span>: {},
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> })
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">await&lt;/span> send({
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;type&amp;#34;&lt;/span>: &lt;span style="color:#e6db74">&amp;#34;http.response.body&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;body&amp;#34;&lt;/span>: &lt;span style="color:#e6db74">&amp;#34;&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;more_body&amp;#34;&lt;/span>: &lt;span style="color:#e6db74">&amp;#34;&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> })
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="usage">Usage&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> core.middleware &lt;span style="color:#f92672">import&lt;/span> HandleRouteNotFoundMiddleware
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>application &lt;span style="color:#f92672">=&lt;/span> ProtocolTypeRouter({
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#39;websocket&amp;#39;&lt;/span>: AuthMiddlewareStack(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> HandleRouteNotFoundMiddleware(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> URLRouter(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> routing&lt;span style="color:#f92672">.&lt;/span>websocket_urlpatterns
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> )
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> )
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#39;channel&amp;#39;&lt;/span>: router,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#39;http&amp;#39;&lt;/span>: HandleRouteNotFoundMiddleware(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> URLRouter(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> urlpatterns
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> )
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> )
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>})
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="how-it-works">How it works&lt;/h1>
+&lt;h2 id="protocoltyperouter">ProtocolTypeRouter&lt;/h2>
+&lt;p>首先我們看到在 Django Channels 我們使用的 Router，可以看到在 &lt;code>__init__&lt;/code> 時把我們對應表放進去，在被 &lt;code>Call&lt;/code> 時直接把 &lt;code>scope&lt;/code> 塞到對應的 &lt;code>Instance&lt;/code> 一樣是執行該 &lt;code>Instance&lt;/code> 的 &lt;code>__call__&lt;/code> （或是該物件已經是 Function 可以直接執行）&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">ProtocolTypeRouter&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;&amp;#34;&amp;#34;
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> Takes a mapping of protocol type names to other Application instances,
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> and dispatches to the right one based on protocol name (or raises an error)
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> &amp;#34;&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> __init__(self, application_mapping):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> self&lt;span style="color:#f92672">.&lt;/span>application_mapping &lt;span style="color:#f92672">=&lt;/span> application_mapping
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> &lt;span style="color:#e6db74">&amp;#34;http&amp;#34;&lt;/span> &lt;span style="color:#f92672">not&lt;/span> &lt;span style="color:#f92672">in&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>application_mapping:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> self&lt;span style="color:#f92672">.&lt;/span>application_mapping[&lt;span style="color:#e6db74">&amp;#34;http&amp;#34;&lt;/span>] &lt;span style="color:#f92672">=&lt;/span> AsgiHandler
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> __call__(self, scope):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> scope[&lt;span style="color:#e6db74">&amp;#34;type&amp;#34;&lt;/span>] &lt;span style="color:#f92672">in&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>application_mapping:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>application_mapping[scope[&lt;span style="color:#e6db74">&amp;#34;type&amp;#34;&lt;/span>]](scope)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">else&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">raise&lt;/span> &lt;span style="color:#a6e22e">ValueError&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;No application configured for scope type &lt;/span>&lt;span style="color:#e6db74">%r&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span> &lt;span style="color:#f92672">%&lt;/span> scope[&lt;span style="color:#e6db74">&amp;#34;type&amp;#34;&lt;/span>])
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="urlrouter">URLRouter&lt;/h2>
+&lt;p>依照上面所述說的，我們常在 &lt;code>Protocol&lt;/code> 對應裡面放入 &lt;code>URLRouter&lt;/code> 所以我們這裡就只要看 &lt;code>___call__&lt;/code> 就好了，可以看到在最後 &lt;code>else&lt;/code> 的部份，會拋出兩個錯誤，也是我們這次主要要修正的問題。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">URLRouter&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;&amp;#34;&amp;#34;
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> Routes to different applications/consumers based on the URL path.
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> Works with anything that has a ``path`` key, but intended for WebSocket
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> and HTTP. Uses Django&amp;#39;s django.conf.urls objects for resolution -
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> url() or path().
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> &amp;#34;&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># ...&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> __call__(self, scope):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># Get the path&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> path &lt;span style="color:#f92672">=&lt;/span> scope&lt;span style="color:#f92672">.&lt;/span>get(&lt;span style="color:#e6db74">&amp;#34;path_remaining&amp;#34;&lt;/span>, scope&lt;span style="color:#f92672">.&lt;/span>get(&lt;span style="color:#e6db74">&amp;#34;path&amp;#34;&lt;/span>, &lt;span style="color:#66d9ef">None&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> path &lt;span style="color:#f92672">is&lt;/span> &lt;span style="color:#66d9ef">None&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">raise&lt;/span> &lt;span style="color:#a6e22e">ValueError&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;No &amp;#39;path&amp;#39; key in connection scope, cannot route URLs&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># Remove leading / to match Django&amp;#39;s handling&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> path &lt;span style="color:#f92672">=&lt;/span> path&lt;span style="color:#f92672">.&lt;/span>lstrip(&lt;span style="color:#e6db74">&amp;#34;/&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># Run through the routes we have until one matches&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">for&lt;/span> route &lt;span style="color:#f92672">in&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>routes:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">try&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> match &lt;span style="color:#f92672">=&lt;/span> route_pattern_match(route, path)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> match:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> new_path, args, kwargs &lt;span style="color:#f92672">=&lt;/span> match
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># Add args or kwargs into the scope&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> outer &lt;span style="color:#f92672">=&lt;/span> scope&lt;span style="color:#f92672">.&lt;/span>get(&lt;span style="color:#e6db74">&amp;#34;url_route&amp;#34;&lt;/span>, {})
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> route&lt;span style="color:#f92672">.&lt;/span>callback(dict(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> scope,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> path_remaining&lt;span style="color:#f92672">=&lt;/span>new_path,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> url_route&lt;span style="color:#f92672">=&lt;/span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;args&amp;#34;&lt;/span>: outer&lt;span style="color:#f92672">.&lt;/span>get(&lt;span style="color:#e6db74">&amp;#34;args&amp;#34;&lt;/span>, ()) &lt;span style="color:#f92672">+&lt;/span> args,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;kwargs&amp;#34;&lt;/span>: {&lt;span style="color:#f92672">**&lt;/span>outer&lt;span style="color:#f92672">.&lt;/span>get(&lt;span style="color:#e6db74">&amp;#34;kwargs&amp;#34;&lt;/span>, {}), &lt;span style="color:#f92672">**&lt;/span>kwargs},
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> },
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">except&lt;/span> Resolver404 &lt;span style="color:#66d9ef">as&lt;/span> e:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">pass&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">else&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> &lt;span style="color:#e6db74">&amp;#34;path_remaining&amp;#34;&lt;/span> &lt;span style="color:#f92672">in&lt;/span> scope:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">raise&lt;/span> Resolver404(&lt;span style="color:#e6db74">&amp;#34;No route found for path &lt;/span>&lt;span style="color:#e6db74">%r&lt;/span>&lt;span style="color:#e6db74">.&amp;#34;&lt;/span> &lt;span style="color:#f92672">%&lt;/span> path)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># We are the outermost URLRouter&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">raise&lt;/span> &lt;span style="color:#a6e22e">ValueError&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;No route found for path &lt;/span>&lt;span style="color:#e6db74">%r&lt;/span>&lt;span style="color:#e6db74">.&amp;#34;&lt;/span> &lt;span style="color:#f92672">%&lt;/span> path)
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="middleware">Middleware&lt;/h2>
+&lt;p>我們要想辦法在 &lt;code>ProtocolTypeRouter&lt;/code> 呼叫 &lt;code>URLRouter&lt;/code> 前，想辦法抓住這個錯誤，回傳正確找不到路徑的回傳，並且寫下 Log，為此，我們參考 &lt;code>Django Channels&lt;/code> 的 &lt;code>Middleware&lt;/code> ，它通常被包在 &lt;code>URLRouter&lt;/code> 外層，在 &lt;code>consumer&lt;/code> 前後處理 &lt;code>scope&lt;/code>，並參考其實做方法，最後自己刻一個專門處理此問題的 &lt;code>Middleware&lt;/code>。&lt;/p>
+&lt;h3 id="how-django-channels-middlewares-work">How Django Channels middlewares work&lt;/h3>
+&lt;p>首先我們可以看到 &lt;code>Django Channels&lt;/code> 的 &lt;code>BaseMiddleware&lt;/code> 在 &lt;code>__init__&lt;/code> 時，只是把它傳來的值放進 &lt;code>inner&lt;/code> 這個變數，在被呼叫時 (&lt;code>__call__&lt;/code>) 回傳一個可以接受 &lt;code>receive&lt;/code> 和 &lt;code>send&lt;/code> 的異步函數，這個函數會在連線近來時被建立，且將 &lt;code>receive&lt;/code> 和 &lt;code>send&lt;/code> 被丟入 &lt;code>epoll&lt;/code> 監聽的事件內，供異步伺服器和 client 溝通。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">BaseMiddleware&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> __init__(self, inner):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;&amp;#34;&amp;#34;
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> Middleware constructor - just takes inner application.
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> &amp;#34;&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> self&lt;span style="color:#f92672">.&lt;/span>inner &lt;span style="color:#f92672">=&lt;/span> inner
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> __call__(self, scope):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;&amp;#34;&amp;#34;
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> ASGI constructor; can insert things into the scope, but not
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> run asynchronous code.
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> &amp;#34;&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># Copy scope to stop changes going upstream&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> scope &lt;span style="color:#f92672">=&lt;/span> dict(scope)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># Allow subclasses to change the scope&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> self&lt;span style="color:#f92672">.&lt;/span>populate_scope(scope)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># Call the inner application&amp;#39;s init&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> inner_instance &lt;span style="color:#f92672">=&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>inner(scope)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># Partially bind it to our coroutine entrypoint along with the scope&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> partial(self&lt;span style="color:#f92672">.&lt;/span>coroutine_call, inner_instance, scope)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">async&lt;/span> &lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">coroutine_call&lt;/span>(self, inner_instance, scope, receive, send):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;&amp;#34;&amp;#34;
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> ASGI coroutine; where we can resolve items in the scope
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> (but you can&amp;#39;t modify it at the top level here!)
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> &amp;#34;&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">await&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>resolve_scope(scope)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">await&lt;/span> inner_instance(receive, send)
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="ps">PS&lt;/h1>
+&lt;p>以上程式我也回在 &lt;a href="https://github.com/django/daphne/issues/165#issuecomment-577024577">GitHub issue&lt;/a> 上，有任何更好的建議也希望您能發出來，幫助大家。&lt;/p></content></item><item><title>Create a GIN index with Django on AWS RDS</title><link>/blog/create-a-gin-index-with-django-on-aws-rds/</link><pubDate>Fri, 26 Apr 2019 00:00:00 +0000</pubDate><guid>/blog/create-a-gin-index-with-django-on-aws-rds/</guid><description>GIN What is it GIN 是一種 INDEX 可以幫助加速全文搜索的速度
 GIN stands for Generalized Inverted Index. GIN is designed for handling cases where the items to be indexed are composite values, and the queries to be handled by the index need to search for element values that appear within the composite items. For example, the items could be documents, and the queries could be searches for documents containing specific words.
-Normal SQL 在傳統 SQL 下可以用以下幾個步驟完成建立 GIN INDEX</description></item><item><title>Closure</title><link>/blog/closure/</link><pubDate>Thu, 18 Apr 2019 00:00:00 +0000</pubDate><guid>/blog/closure/</guid><description>Closure What is closure Closure 簡單來說，就是某函數在另一個函數內被創造並且參照了創建函數的某些變數，此時該變數會存留於記憶內，儘管創建函數已經結束。
+Normal SQL 在傳統 SQL 下可以用以下幾個步驟完成建立 GIN INDEX</description><content>&lt;h2 id="gin">GIN&lt;/h2>
+&lt;h3 id="what-is-it">What is it&lt;/h3>
+&lt;p>GIN 是一種 INDEX 可以幫助加速全文搜索的速度&lt;/p>
+&lt;blockquote>
+&lt;p>GIN stands for Generalized Inverted Index. GIN is designed for handling cases where the items to be indexed are composite values, and the queries to be handled by the index need to search for element values that appear within the composite items. For example, the items could be documents, and the queries could be searches for documents containing specific words.&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="normal-sql">Normal SQL&lt;/h3>
+&lt;p>在傳統 SQL 下可以用以下幾個步驟完成建立 GIN INDEX&lt;/p>
+&lt;ul>
+&lt;li>Install gin extension&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-postgresql" data-lang="postgresql">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">CREATE&lt;/span> &lt;span style="color:#66d9ef">EXTENSION&lt;/span> &lt;span style="color:#66d9ef">IF&lt;/span> &lt;span style="color:#66d9ef">NOT&lt;/span> &lt;span style="color:#66d9ef">EXISTS&lt;/span> pg_trgm;&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;ul>
+&lt;li>Create index for table&amp;rsquo;s column
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-postgresql" data-lang="postgresql">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">CREATE&lt;/span> &lt;span style="color:#66d9ef">INDEX&lt;/span> &lt;span style="color:#f92672">&amp;lt;&lt;/span>index_name&lt;span style="color:#f92672">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">ON&lt;/span> &lt;span style="color:#f92672">&amp;lt;&lt;/span>schema_name&lt;span style="color:#f92672">&amp;gt;&lt;/span>&lt;span style="color:#ae81ff">.&lt;/span>&lt;span style="color:#f92672">&amp;lt;&lt;/span>table_name&lt;span style="color:#f92672">&amp;gt;&lt;/span> &lt;span style="color:#66d9ef">USING&lt;/span> gin
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (&lt;span style="color:#f92672">&amp;lt;&lt;/span>column_name&lt;span style="color:#f92672">&amp;gt;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">TABLESPACE&lt;/span> pg_default;&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;h4 id="special-type">Special type&lt;/h4>
+&lt;p>但是如果你是特殊的欄位，例如：varchar、text，此時你就必須要給它特定的 operator 才能建立&lt;/p>
+&lt;h5 id="create-gin-index-for-varchar-column">Create GIN INDEX for varchar column&lt;/h5>
+&lt;ul>
+&lt;li>Use gin_trgm_ops as operator&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-postgresql" data-lang="postgresql">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">CREATE&lt;/span> &lt;span style="color:#66d9ef">INDEX&lt;/span> &lt;span style="color:#f92672">&amp;lt;&lt;/span>index_name&lt;span style="color:#f92672">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">ON&lt;/span> &lt;span style="color:#f92672">&amp;lt;&lt;/span>schema_name&lt;span style="color:#f92672">&amp;gt;&lt;/span>&lt;span style="color:#ae81ff">.&lt;/span>&lt;span style="color:#f92672">&amp;lt;&lt;/span>table_name&lt;span style="color:#f92672">&amp;gt;&lt;/span> &lt;span style="color:#66d9ef">USING&lt;/span> gin
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (&lt;span style="color:#f92672">&amp;lt;&lt;/span>column_name &lt;span style="color:#66d9ef">COLLATE&lt;/span> pg_catalog&lt;span style="color:#ae81ff">.&lt;/span>&lt;span style="color:#e6db74">&amp;#34;default&amp;#34;&lt;/span> gin_trgm_ops)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">TABLESPACE&lt;/span> pg_default;&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;h5 id="or-you-can-set-gin_trgm_ops-as-default">Or, you can set &lt;code>gin_trgm_ops&lt;/code> as default&lt;/h5>
+&lt;ul>
+&lt;li>Set default operator class&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-postgresql" data-lang="postgresql">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">UPDATE&lt;/span> pg_opclass &lt;span style="color:#66d9ef">SET&lt;/span> opcdefault &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#66d9ef">true&lt;/span> &lt;span style="color:#66d9ef">WHERE&lt;/span> opcname&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;gin_trgm_ops&amp;#39;&lt;/span>;&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;ul>
+&lt;li>Create the index like other types of column&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-postgresql" data-lang="postgresql">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">CREATE&lt;/span> &lt;span style="color:#66d9ef">INDEX&lt;/span> &lt;span style="color:#f92672">&amp;lt;&lt;/span>index_name&lt;span style="color:#f92672">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">ON&lt;/span> &lt;span style="color:#f92672">&amp;lt;&lt;/span>schema_name&lt;span style="color:#f92672">&amp;gt;&lt;/span>&lt;span style="color:#ae81ff">.&lt;/span>&lt;span style="color:#f92672">&amp;lt;&lt;/span>table_name&lt;span style="color:#f92672">&amp;gt;&lt;/span> &lt;span style="color:#66d9ef">USING&lt;/span> gin
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (&lt;span style="color:#f92672">&amp;lt;&lt;/span>column_name&lt;span style="color:#f92672">&amp;gt;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">TABLESPACE&lt;/span> pg_default;&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;h3 id="use-django-postgres-contribution-library">Use Django Postgres contribution library&lt;/h3>
+&lt;p>對於 PostgreSQL 有較完善的 Django 對於 GIN INDEX 也是有支援的，所以你可以在 &lt;code>models.py&lt;/code> 直接使用它&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> django.db &lt;span style="color:#f92672">import&lt;/span> models
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> django.contrib.postgres.fields &lt;span style="color:#f92672">import&lt;/span> JSONField
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> django.contrib.postgres.indexes &lt;span style="color:#f92672">import&lt;/span> GinIndex
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">Post&lt;/span>(models&lt;span style="color:#f92672">.&lt;/span>Model):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> content_segment &lt;span style="color:#f92672">=&lt;/span> JSONField(default&lt;span style="color:#f92672">=&lt;/span>list)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">Meta&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> indexes &lt;span style="color:#f92672">=&lt;/span> [GinIndex(fields&lt;span style="color:#f92672">=&lt;/span>[&lt;span style="color:#e6db74">&amp;#39;content_segment&amp;#39;&lt;/span>])]&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;h3 id="the-char-field-in-django">The char field in Django&lt;/h3>
+&lt;p>在 Django 中 Char、Text 等 &lt;code>varchar&lt;/code> 類型的欄位要使用 GIN 和原生 SQL 一樣需要去設定需要使用的 &lt;code>operator&lt;/code>， 產出 migration file, 並且 migrate 以後你應該會看到類似下面的錯誤&lt;/p>
+&lt;pre tabindex="0">&lt;code>ERROR: data type character varying has no default operator class for access method &amp;#34;gin&amp;#34;
+&lt;/code>&lt;/pre>&lt;p>我們很簡單的可以在 Add Index 前加上設定 default operator 去 by pass&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">import&lt;/span> django.contrib.postgres.indexes
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> django.db &lt;span style="color:#f92672">import&lt;/span> migrations, models
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">Migration&lt;/span>(migrations&lt;span style="color:#f92672">.&lt;/span>Migration):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> dependencies &lt;span style="color:#f92672">=&lt;/span> [
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (&lt;span style="color:#e6db74">&amp;#39;posts&amp;#39;&lt;/span>, &lt;span style="color:#e6db74">&amp;#39;....&amp;#39;&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> operations &lt;span style="color:#f92672">=&lt;/span> [
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> migrations&lt;span style="color:#f92672">.&lt;/span>RunSQL([
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;UPDATE pg_opclass SET opcdefault = true WHERE opcname=&amp;#39;gin_trgm_ops&amp;#39;;&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ]),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> migrations&lt;span style="color:#f92672">.&lt;/span>AddIndex(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> model_name&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;post&amp;#39;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> index&lt;span style="color:#f92672">=&lt;/span>django&lt;span style="color:#f92672">.&lt;/span>contrib&lt;span style="color:#f92672">.&lt;/span>postgres&lt;span style="color:#f92672">.&lt;/span>indexes&lt;span style="color:#f92672">.&lt;/span>GinIndex(fields&lt;span style="color:#f92672">=&lt;/span>[&lt;span style="color:#e6db74">&amp;#39;title&amp;#39;&lt;/span>], name&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;posts_po_title_374d31_gin&amp;#39;&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> )
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ]&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;p>你應該會看到下面的錯誤&lt;/p>
+&lt;pre tabindex="0">&lt;code>django.db.utils.ProgrammingError: operator class &amp;#34;gin_trgm_ops&amp;#34; does not exist for access method &amp;#34;gin&amp;#34;
+&lt;/code>&lt;/pre>&lt;p>表示你家的 PostgreSQL 沒有安裝 GIN 的套件，這很簡單，只需要改改 migration file 就好&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">import&lt;/span> django.contrib.postgres.indexes
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> django.db &lt;span style="color:#f92672">import&lt;/span> migrations, models
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">Migration&lt;/span>(migrations&lt;span style="color:#f92672">.&lt;/span>Migration):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> dependencies &lt;span style="color:#f92672">=&lt;/span> [
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (&lt;span style="color:#e6db74">&amp;#39;posts&amp;#39;&lt;/span>, &lt;span style="color:#e6db74">&amp;#39;....&amp;#39;&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> operations &lt;span style="color:#f92672">=&lt;/span> [
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> migrations&lt;span style="color:#f92672">.&lt;/span>RunSQL([
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;CREATE EXTENSION IF NOT EXISTS pg_trgm;&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;UPDATE pg_opclass SET opcdefault = true WHERE opcname=&amp;#39;gin_trgm_ops&amp;#39;;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ]),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> migrations&lt;span style="color:#f92672">.&lt;/span>AddIndex(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> model_name&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;post&amp;#39;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> index&lt;span style="color:#f92672">=&lt;/span>django&lt;span style="color:#f92672">.&lt;/span>contrib&lt;span style="color:#f92672">.&lt;/span>postgres&lt;span style="color:#f92672">.&lt;/span>indexes&lt;span style="color:#f92672">.&lt;/span>GinIndex(fields&lt;span style="color:#f92672">=&lt;/span>[&lt;span style="color:#e6db74">&amp;#39;title&amp;#39;&lt;/span>], name&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;posts_po_title_374d31_gin&amp;#39;&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> )
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ]&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;p>再次 migrate 相信你已經成功了&lt;/p>
+&lt;h2 id="aws-rds-is-secure-than-your-local-db-server">AWS RDS is secure than your local DB server&lt;/h2>
+&lt;p>AWS RDS 預設不會給你 superuser 權限，所以你沒有辦法直接執行&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-postgresql" data-lang="postgresql">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">UPDATE&lt;/span> pg_opclass &lt;span style="color:#66d9ef">SET&lt;/span> opcdefault &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#66d9ef">true&lt;/span> &lt;span style="color:#66d9ef">WHERE&lt;/span> opcname&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;gin_trgm_ops&amp;#39;&lt;/span>;&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;p>這會讓你在 Django migrate 時看到以下錯誤&lt;/p>
+&lt;pre tabindex="0">&lt;code>permission denied for relation pg_opclass
+&lt;/code>&lt;/pre>&lt;h3 id="fix-it">Fix it&lt;/h3>
+&lt;p>記得我們在最一開始如何使用免設定預設 &lt;code>operator&lt;/code> 就產生了一個 GIN 的 index 嗎？&lt;/p>
+&lt;p>如法炮製我們直接把 &lt;code>operator&lt;/code> 插入在 CREATE INDEX 的 SQL 就可以達到了&lt;/p>
+&lt;h4 id="source-code-tour">Source code tour&lt;/h4>
+&lt;ul>
+&lt;li>GINIndex forefathers
+我們可以在發現 SQL statement 是由 &lt;code>schema_editor&lt;/code> 的 &lt;code>_create_index_sql&lt;/code> 產生出來的&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># django/contrib/postgres/indexes.py&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">from&lt;/span> django.db.models &lt;span style="color:#f92672">import&lt;/span> Index
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">PostgresIndex&lt;/span>(Index):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># ...&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">GinIndex&lt;/span>(PostgresIndex):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">create_sql&lt;/span>(self, model, schema_editor, using&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;&amp;#39;&lt;/span>):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> statement &lt;span style="color:#f92672">=&lt;/span> super()&lt;span style="color:#f92672">.&lt;/span>create_sql(model, schema_editor, using&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39; USING &lt;/span>&lt;span style="color:#e6db74">%s&lt;/span>&lt;span style="color:#e6db74">&amp;#39;&lt;/span> &lt;span style="color:#f92672">%&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>suffix)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> with_params &lt;span style="color:#f92672">=&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>get_with_params()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> with_params:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> statement&lt;span style="color:#f92672">.&lt;/span>parts[&lt;span style="color:#e6db74">&amp;#39;extra&amp;#39;&lt;/span>] &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&amp;#39;WITH (&lt;/span>&lt;span style="color:#e6db74">%s&lt;/span>&lt;span style="color:#e6db74">) &lt;/span>&lt;span style="color:#e6db74">%s&lt;/span>&lt;span style="color:#e6db74">&amp;#39;&lt;/span> &lt;span style="color:#f92672">%&lt;/span> (
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#39;, &amp;#39;&lt;/span>&lt;span style="color:#f92672">.&lt;/span>join(with_params),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> statement&lt;span style="color:#f92672">.&lt;/span>parts[&lt;span style="color:#e6db74">&amp;#39;extra&amp;#39;&lt;/span>],
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> )
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> statement
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># django/db/models/indexes.py&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">Index&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">create_sql&lt;/span>(self, model, schema_editor, using&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;&amp;#39;&lt;/span>):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> fields &lt;span style="color:#f92672">=&lt;/span> [model&lt;span style="color:#f92672">.&lt;/span>_meta&lt;span style="color:#f92672">.&lt;/span>get_field(field_name) &lt;span style="color:#66d9ef">for&lt;/span> field_name, _ &lt;span style="color:#f92672">in&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>fields_orders]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> col_suffixes &lt;span style="color:#f92672">=&lt;/span> [order[&lt;span style="color:#ae81ff">1&lt;/span>] &lt;span style="color:#66d9ef">for&lt;/span> order &lt;span style="color:#f92672">in&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>fields_orders]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> schema_editor&lt;span style="color:#f92672">.&lt;/span>_create_index_sql(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> model, fields, name&lt;span style="color:#f92672">=&lt;/span>self&lt;span style="color:#f92672">.&lt;/span>name, using&lt;span style="color:#f92672">=&lt;/span>using, db_tablespace&lt;span style="color:#f92672">=&lt;/span>self&lt;span style="color:#f92672">.&lt;/span>db_tablespace,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> col_suffixes&lt;span style="color:#f92672">=&lt;/span>col_suffixes,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> )&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;ul>
+&lt;li>How &lt;code>schema_edit&lt;/code> create SQL statement&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># django/db/backends/postgresql/schema.py&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">from&lt;/span> django.db.backends.base.schema &lt;span style="color:#f92672">import&lt;/span> BaseDatabaseSchemaEditor
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">DatabaseSchemaEditor&lt;/span>(BaseDatabaseSchemaEditor):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># ...&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> sql_create_index &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&amp;#34;CREATE INDEX &lt;/span>&lt;span style="color:#e6db74">%(name)s&lt;/span>&lt;span style="color:#e6db74"> ON &lt;/span>&lt;span style="color:#e6db74">%(table)s%(using)s&lt;/span>&lt;span style="color:#e6db74"> (&lt;/span>&lt;span style="color:#e6db74">%(columns)s&lt;/span>&lt;span style="color:#e6db74">)&lt;/span>&lt;span style="color:#e6db74">%(extra)s&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># schema.py&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">BaseDatabaseSchemaEditor&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">_create_index_sql&lt;/span>(self, model, fields, &lt;span style="color:#f92672">*&lt;/span>, name&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#66d9ef">None&lt;/span>, suffix&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;&amp;#39;&lt;/span>, using&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;&amp;#39;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> db_tablespace&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#66d9ef">None&lt;/span>, col_suffixes&lt;span style="color:#f92672">=&lt;/span>(), sql&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#66d9ef">None&lt;/span>):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;&amp;#34;&amp;#34;
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> Return the SQL statement to create the index for one or several fields.
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> `sql` can be specified if the syntax differs from the standard (GIS
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> indexes, ...).
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> &amp;#34;&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> tablespace_sql &lt;span style="color:#f92672">=&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>_get_index_tablespace_sql(model, fields, db_tablespace&lt;span style="color:#f92672">=&lt;/span>db_tablespace)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> columns &lt;span style="color:#f92672">=&lt;/span> [field&lt;span style="color:#f92672">.&lt;/span>column &lt;span style="color:#66d9ef">for&lt;/span> field &lt;span style="color:#f92672">in&lt;/span> fields]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> sql_create_index &lt;span style="color:#f92672">=&lt;/span> sql &lt;span style="color:#f92672">or&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>sql_create_index
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> table &lt;span style="color:#f92672">=&lt;/span> model&lt;span style="color:#f92672">.&lt;/span>_meta&lt;span style="color:#f92672">.&lt;/span>db_table
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">create_index_name&lt;/span>(&lt;span style="color:#f92672">*&lt;/span>args, &lt;span style="color:#f92672">**&lt;/span>kwargs):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">nonlocal&lt;/span> name
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> name &lt;span style="color:#f92672">is&lt;/span> &lt;span style="color:#66d9ef">None&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> name &lt;span style="color:#f92672">=&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>_create_index_name(&lt;span style="color:#f92672">*&lt;/span>args, &lt;span style="color:#f92672">**&lt;/span>kwargs)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>quote_name(name)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> Statement(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> sql_create_index,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> table&lt;span style="color:#f92672">=&lt;/span>Table(table, self&lt;span style="color:#f92672">.&lt;/span>quote_name),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> name&lt;span style="color:#f92672">=&lt;/span>IndexName(table, columns, suffix, create_index_name),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> using&lt;span style="color:#f92672">=&lt;/span>using,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> columns&lt;span style="color:#f92672">=&lt;/span>Columns(table, columns, self&lt;span style="color:#f92672">.&lt;/span>quote_name, col_suffixes&lt;span style="color:#f92672">=&lt;/span>col_suffixes),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> extra&lt;span style="color:#f92672">=&lt;/span>tablespace_sql,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> )&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;ul>
+&lt;li>Override the &lt;code>create_sql&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">from&lt;/span> django.contrib.postgres.indexes &lt;span style="color:#f92672">import&lt;/span> GinIndex
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">CharGinIndex&lt;/span>(GinIndex):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">create_sql&lt;/span>(self, model, schema_editor, using&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;&amp;#39;&lt;/span>):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">assert&lt;/span> len(self&lt;span style="color:#f92672">.&lt;/span>fields_orders) &lt;span style="color:#f92672">==&lt;/span> &lt;span style="color:#ae81ff">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> original_sql &lt;span style="color:#f92672">=&lt;/span> schema_editor&lt;span style="color:#f92672">.&lt;/span>sql_create_index
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> schema_editor&lt;span style="color:#f92672">.&lt;/span>sql_create_index &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&amp;#39;CREATE INDEX &lt;/span>&lt;span style="color:#e6db74">%(name)s&lt;/span>&lt;span style="color:#e6db74"> ON &lt;/span>&lt;span style="color:#e6db74">%(table)s%(using)s&lt;/span>&lt;span style="color:#e6db74"> (&lt;/span>&lt;span style="color:#e6db74">%(columns)s&lt;/span>&lt;span style="color:#e6db74"> COLLATE pg_catalog.&amp;#34;default&amp;#34; gin_trgm_ops)&lt;/span>&lt;span style="color:#e6db74">%(extra)s&lt;/span>&lt;span style="color:#e6db74">&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> statement &lt;span style="color:#f92672">=&lt;/span> super()&lt;span style="color:#f92672">.&lt;/span>create_sql(model, schema_editor, using)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> schema_editor&lt;span style="color:#f92672">.&lt;/span>sql_create_index &lt;span style="color:#f92672">=&lt;/span> original_sql
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> statement&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;p>我們在 &lt;code>create_sql&lt;/code> 上面覆寫掉 &lt;code>schema_editor&lt;/code> 的 &lt;code>sql_create_index&lt;/code> 語法，並且在呼叫完 &lt;code>create_sql&lt;/code> 以後把它還原（因為一次 migrate 中 schema editor 會被重複使用，若沒有還原其他在同一次 migrate 中使用到相同 schema editor 的就會被影響)&lt;/p>
+&lt;h2 id="conclusion">Conclusion&lt;/h2>
+&lt;p>在這邊用比較髒的方式處理了這個問題，主要是因為在 &lt;code>BaseDatabaseSchemaEditor&lt;/code> 有以下方式可以更改 &lt;code>sql&lt;/code> 參數就可以達到這功能，但是在 &lt;code>Index&lt;/code> 類別並沒有把此參數讓我們可以丟進去，由於不會影響功能，暫時就不重複造輪子。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">BaseDatabaseSchemaEditor&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">_create_index_sql&lt;/span>(self, model, fields, &lt;span style="color:#f92672">*&lt;/span>, name&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#66d9ef">None&lt;/span>, suffix&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;&amp;#39;&lt;/span>, using&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;&amp;#39;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> db_tablespace&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#66d9ef">None&lt;/span>, col_suffixes&lt;span style="color:#f92672">=&lt;/span>(), sql&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#66d9ef">None&lt;/span>):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># ...&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> sql_create_index &lt;span style="color:#f92672">=&lt;/span> sql &lt;span style="color:#f92672">or&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>sql_create_index
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># ...&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></content></item><item><title>Closure</title><link>/blog/closure/</link><pubDate>Thu, 18 Apr 2019 00:00:00 +0000</pubDate><guid>/blog/closure/</guid><description>Closure What is closure Closure 簡單來說，就是某函數在另一個函數內被創造並且參照了創建函數的某些變數，此時該變數會存留於記憶內，儘管創建函數已經結束。
 First time meet to Closure N年前在學習 Common Lisp 時教學內出現了一個陌生又奇特的技巧，Closure，以下是他的實做
 (let ((counter 0)) (defun reset () (setf counter 0)) (defun stamp () (setf counter (+ counter 1)))) (list (stamp) (stamp) (reset) (stamp)) ; (1 2 0 1) 為了怕正常人看不懂，以下用 Python 翻譯
-def gen_counter(): counter = 0 def reset(): nonlocal counter counter = 0 return counter def stamp(): nonlocal counter counter += 1 return counter return reset, stamp reset, stamp = gen_counter() print(stamp()) # 1 print(stamp()) # 2 print(reset()) # 0 print(stamp()) # 1 可以看出在 gen_counter 內的 兩個函數 (reset, stamp) 一同共用內部變數 counter 儘管 gen_counter 已經回傳並且結束，但是在之後的程式卻還是擁有當初初始化的 count，亦即 counter 在記憶體中不會因為 gen_counter 已經回傳就被回收。</description></item></channel></rss>
+def gen_counter(): counter = 0 def reset(): nonlocal counter counter = 0 return counter def stamp(): nonlocal counter counter += 1 return counter return reset, stamp reset, stamp = gen_counter() print(stamp()) # 1 print(stamp()) # 2 print(reset()) # 0 print(stamp()) # 1 可以看出在 gen_counter 內的 兩個函數 (reset, stamp) 一同共用內部變數 counter 儘管 gen_counter 已經回傳並且結束，但是在之後的程式卻還是擁有當初初始化的 count，亦即 counter 在記憶體中不會因為 gen_counter 已經回傳就被回收。</description><content>&lt;h1 id="closure">Closure&lt;/h1>
+&lt;h2 id="what-is-closure">What is closure&lt;/h2>
+&lt;p>Closure 簡單來說，就是某函數在另一個函數內被創造並且參照了創建函數的某些變數，此時該變數會存留於記憶內，儘管創建函數已經結束。&lt;/p>
+&lt;h2 id="first-time-meet-to-closure">First time meet to Closure&lt;/h2>
+&lt;p>N年前在學習 Common Lisp 時教學內出現了一個陌生又奇特的技巧，&lt;a href="https://acl.readthedocs.io/en/latest/zhTW/ch6.html#closures">Closure&lt;/a>，以下是他的實做&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-lisp" data-lang="lisp">&lt;span style="display:flex;">&lt;span>(&lt;span style="color:#66d9ef">let&lt;/span> ((counter &lt;span style="color:#ae81ff">0&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (defun reset ()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (setf counter &lt;span style="color:#ae81ff">0&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (defun stamp ()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (setf counter (&lt;span style="color:#a6e22e">+&lt;/span> counter &lt;span style="color:#ae81ff">1&lt;/span>))))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>(&lt;span style="color:#a6e22e">list&lt;/span> (stamp) (stamp) (reset) (stamp))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">; (1 2 0 1)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;p>為了怕正常人看不懂，以下用 Python 翻譯&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">gen_counter&lt;/span>():
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> counter &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">reset&lt;/span>():
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">nonlocal&lt;/span> counter
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> counter &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> counter
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">stamp&lt;/span>():
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">nonlocal&lt;/span> counter
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> counter &lt;span style="color:#f92672">+=&lt;/span> &lt;span style="color:#ae81ff">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> counter
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> reset, stamp
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>reset, stamp &lt;span style="color:#f92672">=&lt;/span> gen_counter()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>print(stamp()) &lt;span style="color:#75715e"># 1&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>print(stamp()) &lt;span style="color:#75715e"># 2&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>print(reset()) &lt;span style="color:#75715e"># 0&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>print(stamp()) &lt;span style="color:#75715e"># 1&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;p>可以看出在 &lt;code>gen_counter&lt;/code> 內的 兩個函數 (reset, stamp) 一同共用內部變數 &lt;code>counter&lt;/code> 儘管 gen_counter 已經回傳並且結束，但是在之後的程式卻還是擁有當初初始化的 count，亦即 &lt;code>counter&lt;/code> 在記憶體中不會因為 gen_counter 已經回傳就被回收。&lt;/p>
+&lt;h1 id="django-q">Django Q&lt;/h1>
+&lt;h2 id="what-is-django-q">What is Django Q&lt;/h2>
+&lt;p>Django 的 ORM 十分的簡易讓新手們可以簡單的寫出一般的增刪改查，但是如果要用比較進階的搜尋 (SQL WHERE CLAUSE)，例如：正常人都寫的出來的 OR&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-postgresql" data-lang="postgresql">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">SELECT&lt;/span> &lt;span style="color:#f92672">*&lt;/span> &lt;span style="color:#66d9ef">FROM&lt;/span> post
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">WHERE&lt;/span> &lt;span style="color:#66d9ef">content&lt;/span> &lt;span style="color:#66d9ef">LIKE&lt;/span> &lt;span style="color:#e6db74">&amp;#39;%HELLO%&amp;#39;&lt;/span> &lt;span style="color:#66d9ef">OR&lt;/span> title &lt;span style="color:#66d9ef">LIKE&lt;/span> &lt;span style="color:#e6db74">&amp;#39;%HELLO%&amp;#39;&lt;/span>;&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;p>在 Django ORM 就必須要使用 Q 來達成&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> django.db.models &lt;span style="color:#f92672">import&lt;/span> Q
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Post&lt;span style="color:#f92672">.&lt;/span>objects&lt;span style="color:#f92672">.&lt;/span>filter(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Q(content__contains&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;HELLO&amp;#39;&lt;/span>) &lt;span style="color:#f92672">|&lt;/span> Q(title__contains&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;HELLO&amp;#39;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>)&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;p>其中使用 &lt;code>|&lt;/code> 作為 &lt;code>OR&lt;/code> 所有的 Q 就如同原本寫 ORM 的條件&lt;/p>
+&lt;h1 id="dancing-with">Dancing with&lt;/h1>
+&lt;p>在專案中有一項很常見的功能，就是關鍵字搜尋，很容易想像的是，如果使用一般的 SQL 就用 &lt;code>LIKE&lt;/code> 慢慢組起來，但是在每個需要搜尋的功能中使用 Django Q 來組建實在很不好維護，以下利用簡化版的真實專案的案例演示 Closure 如何使它看起來更優雅&lt;/p>
+&lt;h3 id="modelspy">models.py&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> django.db &lt;span style="color:#f92672">import&lt;/span> models
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> django.contrib.postgres.fields &lt;span style="color:#f92672">import&lt;/span> JSONField
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">Content&lt;/span>(models&lt;span style="color:#f92672">.&lt;/span>Model):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> title &lt;span style="color:#f92672">=&lt;/span> models&lt;span style="color:#f92672">.&lt;/span>CharField(max_length&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">200&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> title_pinyin &lt;span style="color:#f92672">=&lt;/span> models&lt;span style="color:#f92672">.&lt;/span>CharField(max_length&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">400&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> tags &lt;span style="color:#f92672">=&lt;/span> JSONField(default&lt;span style="color:#f92672">=&lt;/span>list)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> content &lt;span style="color:#f92672">=&lt;/span> models&lt;span style="color:#f92672">.&lt;/span>TextField()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> content_pinyin &lt;span style="color:#f92672">=&lt;/span> models&lt;span style="color:#f92672">.&lt;/span>TextField()&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;h3 id="sqlpy">sql.py&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> django.db.models &lt;span style="color:#f92672">import&lt;/span> Q
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">gen_keywords_search&lt;/span>():
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> q &lt;span style="color:#f92672">=&lt;/span> Q()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">icontains&lt;/span>(contain&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#66d9ef">None&lt;/span>):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">nonlocal&lt;/span> q
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> contain:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> q &lt;span style="color:#f92672">=&lt;/span> (q &lt;span style="color:#f92672">|&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Q(title__icontains&lt;span style="color:#f92672">=&lt;/span>contain) &lt;span style="color:#f92672">|&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Q(title_pinyin__icontains&lt;span style="color:#f92672">=&lt;/span>contain) &lt;span style="color:#f92672">|&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Q(tags__icontains&lt;span style="color:#f92672">=&lt;/span>contain) &lt;span style="color:#f92672">|&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Q(content__icontains&lt;span style="color:#f92672">=&lt;/span>contain) &lt;span style="color:#f92672">|&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Q(content_pinyin__icontains&lt;span style="color:#f92672">=&lt;/span>contain))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> q
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> icontains&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;h3 id="viewspy">views.py&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> rest_framework.decorators &lt;span style="color:#f92672">import&lt;/span> api_view
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> api.page &lt;span style="color:#f92672">import&lt;/span> pager
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> .models &lt;span style="color:#f92672">import&lt;/span> Content
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> .sql &lt;span style="color:#f92672">import&lt;/span> gen_keywords_search
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> .serializer &lt;span style="color:#f92672">import&lt;/span> PostListSerializer, SearchContentSerializer
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">@api_view&lt;/span>([&lt;span style="color:#e6db74">&amp;#39;post&amp;#39;&lt;/span>])
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">search&lt;/span>(request):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> serializer &lt;span style="color:#f92672">=&lt;/span> SearchContentSerializer(data&lt;span style="color:#f92672">=&lt;/span>request&lt;span style="color:#f92672">.&lt;/span>data)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> serializer&lt;span style="color:#f92672">.&lt;/span>is_valid(raise_exception&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#66d9ef">True&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> data &lt;span style="color:#f92672">=&lt;/span> serializer&lt;span style="color:#f92672">.&lt;/span>data
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> qs &lt;span style="color:#f92672">=&lt;/span> request&lt;span style="color:#f92672">.&lt;/span>user&lt;span style="color:#f92672">.&lt;/span>post_set&lt;span style="color:#f92672">.&lt;/span>all()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> &lt;span style="color:#e6db74">&amp;#39;keywords&amp;#39;&lt;/span> &lt;span style="color:#f92672">in&lt;/span> data:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> q &lt;span style="color:#f92672">=&lt;/span> gen_keywords_search()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> [q(key) &lt;span style="color:#66d9ef">for&lt;/span> key &lt;span style="color:#f92672">in&lt;/span> data[&lt;span style="color:#e6db74">&amp;#39;keywords&amp;#39;&lt;/span>]&lt;span style="color:#f92672">.&lt;/span>split()]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> qs &lt;span style="color:#f92672">=&lt;/span> qs&lt;span style="color:#f92672">.&lt;/span>filter(q())
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> pager(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> request,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> qs,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> PostListSerializer,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> page_size&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">5&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> )&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></content></item></channel></rss>

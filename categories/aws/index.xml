@@ -1,3 +1,33 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>AWS on Lambda</title><link>/categories/aws/</link><description>Recent content in AWS on Lambda</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 12 Nov 2022 10:59:12 +0800</lastBuildDate><atom:link href="/categories/aws/index.xml" rel="self" type="application/rss+xml"/><item><title>Kubeflow on AWS</title><link>/blog/kubeflow-on-aws/</link><pubDate>Sat, 12 Nov 2022 10:59:12 +0800</pubDate><guid>/blog/kubeflow-on-aws/</guid><description> 問題 傳統使用 EC2 給各個 ML 工程師使用，會導致
 難以重現環境（如果工程師不是用 container） 資源難以被完整分配 例如：某人開了一個 GPU + CPU 的 EC2，但是它正在訓練的模型只吃 CPU 難以進行大規模的訓練 除非該 ML 工程師自己寫一堆 script 並且有辦法 scale EC2 ，否則相對困難 Kubeflow 這邊演講者列出以下架構去服務 ML 工程師
-Route53 + Load Balancer + AWS Certificate Manager 去提供 HTTPS 服務 用 AWS Cognito 做身份驗證 在 ELK 中部署 Kubeflow 去做訓練的服務 用 Istio 去做服務的導流 可以直接使用 AWS 靜態檔案服務或是資料庫服務，例如： AWS Deep Learning Containers, Amazon Elastic File System，Amazon FSx，AWS S3，RDS</description></item></channel></rss>
+Route53 + Load Balancer + AWS Certificate Manager 去提供 HTTPS 服務 用 AWS Cognito 做身份驗證 在 ELK 中部署 Kubeflow 去做訓練的服務 用 Istio 去做服務的導流 可以直接使用 AWS 靜態檔案服務或是資料庫服務，例如： AWS Deep Learning Containers, Amazon Elastic File System，Amazon FSx，AWS S3，RDS</description><content>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+&lt;iframe src="https://www.youtube.com/embed/EtEg6P-XLvg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;/div>
+&lt;h2 id="問題">問題&lt;/h2>
+&lt;p>&lt;img src="/img/2022/11/MLEC2Architecture.png" alt="ML EC2 Architecture">
+傳統使用 EC2 給各個 ML 工程師使用，會導致&lt;/p>
+&lt;ul>
+&lt;li>難以重現環境（如果工程師不是用 container）&lt;/li>
+&lt;li>資源難以被完整分配
+&lt;ul>
+&lt;li>例如：某人開了一個 GPU + CPU 的 EC2，但是它正在訓練的模型只吃 CPU&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>難以進行大規模的訓練
+&lt;ul>
+&lt;li>除非該 ML 工程師自己寫一堆 script 並且有辦法 scale EC2 ，否則相對困難&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="kubeflow">Kubeflow&lt;/h2>
+&lt;p>&lt;img src="/img/2022/11/EKSOpenSourceArchitecture.png" alt="EKS OpenSource Architecture">
+這邊演講者列出以下架構去服務 ML 工程師&lt;/p>
+&lt;ol>
+&lt;li>Route53 + Load Balancer + AWS Certificate Manager 去提供 HTTPS 服務&lt;/li>
+&lt;li>用 AWS Cognito 做身份驗證&lt;/li>
+&lt;li>在 ELK 中部署 Kubeflow 去做訓練的服務&lt;/li>
+&lt;li>用 Istio 去做服務的導流&lt;/li>
+&lt;li>可以直接使用 AWS 靜態檔案服務或是資料庫服務，例如： AWS Deep Learning Containers, Amazon Elastic File System，Amazon FSx，AWS S3，RDS&lt;/li>
+&lt;/ol>
+&lt;p>&lt;img src="/img/2022/11/EKSwithAWSSStateful.png" alt="EKS with AWS Stateful">&lt;/p></content></item></channel></rss>

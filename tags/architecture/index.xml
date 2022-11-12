@@ -1,13 +1,254 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>architecture on Lambda</title><link>/tags/architecture/</link><description>Recent content in architecture on Lambda</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 12 Nov 2022 11:19:38 +0800</lastBuildDate><atom:link href="/tags/architecture/index.xml" rel="self" type="application/rss+xml"/><item><title>AWS Architecture ContactSuite</title><link>/blog/aws-architecture-contactsuite/</link><pubDate>Sat, 12 Nov 2022 11:19:38 +0800</pubDate><guid>/blog/aws-architecture-contactsuite/</guid><description> 簡介 ContactSuite 是一家做客戶服務系統的公司，讓客服可以在一個介面上完成所有客戶服務所需要的事情
 可以馬上知道打過來的客戶的 email 或是 ID 整合到現有的 CRM 系統 整合現有知識庫 AWS 架構 依照服務， ContactSuite 架構可以粗分為以下三個資料流
-電話或文字訊息 客戶打電話或是使用文字客服，該資訊會用 Amazon Connect 利用 IVR (互動式語音應答) 的方式，讓一些比較制式化的流程讓 lambda 處理 處理後的資料透過 Amazon ECS 轉換成客服人員有用的資訊 顯示在 ContactSuite 的頁面上 Email 透過 AWS SES 收件 Lambda 處理後送至 DyanamoDB 顯示在 ContactSuite 的頁面上 報告 ContactSuite 的系統會記錄有用的資訊到 RDS 利用 AWS SES 寄送 Report 給需要看到的人員</description></item><item><title>McDonald Event Driven Architecture</title><link>/blog/mcdonald-event-driven-architecture/</link><pubDate>Tue, 08 Nov 2022 21:16:20 +0800</pubDate><guid>/blog/mcdonald-event-driven-architecture/</guid><description>簡介 麥當勞，就是早餐滿福堡很好吃的那家，不服來辯
+電話或文字訊息 客戶打電話或是使用文字客服，該資訊會用 Amazon Connect 利用 IVR (互動式語音應答) 的方式，讓一些比較制式化的流程讓 lambda 處理 處理後的資料透過 Amazon ECS 轉換成客服人員有用的資訊 顯示在 ContactSuite 的頁面上 Email 透過 AWS SES 收件 Lambda 處理後送至 DyanamoDB 顯示在 ContactSuite 的頁面上 報告 ContactSuite 的系統會記錄有用的資訊到 RDS 利用 AWS SES 寄送 Report 給需要看到的人員</description><content>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+&lt;iframe src="https://www.youtube.com/embed/BPvr0qWpJlA" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;/div>
+&lt;h2 id="簡介">簡介&lt;/h2>
+&lt;p>ContactSuite 是一家做客戶服務系統的公司，讓客服可以在一個介面上完成所有客戶服務所需要的事情&lt;/p>
+&lt;ul>
+&lt;li>可以馬上知道打過來的客戶的 email 或是 ID&lt;/li>
+&lt;li>整合到現有的 CRM 系統&lt;/li>
+&lt;li>整合現有知識庫&lt;/li>
+&lt;/ul>
+&lt;h2 id="aws-架構">AWS 架構&lt;/h2>
+&lt;p>&lt;img src="/img/2022/11/ContactSuiteAWSArchitecture.png" alt="ContactSuite AWS Architecture.png">&lt;/p>
+&lt;p>依照服務， ContactSuite 架構可以粗分為以下三個資料流&lt;/p>
+&lt;h3 id="電話或文字訊息">電話或文字訊息&lt;/h3>
+&lt;ul>
+&lt;li>客戶打電話或是使用文字客服，該資訊會用 Amazon Connect 利用 IVR (互動式語音應答) 的方式，讓一些比較制式化的流程讓 lambda 處理&lt;/li>
+&lt;li>處理後的資料透過 Amazon ECS 轉換成客服人員有用的資訊&lt;/li>
+&lt;li>顯示在 ContactSuite 的頁面上&lt;/li>
+&lt;/ul>
+&lt;h3 id="email">Email&lt;/h3>
+&lt;ul>
+&lt;li>透過 AWS SES 收件&lt;/li>
+&lt;li>Lambda 處理後送至 DyanamoDB&lt;/li>
+&lt;li>顯示在 ContactSuite 的頁面上&lt;/li>
+&lt;/ul>
+&lt;h3 id="報告">報告&lt;/h3>
+&lt;ul>
+&lt;li>ContactSuite 的系統會記錄有用的資訊到 RDS&lt;/li>
+&lt;li>利用 AWS SES 寄送 Report 給需要看到的人員&lt;/li>
+&lt;/ul></content></item><item><title>McDonald Event Driven Architecture</title><link>/blog/mcdonald-event-driven-architecture/</link><pubDate>Tue, 08 Nov 2022 21:16:20 +0800</pubDate><guid>/blog/mcdonald-event-driven-architecture/</guid><description>簡介 麥當勞，就是早餐滿福堡很好吃的那家，不服來辯
 Event Driven Architecture 用於哪些系統 mobile-order progress tracking and sending marketing communications
 很明顯都是很經典的應用情境，包含點餐進度追蹤和寄送一些商用訊息
 Components 比較特別的是他們有工程友善的 SDK 去處理訊息，包括 schema 檢查，訊息寄送，錯誤處理等等
-架構 外部訊息經過 Event Gateway 處理權限驗證等 (此處沒有說明怎樣辦到的) 經過驗證的外部訊息以及內部訊息都會打到 Producer 上面 Producer SDK 經過 Schema validation 後送到 Primary Topic 上 沒過送 Dead-letter 可以自動化處理的錯誤的由 Lambda 重送 其他人工處理後直接送到 Primary Topic 送不出去存 DynamoDB 由 Lambda 重送 Consummers 接收後一樣經過 SDK 去處理 Data governance 符合 Schema validation 就處理 不符合就丟到 Dead-letter Topic ，工人智慧處理 可以快速變更 Schema Cluster autoscaling 這裡比較好玩的是有用到 Step Function 去 Trigger Lambda 做 Partition re-assignment</description></item><item><title>AWS Architecture Study Halter</title><link>/blog/aws-architecture-halter/</link><pubDate>Sun, 06 Nov 2022 20:30:18 +0800</pubDate><guid>/blog/aws-architecture-halter/</guid><description>簡介 Halter 提供遠端管理農場的軟體，他們使用一個叫 Collar 的東西放在牛身上
+架構 外部訊息經過 Event Gateway 處理權限驗證等 (此處沒有說明怎樣辦到的) 經過驗證的外部訊息以及內部訊息都會打到 Producer 上面 Producer SDK 經過 Schema validation 後送到 Primary Topic 上 沒過送 Dead-letter 可以自動化處理的錯誤的由 Lambda 重送 其他人工處理後直接送到 Primary Topic 送不出去存 DynamoDB 由 Lambda 重送 Consummers 接收後一樣經過 SDK 去處理 Data governance 符合 Schema validation 就處理 不符合就丟到 Dead-letter Topic ，工人智慧處理 可以快速變更 Schema Cluster autoscaling 這裡比較好玩的是有用到 Step Function 去 Trigger Lambda 做 Partition re-assignment</description><content>&lt;h2 id="簡介">簡介&lt;/h2>
+&lt;p>麥當勞，就是早餐滿福堡很好吃的那家，不服來辯&lt;/p>
+&lt;h2 id="event-driven-architecture-用於哪些系統">Event Driven Architecture 用於哪些系統&lt;/h2>
+&lt;blockquote>
+&lt;p>mobile-order progress tracking and sending marketing communications&lt;/p>
+&lt;/blockquote>
+&lt;p>很明顯都是很經典的應用情境，包含點餐進度追蹤和寄送一些商用訊息&lt;/p>
+&lt;h2 id="components">Components&lt;/h2>
+&lt;p>&lt;img src="https://miro.medium.com/max/1400/1*P0mtpk5Jk0rBQZuJl7zWIA.png" alt="Components">&lt;/p>
+&lt;p>比較特別的是他們有工程友善的 SDK 去處理訊息，包括 schema 檢查，訊息寄送，錯誤處理等等&lt;/p>
+&lt;h2 id="架構">架構&lt;/h2>
+&lt;p>&lt;img src="https://miro.medium.com/max/1400/1*gCOnmHq4jXNjSX8Jp0NgOA.jpeg" alt="Architecture">&lt;/p>
+&lt;ul>
+&lt;li>外部訊息經過 Event Gateway 處理權限驗證等 (此處沒有說明怎樣辦到的)&lt;/li>
+&lt;li>經過驗證的外部訊息以及內部訊息都會打到 Producer 上面&lt;/li>
+&lt;li>Producer SDK 經過 Schema validation 後送到 Primary Topic 上
+&lt;ul>
+&lt;li>沒過送 Dead-letter
+&lt;ul>
+&lt;li>可以自動化處理的錯誤的由 Lambda 重送&lt;/li>
+&lt;li>其他人工處理後直接送到 Primary Topic&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>送不出去存 DynamoDB
+&lt;ul>
+&lt;li>由 Lambda 重送&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Consummers 接收後一樣經過 SDK 去處理&lt;/li>
+&lt;/ul>
+&lt;h2 id="data-governance">Data governance&lt;/h2>
+&lt;p>&lt;img src="https://miro.medium.com/max/1400/1*LvV2J6pcNdSjRf0gSA4yAw.jpeg" alt="DataGovernance">&lt;/p>
+&lt;ul>
+&lt;li>符合 Schema validation 就處理&lt;/li>
+&lt;li>不符合就丟到 Dead-letter Topic ，工人智慧處理&lt;/li>
+&lt;li>可以快速變更 Schema&lt;/li>
+&lt;/ul>
+&lt;h2 id="cluster-autoscaling">Cluster autoscaling&lt;/h2>
+&lt;p>&lt;img src="https://miro.medium.com/max/1248/1*0WQ4CpnzhlNthWt4uGLO3g.jpeg" alt="ClusterAutoscaling">&lt;/p>
+&lt;p>這裡比較好玩的是有用到 Step Function 去 Trigger Lambda 做 Partition re-assignment&lt;/p>
+&lt;h2 id="domain-based-sharding">Domain-based sharding&lt;/h2>
+&lt;p>&lt;img src="https://miro.medium.com/max/1400/1*cCR1EaCLRhUKG8AruzJ43g.jpeg" alt="DomainSharding">&lt;/p>
+&lt;p>依照 Domain 去拆分，這邊感覺類似微服務，但又有點不太像，可以想像壞掉時的差異如下&lt;/p>
+&lt;ul>
+&lt;li>微服務
+&lt;ul>
+&lt;li>通知系統壞了但是首頁是好的&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Domain sharding
+&lt;ul>
+&lt;li>點餐進度通知壞了，但是還是有收到廣告通知 (前提：某通知系統 Backend 是好的以及通知系統前端是好的)&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="refs">Refs&lt;/h2>
+&lt;p>&lt;a href="https://medium.com/mcdonalds-technical-blog/behind-the-scenes-mcdonalds-event-driven-architecture-51a6542c0d86">Behind the scenes: McDonald’s event-driven architecture&lt;/a>&lt;/p>
+&lt;p>&lt;a href="https://medium.com/mcdonalds-technical-blog/mcdonalds-event-driven-architecture-the-data-journey-and-how-it-works-4591d108821f">McDonald’s event-driven architecture: The data journey and how it works&lt;/a>&lt;/p></content></item><item><title>AWS Architecture Study Halter</title><link>/blog/aws-architecture-halter/</link><pubDate>Sun, 06 Nov 2022 20:30:18 +0800</pubDate><guid>/blog/aws-architecture-halter/</guid><description>簡介 Halter 提供遠端管理農場的軟體，他們使用一個叫 Collar 的東西放在牛身上
 用太陽能為能源 有 GPS 可以發出聲響以及震動 (驅動牛去某個地方) 觀測牛隻健康 有 APP 讓農夫建立虛擬柵欄
-AWS 的架構 Collar 使用 wifi, MQTT 以及 IoT Core 將資料送到雲端 除了 wifi 以外，他們使用了 LoRa 協定，將資料送到 station 再由其送至 AWS EC2 上面的資料都會用 binary 的方式送到 Kinesis (由於有兩個 source 所以可能會重複) 去除重複資料後，利用 Lambda 並解成 JSON 格式後送到另一個 Kinesis 利用 Kinesis 做 Data aggregation (by GEO index) 將上面整理好的資料存到 S3 (此處利用農場 ID 當作 partition key) 當使用者要求牛群資料時，會傳送需求到 ECS ECS 傳送運算需求給 Athena 做運算 (十秒可以處理兩千五百萬筆資料) 完成後，ECS 從 S3 獲取 Athena 運算完成的資料，整理後傳給使用者 Key Notes LoRa 可以傳送好幾公里，其資料率可以從 27 Kbps 到 0.</description></item><item><title>AWS Architecture Study Mobileye</title><link>/blog/aws-architecture-mobileye/</link><pubDate>Fri, 04 Nov 2022 21:39:03 +0800</pubDate><guid>/blog/aws-architecture-mobileye/</guid><description>簡介 Mobileye 是提供汽車自駕 (ADAS) 的晶片以及演算法的廠商，依照影片的說明已經有七千萬車輛使用他們家的解決方案
-AWS 的架構 車子透過 REST API 傳送資料到 AWS S3 S3 透過更時會觸發 SQS EKS 依照 SQS 的長度去擴增 worker 做資料前處理 EKS 處理完資料後分別送到 AWS Step Function S3 Elasticsearch CockroachDB 最後使用另一套 EKS 作為服務的介面 架構演進 Service Spark streaming, AWS EMR, KAFKA Lambda functions, 為了拆分服務 EKS serve Lambda functions 為了 Scale DB Postgres RDS RIDB, 查了很久，找不到是啥，以下是猜的 Reserved Instance (EC2) for AWS RDS 特規的商用資料庫 可能字幕有問題 為了查詢文件 (document) 使用 Elasticsearch 發現 Elasticsearch 對於經常更新不太友善，使用 CockroachDB 並且將其部署到 EKS 上面，使他們可以 auto scale 還享有高可用性 未來展望 雲端圖像處理 降低成本 Key Notes 為了節省成本，所以儘管有七千萬的車子使用該家產品，但是只有少部分的資料有打到雲端，每天約一千萬的資料量 由於 AWS Lambda 在同時執行 Lambda 是有其帳號上限的 (per account per region)，我猜是因為這樣才轉換到 EKS 上 架構是慢慢演化的 架構之我建 假設</description></item><item><title>AWS Architecture Study Buzzdial</title><link>/blog/aws-architecture-study-buzzdial/</link><pubDate>Wed, 26 Oct 2022 21:21:46 +0800</pubDate><guid>/blog/aws-architecture-study-buzzdial/</guid><description>簡介 Buzzdial 是一家製作電視 Live 節目即時互動的公司，可以想像主持人問答，在家中看電視的你也可以使用 App 與其他相同收看電視的人們互相交流，目前已經找不到網站，看起來應該是已經收掉了，但是還是可以找到相關資訊
+AWS 的架構 Collar 使用 wifi, MQTT 以及 IoT Core 將資料送到雲端 除了 wifi 以外，他們使用了 LoRa 協定，將資料送到 station 再由其送至 AWS EC2 上面的資料都會用 binary 的方式送到 Kinesis (由於有兩個 source 所以可能會重複) 去除重複資料後，利用 Lambda 並解成 JSON 格式後送到另一個 Kinesis 利用 Kinesis 做 Data aggregation (by GEO index) 將上面整理好的資料存到 S3 (此處利用農場 ID 當作 partition key) 當使用者要求牛群資料時，會傳送需求到 ECS ECS 傳送運算需求給 Athena 做運算 (十秒可以處理兩千五百萬筆資料) 完成後，ECS 從 S3 獲取 Athena 運算完成的資料，整理後傳給使用者 Key Notes LoRa 可以傳送好幾公里，其資料率可以從 27 Kbps 到 0.</description><content>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+&lt;iframe src="https://www.youtube.com/embed/j-lPgPGBTwQ" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;/div>
+&lt;h2 id="簡介">簡介&lt;/h2>
+&lt;p>Halter 提供遠端管理農場的軟體，他們使用一個叫 &lt;code>Collar&lt;/code> 的東西放在牛身上&lt;/p>
+&lt;ul>
+&lt;li>用太陽能為能源&lt;/li>
+&lt;li>有 GPS&lt;/li>
+&lt;li>可以發出聲響以及震動 (驅動牛去某個地方)&lt;/li>
+&lt;li>觀測牛隻健康&lt;/li>
+&lt;/ul>
+&lt;p>有 APP 讓農夫建立虛擬柵欄&lt;/p>
+&lt;h2 id="aws-的架構">AWS 的架構&lt;/h2>
+&lt;p>&lt;img src="/img/2022/11/HalterAWSArchitecture.png" alt="Halter AWS Architecture">&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>Collar&lt;/code> 使用 wifi, MQTT 以及 IoT Core 將資料送到雲端&lt;/li>
+&lt;li>除了 wifi 以外，他們使用了 LoRa 協定，將資料送到 station 再由其送至 AWS EC2&lt;/li>
+&lt;li>上面的資料都會用 binary 的方式送到 Kinesis (由於有兩個 source 所以可能會重複)&lt;/li>
+&lt;li>去除重複資料後，利用 Lambda 並解成 JSON 格式後送到另一個 Kinesis&lt;/li>
+&lt;li>利用 Kinesis 做 Data aggregation (by GEO index)&lt;/li>
+&lt;li>將上面整理好的資料存到 S3 (此處利用農場 ID 當作 partition key)&lt;/li>
+&lt;li>當使用者要求牛群資料時，會傳送需求到 ECS&lt;/li>
+&lt;li>ECS 傳送運算需求給 Athena 做運算 (十秒可以處理兩千五百萬筆資料)&lt;/li>
+&lt;li>完成後，ECS 從 S3 獲取 Athena 運算完成的資料，整理後傳給使用者&lt;/li>
+&lt;/ul>
+&lt;h3 id="key-notes">Key Notes&lt;/h3>
+&lt;ul>
+&lt;li>LoRa 可以傳送好幾公里，其資料率可以從 27 Kbps 到 0.3 Kbps&lt;/li>
+&lt;li>很多服務使用者其實可以等待&lt;/li>
+&lt;/ul></content></item><item><title>AWS Architecture Study Mobileye</title><link>/blog/aws-architecture-mobileye/</link><pubDate>Fri, 04 Nov 2022 21:39:03 +0800</pubDate><guid>/blog/aws-architecture-mobileye/</guid><description>簡介 Mobileye 是提供汽車自駕 (ADAS) 的晶片以及演算法的廠商，依照影片的說明已經有七千萬車輛使用他們家的解決方案
+AWS 的架構 車子透過 REST API 傳送資料到 AWS S3 S3 透過更時會觸發 SQS EKS 依照 SQS 的長度去擴增 worker 做資料前處理 EKS 處理完資料後分別送到 AWS Step Function S3 Elasticsearch CockroachDB 最後使用另一套 EKS 作為服務的介面 架構演進 Service Spark streaming, AWS EMR, KAFKA Lambda functions, 為了拆分服務 EKS serve Lambda functions 為了 Scale DB Postgres RDS RIDB, 查了很久，找不到是啥，以下是猜的 Reserved Instance (EC2) for AWS RDS 特規的商用資料庫 可能字幕有問題 為了查詢文件 (document) 使用 Elasticsearch 發現 Elasticsearch 對於經常更新不太友善，使用 CockroachDB 並且將其部署到 EKS 上面，使他們可以 auto scale 還享有高可用性 未來展望 雲端圖像處理 降低成本 Key Notes 為了節省成本，所以儘管有七千萬的車子使用該家產品，但是只有少部分的資料有打到雲端，每天約一千萬的資料量 由於 AWS Lambda 在同時執行 Lambda 是有其帳號上限的 (per account per region)，我猜是因為這樣才轉換到 EKS 上 架構是慢慢演化的 架構之我建 假設</description><content>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+&lt;iframe src="https://www.youtube.com/embed/5hjkSczrke4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;/div>
+&lt;h2 id="簡介">簡介&lt;/h2>
+&lt;p>Mobileye 是提供汽車自駕 (ADAS) 的晶片以及演算法的廠商，依照影片的說明已經有七千萬車輛使用他們家的解決方案&lt;/p>
+&lt;h2 id="aws-的架構">AWS 的架構&lt;/h2>
+&lt;p>&lt;img src="/img/2022/11/MobileyeAWSArchitecture.png" alt="Mobileye Architecture">&lt;/p>
+&lt;ul>
+&lt;li>車子透過 REST API 傳送資料到 AWS S3&lt;/li>
+&lt;li>S3 透過更時會觸發 SQS&lt;/li>
+&lt;li>EKS 依照 SQS 的長度去擴增 worker 做資料前處理&lt;/li>
+&lt;li>EKS 處理完資料後分別送到
+&lt;ul>
+&lt;li>AWS Step Function&lt;/li>
+&lt;li>S3&lt;/li>
+&lt;li>Elasticsearch&lt;/li>
+&lt;li>CockroachDB&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>最後使用另一套 EKS 作為服務的介面&lt;/li>
+&lt;/ul>
+&lt;h3 id="架構演進">架構演進&lt;/h3>
+&lt;ul>
+&lt;li>Service
+&lt;ul>
+&lt;li>Spark streaming, AWS EMR, KAFKA&lt;/li>
+&lt;li>Lambda functions, 為了拆分服務&lt;/li>
+&lt;li>EKS serve Lambda functions 為了 Scale&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>DB
+&lt;ul>
+&lt;li>Postgres RDS&lt;/li>
+&lt;li>RIDB, 查了很久，找不到是啥，以下是猜的
+&lt;ul>
+&lt;li>Reserved Instance (EC2) for AWS RDS&lt;/li>
+&lt;li>特規的商用資料庫&lt;/li>
+&lt;li>可能字幕有問題&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>為了查詢文件 (document) 使用 Elasticsearch&lt;/li>
+&lt;li>發現 Elasticsearch 對於經常更新不太友善，使用 CockroachDB 並且將其部署到 EKS 上面，使他們可以 auto scale 還享有高可用性&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="未來展望">未來展望&lt;/h3>
+&lt;ul>
+&lt;li>雲端圖像處理&lt;/li>
+&lt;li>降低成本&lt;/li>
+&lt;/ul>
+&lt;h3 id="key-notes">Key Notes&lt;/h3>
+&lt;ul>
+&lt;li>為了節省成本，所以儘管有七千萬的車子使用該家產品，但是只有少部分的資料有打到雲端，每天約一千萬的資料量&lt;/li>
+&lt;li>由於 AWS Lambda 在同時執行 Lambda 是有其帳號上限的 (per account per region)，我猜是因為這樣才轉換到 EKS 上&lt;/li>
+&lt;li>架構是慢慢演化的&lt;/li>
+&lt;/ul>
+&lt;h3 id="架構之我建">架構之我建&lt;/h3>
+&lt;p>&lt;img src="/img/2022/11/MyMobileyeIoTArchitecture.png" alt="MyMobileye IoT Architecture">&lt;/p>
+&lt;p>假設&lt;/p>
+&lt;ul>
+&lt;li>5G 網路速度夠快&lt;/li>
+&lt;li>大家都是電動車&lt;/li>
+&lt;/ul>
+&lt;p>我們就可以讓行駛中的車輛將影像分別傳送到&lt;/p>
+&lt;ul>
+&lt;li>正在充電的閒置車輛&lt;/li>
+&lt;li>AWS 雲端&lt;/li>
+&lt;/ul>
+&lt;p>利用雲端可拓展以及先到先贏的方式，如果其他車輛已經將圖片處理完成，那我們就可以取消雲端上面的工作，用以減少成本，也可以利用基本圖像分割的方式，把大量的圖片資訊分別送給不同的閒置車輛，達到平行處理&lt;/p></content></item><item><title>AWS Architecture Study Buzzdial</title><link>/blog/aws-architecture-study-buzzdial/</link><pubDate>Wed, 26 Oct 2022 21:21:46 +0800</pubDate><guid>/blog/aws-architecture-study-buzzdial/</guid><description>簡介 Buzzdial 是一家製作電視 Live 節目即時互動的公司，可以想像主持人問答，在家中看電視的你也可以使用 App 與其他相同收看電視的人們互相交流，目前已經找不到網站，看起來應該是已經收掉了，但是還是可以找到相關資訊
 遇到的問題 當遇某一特殊事件，導致大量使用者在同一時間使用服務時，需要保證網路以及伺服器可以負荷，並且該特殊事件可能不會天天發生，如果使用傳統架構會需要大量的初始建構成本
-導入 AWS 的架構 Buzzdial AWS Architecture 架構拆想 可以看到 Buzzdial 使用了兩個分開的 ASG (auto scale group)，一個是做 Web，另一個是做管理的部分
-第一次猜想 可以想像，電視製作或是主持人可以透過 API 去發送事件廣播 (broadcast)，讓所有使用者去看到或是被通知有一個互動發生 (例如：新的題目) Web App 中的 Deamon 可以透過 Logging DB 來通知使用者有新的事件 第二次猜想 We queue those records and store them in our databases to allow us to report back to clients on the success of their broadcast event, and also provide detailed business reports that we review internally.</description></item></channel></rss>
+導入 AWS 的架構 架構拆想 可以看到 Buzzdial 使用了兩個分開的 ASG (auto scale group)，一個是做 Web，另一個是做管理的部分
+第一次猜想 可以想像，電視製作或是主持人可以透過 API 去發送事件廣播 (broadcast)，讓所有使用者去看到或是被通知有一個互動發生 (例如：新的題目) Web App 中的 Deamon 可以透過 Logging DB 來通知使用者有新的事件 第二次猜想 We queue those records and store them in our databases to allow us to report back to clients on the success of their broadcast event, and also provide detailed business reports that we review internally.</description><content>&lt;h2 id="簡介">簡介&lt;/h2>
+&lt;p>Buzzdial 是一家製作電視 Live 節目即時互動的公司，可以想像主持人問答，在家中看電視的你也可以使用 App 與其他相同收看電視的人們互相交流，目前已經找不到網站，看起來應該是已經收掉了，但是還是可以找到&lt;a href="https://nz.linkedin.com/company/buzzdial?trk=public_profile_experience-item_profile-section-card_image-click">相關資訊&lt;/a>&lt;/p>
+&lt;h2 id="遇到的問題">遇到的問題&lt;/h2>
+&lt;p>當遇某一特殊事件，導致大量使用者在同一時間使用服務時，需要保證網路以及伺服器可以負荷，並且該特殊事件可能不會天天發生，如果使用傳統架構會需要大量的初始建構成本&lt;/p>
+&lt;h2 id="導入-aws-的架構">導入 AWS 的架構&lt;/h2>
+&lt;figure class="left" >
+&lt;img src="https://d1.awsstatic.com/architecture-diagrams/customers/buzzdial-arch-diag.1cd13ca7855b730ce72977f106964923745b5ca2.png" />
+&lt;/figure>
+&lt;h3 id="架構拆想">架構拆想&lt;/h3>
+&lt;p>可以看到 Buzzdial 使用了兩個分開的 ASG (auto scale group)，一個是做 Web，另一個是做管理的部分&lt;/p>
+&lt;h4 id="第一次猜想">第一次猜想&lt;/h4>
+&lt;ol>
+&lt;li>可以想像，電視製作或是主持人可以透過 API 去發送事件廣播 (broadcast)，讓所有使用者去看到或是被通知有一個互動發生 (例如：新的題目)&lt;/li>
+&lt;li>Web App 中的 Deamon 可以透過 Logging DB 來通知使用者有新的事件&lt;/li>
+&lt;/ol>
+&lt;h4 id="第二次猜想">第二次猜想&lt;/h4>
+&lt;blockquote>
+&lt;p>We queue those records and store them in our databases to allow us to report back to clients on the success of their broadcast event, and also provide detailed business reports that we review internally. In addition, we monitor our application in real time as it scales up and down to check performance and error rates, and undertake extensive and aggressive load testing to predetermine its capabilities. If there any concerns, we rework the application and AWS infrastructure accordingly&lt;/p>
+&lt;/blockquote>
+&lt;ol>
+&lt;li>很明顯 Logging DB 主要是用來留存每次互動，所以想應該有少畫一條線，是 Broadcast Tool 使用 App DB，或是利用某些方式去 Trigger App 端的更新&lt;/li>
+&lt;li>在調整架構時使用了以前的資料&lt;/li>
+&lt;/ol>
+&lt;h4 id="有趣的點">有趣的點&lt;/h4>
+&lt;blockquote>
+&lt;p>the service provider can still scale in 10 to 15 minutes to support 10s of thousands of concurrent users.&lt;/p>
+&lt;/blockquote>
+&lt;ul>
+&lt;li>很明顯架構是使用比較傳統的 EC2 才會導致增加流量要等那麼久&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>Buzzdial would have also required six full-time equivalent administrators to manage 60 physical servers, costing about US$350,000, while the AWS infrastructure requires about 20 percent of a single full-time employee’s time to administer.&lt;/p>
+&lt;/blockquote>
+&lt;ul>
+&lt;li>IT 人力成本在國外真的很高&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>Caching is undertaken at the Amazon EC2 level to prevent the database infrastructure from being overloaded during periods of high demand&lt;/p>
+&lt;/blockquote>
+&lt;ul>
+&lt;li>使用 Local cache 而不是 redis 之類叢集快取&lt;/li>
+&lt;/ul>
+&lt;h3 id="架構之我建">架構之我建&lt;/h3>
+&lt;h4 id="amazon-kinesis">Amazon Kinesis&lt;/h4>
+&lt;p>在這個年代，如果要重新製作類似的軟體服務，可以簡單使用 &lt;a href="https://aws.amazon.com/tw/solutions/implementations/aws-streaming-data-solution-for-amazon-kinesis/">Amazon Kinesis&lt;/a> 來達成，不僅在 streaming 的部分直接幫你做掉，還可以紀錄並分析使用狀況，最後在資料整合的部分也可以使用 Kinesis Data Analytics 來達成
+&lt;figure class="left" >
+&lt;img src="https://d1.awsstatic.com/Solutions/Solutions%20Category%20Template%20Draft/Solution%20Architecture%20Diagrams/aws-streaming-data-using-api-gateway-architecture.1b9d28f061fe84385cb871ec58ccad18c7265d22.png" />
+&lt;/figure>
+&lt;/p>
+&lt;h4 id="out-of-aws">Out of AWS&lt;/h4>
+&lt;p>如果是比較 general 的方法，我想我會使用現在比較通用的 event sourcing 的方式，搭配讀寫分離來製作這一個軟體服務&lt;/p>
+&lt;p>&lt;img src="/img/2022/10/MyBuzzdialArchitecture.svg" alt="My Buzzdial Architecture">&lt;/p>
+&lt;h2 id="ref">Ref&lt;/h2>
+&lt;p>&lt;a href="https://aws.amazon.com/solutions/case-studies/buzzdial/">Source of AWS case study&lt;/a>&lt;/p></content></item></channel></rss>

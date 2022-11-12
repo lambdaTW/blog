@@ -1,16 +1,562 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>python on Lambda</title><link>/tags/python/</link><description>Recent content in python on Lambda</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 27 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/python/index.xml" rel="self" type="application/rss+xml"/><item><title>Python Project (5) Make Automatically</title><link>/blog/python-project-5/</link><pubDate>Tue, 27 Apr 2021 00:00:00 +0000</pubDate><guid>/blog/python-project-5/</guid><description>Makefile Makefile 是個很古老的東西，可以把很多東西自動化，以前用來 compile 需要編譯的語言，但是做為自動化的語意，是十分優雅的，這邊我們把之前有用到的套件，利用 Makefile 將他自動化
-Usage make &amp;lt;target&amp;gt; Configuration PKG_FILES := $(shell ls requirements/*.txt) build: ## Build this project as pip wheel rm -rf dist/* python setup.py bdist_wheel .PHONY: build dev-install: build ## Install current code into venv pip install -U dist/*.whl pip: ## Recompile and install all pip packages pip-compile requirements/base.in pip-compile --generate-hashes requirements/development.in pip-compile --generate-hashes requirements/deployment.in pip-sync $(PKG_FILES) .PHONY: pip test: dev-install ## Run test only pytest tests .</description></item><item><title>Python Project (4) Test More</title><link>/blog/python-project-4/</link><pubDate>Sun, 25 Apr 2021 00:00:00 +0000</pubDate><guid>/blog/python-project-4/</guid><description>Python Version Tests 如果專案只是一般服務，可能基本測試就足夠了，但是如果是要寫 Library 給別的專案或是開放給大家使用的話，就要考慮更多的相容性問題，例如： Python 版本，相依套件版本，等等，那一般的測試可能就不足以符合這樣的情境，因此我們需要更多的整合測試
+Usage make &amp;lt;target&amp;gt; Configuration PKG_FILES := $(shell ls requirements/*.txt) build: ## Build this project as pip wheel rm -rf dist/* python setup.py bdist_wheel .PHONY: build dev-install: build ## Install current code into venv pip install -U dist/*.whl pip: ## Recompile and install all pip packages pip-compile requirements/base.in pip-compile --generate-hashes requirements/development.in pip-compile --generate-hashes requirements/deployment.in pip-sync $(PKG_FILES) .PHONY: pip test: dev-install ## Run test only pytest tests .</description><content>&lt;h1 id="makefile">Makefile&lt;/h1>
+&lt;p>Makefile 是個很古老的東西，可以把很多東西自動化，以前用來 compile 需要編譯的語言，但是做為自動化的語意，是十分優雅的，這邊我們把之前有用到的套件，利用 &lt;code>Makefile&lt;/code> 將他自動化&lt;/p>
+&lt;h2 id="usage">Usage&lt;/h2>
+&lt;pre tabindex="0">&lt;code class="language-shell-script" data-lang="shell-script">make &amp;lt;target&amp;gt;
+&lt;/code>&lt;/pre>&lt;h2 id="configuration">Configuration&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-Makefile" data-lang="Makefile">&lt;span style="display:flex;">&lt;span>PKG_FILES &lt;span style="color:#f92672">:=&lt;/span> &lt;span style="color:#66d9ef">$(&lt;/span>shell ls requirements/*.txt&lt;span style="color:#66d9ef">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">build&lt;/span>&lt;span style="color:#f92672">:&lt;/span> &lt;span style="color:#75715e">## Build this project as pip wheel
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> rm -rf dist/*
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> python setup.py bdist_wheel
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">.PHONY&lt;/span>&lt;span style="color:#f92672">:&lt;/span> build
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">dev-install&lt;/span>&lt;span style="color:#f92672">:&lt;/span> build &lt;span style="color:#75715e">## Install current code into venv
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> pip install -U dist/*.whl
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">pip&lt;/span>&lt;span style="color:#f92672">:&lt;/span> &lt;span style="color:#75715e">## Recompile and install all pip packages
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> pip-compile requirements/base.in
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> pip-compile --generate-hashes requirements/development.in
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> pip-compile --generate-hashes requirements/deployment.in
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> pip-sync &lt;span style="color:#66d9ef">$(&lt;/span>PKG_FILES&lt;span style="color:#66d9ef">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">.PHONY&lt;/span>&lt;span style="color:#f92672">:&lt;/span> pip
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">test&lt;/span>&lt;span style="color:#f92672">:&lt;/span> dev-install &lt;span style="color:#75715e">## Run test only
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> pytest tests
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">.PHONY&lt;/span>&lt;span style="color:#f92672">:&lt;/span> test
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">typecheck&lt;/span>&lt;span style="color:#f92672">:&lt;/span> &lt;span style="color:#75715e">## Run typechecking
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> python -m mypy --show-error-codes --pretty src
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">.PHONY&lt;/span>&lt;span style="color:#f92672">:&lt;/span> typecheck
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">lint&lt;/span>&lt;span style="color:#f92672">:&lt;/span> &lt;span style="color:#75715e">## Run linting
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> python -m black --check .
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> python -m isort -c .
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> python -m flake8 .
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> python -m pydocstyle .
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">.PHONY&lt;/span>&lt;span style="color:#f92672">:&lt;/span> lint
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">ci&lt;/span>&lt;span style="color:#f92672">:&lt;/span> typecheck lint test &lt;span style="color:#75715e">## Run all checks (test, lint, typecheck)
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#a6e22e">.PHONY&lt;/span>&lt;span style="color:#f92672">:&lt;/span> ci
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">tox&lt;/span>&lt;span style="color:#f92672">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> tox -p all
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">.PHONY&lt;/span>&lt;span style="color:#f92672">:&lt;/span> tox
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">lint-fix&lt;/span>&lt;span style="color:#f92672">:&lt;/span> &lt;span style="color:#75715e">## Run autoformatters
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> python -m black .
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> python -m isort .
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">.PHONY&lt;/span>&lt;span style="color:#f92672">:&lt;/span> lint-fix
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">push&lt;/span>&lt;span style="color:#f92672">:&lt;/span> &lt;span style="color:#75715e">## Push code with tags
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> git push &lt;span style="color:#f92672">&amp;amp;&amp;amp;&lt;/span> git push --tags
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>.DEFAULT_GOAL &lt;span style="color:#f92672">:=&lt;/span> help
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">help&lt;/span>&lt;span style="color:#f92672">:&lt;/span> Makefile &lt;span style="color:#75715e">## Show Makefile help
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> @echo &lt;span style="color:#e6db74">&amp;#34;Below shows Makefile targets&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> @grep -E &lt;span style="color:#e6db74">&amp;#39;(^[a-zA-Z_-]+:.*?##.*$$)|(^##)&amp;#39;&lt;/span> Makefile | awk &lt;span style="color:#e6db74">&amp;#39;BEGIN {FS = &amp;#34;:.*?## &amp;#34;}; {printf &amp;#34;\033[32m%-30s\033[0m %s\n&amp;#34;, $$1, $$2}&amp;#39;&lt;/span> | sed -e &lt;span style="color:#e6db74">&amp;#39;s/\[32m##/[33m/&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></content></item><item><title>Python Project (4) Test More</title><link>/blog/python-project-4/</link><pubDate>Sun, 25 Apr 2021 00:00:00 +0000</pubDate><guid>/blog/python-project-4/</guid><description>Python Version Tests 如果專案只是一般服務，可能基本測試就足夠了，但是如果是要寫 Library 給別的專案或是開放給大家使用的話，就要考慮更多的相容性問題，例如： Python 版本，相依套件版本，等等，那一般的測試可能就不足以符合這樣的情境，因此我們需要更多的整合測試
 tox 利用 tox 可以測試多種環境，如下圖： 他可以支援 .tox 和 pyproject.toml 但是在 pyproject.toml 裡面是用字串寫舊有設定格式，由於他會先把你的專案，用 setup.py 建立好，用 pip 裝起來後再去執行測試（指令），所以我們要把測試改寫到 tests ，並且儘量用絕對路徑去 import 我們自己的專案，這樣才不會有問題
-Usage pip install tox tox -e py38-django31 py38-django31 inst-nodeps: /Users/super/project/prj/.tox/.tmp/package/1/prj-0.1.0.tar.gz py38-django31 installed: asgiref==3.3.4,attrs==20.3.0,coverage==5.5,Django==3.1.8,django-object-actions==3.0.2,prj @ file:///Users/super/project/prj/.tox/.tmp/package/1/prj-0.1.0.tar.gz,iniconfig==1.1.1,packaging==20.9,pluggy==0.13.1,ply==3.11,py==1.10.0,pyparsing==2.4.7,pytest==6.2.3,pytest-cov==2.11.1,pytest-django==4.2.0,python-dateutil==2.8.1,pytz==2021.1,rule-engine==3.2.0,six==1.15.0,sqlparse==0.4.1,toml==0.10.2 py38-django31 run-test-pre: PYTHONHASHSEED=&amp;#39;3217434528&amp;#39; py38-django31 run-test: commands[0] | coverage erase py38-django31 run-test: commands[1] | pytest tests ============================= test session starts ============================== platform darwin -- Python 3.8.5, pytest-6.2.3, py-1.10.0, pluggy-0.13.1 -- /Users/super/project/prj/.</description></item><item><title>Python Project (3) Test Your Project</title><link>/blog/python-project-3/</link><pubDate>Sat, 24 Apr 2021 00:00:00 +0000</pubDate><guid>/blog/python-project-3/</guid><description>Test 寫測試可以減少改壞以前的東西，加速開發，在原生的 Python 就有提供測試的方法 unittest，然而隨著越來越多的套件支援與其脫鉤，如果是開新專案，可以試著從一開始就使用 pytest
+Usage pip install tox tox -e py38-django31 py38-django31 inst-nodeps: /Users/super/project/prj/.tox/.tmp/package/1/prj-0.1.0.tar.gz py38-django31 installed: asgiref==3.3.4,attrs==20.3.0,coverage==5.5,Django==3.1.8,django-object-actions==3.0.2,prj @ file:///Users/super/project/prj/.tox/.tmp/package/1/prj-0.1.0.tar.gz,iniconfig==1.1.1,packaging==20.9,pluggy==0.13.1,ply==3.11,py==1.10.0,pyparsing==2.4.7,pytest==6.2.3,pytest-cov==2.11.1,pytest-django==4.2.0,python-dateutil==2.8.1,pytz==2021.1,rule-engine==3.2.0,six==1.15.0,sqlparse==0.4.1,toml==0.10.2 py38-django31 run-test-pre: PYTHONHASHSEED=&amp;#39;3217434528&amp;#39; py38-django31 run-test: commands[0] | coverage erase py38-django31 run-test: commands[1] | pytest tests ============================= test session starts ============================== platform darwin -- Python 3.8.5, pytest-6.2.3, py-1.10.0, pluggy-0.13.1 -- /Users/super/project/prj/.</description><content>&lt;h1 id="python-version-tests">Python Version Tests&lt;/h1>
+&lt;p>如果專案只是一般服務，可能基本測試就足夠了，但是如果是要寫 Library 給別的專案或是開放給大家使用的話，就要考慮更多的相容性問題，例如： Python 版本，相依套件版本，等等，那一般的測試可能就不足以符合這樣的情境，因此我們需要更多的整合測試&lt;/p>
+&lt;h2 id="tox">tox&lt;/h2>
+&lt;p>利用 tox 可以測試多種環境，如下圖：
+&lt;img src="https://tox.readthedocs.io/en/latest/_images/tox_flow.png" alt="Tox flow">
+他可以支援 &lt;code>.tox&lt;/code> 和 &lt;code>pyproject.toml&lt;/code> 但是在 &lt;code>pyproject.toml&lt;/code> 裡面是用字串寫舊有設定格式，由於他會先把你的專案，用 &lt;code>setup.py&lt;/code> 建立好，用 pip 裝起來後再去執行測試（指令），所以我們要把測試改寫到 tests ，並且儘量用絕對路徑去 import 我們自己的專案，這樣才不會有問題&lt;/p>
+&lt;h3 id="usage">Usage&lt;/h3>
+&lt;pre tabindex="0">&lt;code>pip install tox
+tox -e py38-django31
+py38-django31 inst-nodeps: /Users/super/project/prj/.tox/.tmp/package/1/prj-0.1.0.tar.gz
+py38-django31 installed: asgiref==3.3.4,attrs==20.3.0,coverage==5.5,Django==3.1.8,django-object-actions==3.0.2,prj @ file:///Users/super/project/prj/.tox/.tmp/package/1/prj-0.1.0.tar.gz,iniconfig==1.1.1,packaging==20.9,pluggy==0.13.1,ply==3.11,py==1.10.0,pyparsing==2.4.7,pytest==6.2.3,pytest-cov==2.11.1,pytest-django==4.2.0,python-dateutil==2.8.1,pytz==2021.1,rule-engine==3.2.0,six==1.15.0,sqlparse==0.4.1,toml==0.10.2
+py38-django31 run-test-pre: PYTHONHASHSEED=&amp;#39;3217434528&amp;#39;
+py38-django31 run-test: commands[0] | coverage erase
+py38-django31 run-test: commands[1] | pytest tests
+============================= test session starts ==============================
+platform darwin -- Python 3.8.5, pytest-6.2.3, py-1.10.0, pluggy-0.13.1 -- /Users/super/project/prj/.tox/py38-django31/bin/python
+cachedir: .tox/py38-django31/.pytest_cache
+django: settings: settings (from ini)
+rootdir: /Users/super/project/prj, configfile: pyproject.toml
+plugins: cov-2.11.1, django-4.2.0
+collecting ... collected 26 items
+tests/test_admin/test_actions.py::TestCreateTransformationAction::test_transformation_action_check_fk_values PASSED
+tests/test_models/test_copy.py::TestInnerCopy::test_copy_to_new_diagram_inner_attr_are_copied PASSED
+tests/test_models/test_copy.py::TestInnerCopy::test_copy_to_new_diagram_nodes_will_be_copied PASSED
+tests/test_models/test_copy.py::TestInnerCopy::test_copy_to_new_diagram_transitions_will_be_copied PASSED
+tests/test_models/test_copy.py::TestDeepCopy::test_copy_to_new_diagram_inner_attr_are_copied PASSED
+tests/test_models/test_copy.py::TestDeepCopy::test_copy_to_new_diagram_nodes_will_be_copied PASSED
+tests/test_models/test_copy.py::TestDeepCopy::test_copy_to_new_diagram_transitions_will_be_copied PASSED
+tests/test_models/test_copy.py::TestDeepCopy::test_deep_inner_copy_to_new_diagram_inner_attr_are_copied PASSED
+tests/test_models/test_freeze.py::TestFreeze::test_freeze_diagram_will_create_static_diagram PASSED
+tests/test_models/test_freeze.py::TestFreeze::test_freeze_diagram_with_inner_diagram PASSED
+tests/test_models/test_freeze.py::TestFreeze::test_freeze_node_will_take_permissions PASSED
+tests/test_models/test_freeze.py::TestFreeze::test_freeze_node_will_take_updateable_fields PASSED
+tests/test_models/test_freeze.py::TestFreeze::test_freeze_transformation_will_take_all_things PASSED
+tests/test_models/test_freeze.py::TestFreeze::test_freeze_uuid_pk_mode PASSED
+tests/test_models/test_inner_enter.py::TestDeepInnerEnter::test_deep_enter PASSED
+tests/test_models/test_inner_enter.py::TestDeepInnerEnter::test_deep_leave PASSED
+tests/test_models/test_inner_enter.py::TestDeepInnerEnter::test_leave_inner_deep_will_not_present PASSED
+tests/test_models/test_inner_enter.py::TestInnerEnter::test_enter_inner_forward_node_will_check_forward_number PASSED
+tests/test_models/test_inner_enter.py::TestInnerEnter::test_enter_node_with_inner_will_create_init_nodes_present PASSED
+tests/test_models/test_inner_enter.py::TestInnerEnter::test_enter_rollback_will_create_outer_rollback_node_present PASSED
+tests/test_models/test_nodes.py::TestFreeze::test_enter_node_will_change_present_node PASSED
+tests/test_models/test_permissions.py::TestFreeze::test_get_permission_pks PASSED
+tests/test_utils/test_context_utils.py::TestIterKeys::test_simple_case PASSED
+tests/test_utils/test_parser_utils.py::TestIterKeys::test_deep_comparison PASSED
+tests/test_utils/test_parser_utils.py::TestIterKeys::test_has_attribute PASSED
+tests/test_utils/test_parser_utils.py::TestIterKeys::test_simple_case PASSED
+---------- coverage: platform darwin, python 3.8.5-final-0 -----------
+Name Stmts Miss Branch BrPart Cover Missing
+----------------------------------------------------------------------------------------------------------------------------
+prj/__init__.py 1 0 0 0 100%
+prj/admin/__init__.py 28 9 2 0 63% 17-35
+prj/admin/actions.py 64 33 14 1 44% 14-&amp;gt;30, 44-58, 61-82, 103-122
+prj/admin/base.py 47 47 14 0 0% 1-95
+prj/admin/helpers.py 18 11 4 0 32% 8, 13, 18-19, 22-32
+prj/apps.py 3 3 0 0 0% 1-5
+prj/models.py 195 7 67 5 95% 24, 45, 65, 121, 129, 239-&amp;gt;238, 373-&amp;gt;376, 381-&amp;gt;390, 422, 458
+prj/tests/__init__.py 0 0 0 0 100%
+prj/utils/__init__.py 0 0 0 0 100%
+prj/utils/ast_parser_utils.py 16 0 10 1 96% 27-&amp;gt;exit
+prj/utils/rule_context_utils.py 7 1 4 2 73% 9
+----------------------------------------------------------------------------------------------------------------------------
+TOTAL 379 111 115 9 70%
+============================== 26 passed in 4.63s ==============================
+Creating test database for alias &amp;#39;default&amp;#39;...
+Destroying test database for alias &amp;#39;default&amp;#39;...
+___________________________________ summary ____________________________________
+py38-django31: commands succeeded
+congratulations :)
+&lt;/code>&lt;/pre>&lt;h3 id="configuration">Configuration&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-toml" data-lang="toml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"># pyproject.toml&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">legacy_tox_ini&lt;/span> = &lt;span style="color:#e6db74">&amp;#34;&amp;#34;&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>[&lt;span style="color:#a6e22e">tox&lt;/span>]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">isolated_build&lt;/span> = &lt;span style="color:#a6e22e">True&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">envlist&lt;/span> =
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {&lt;span style="color:#a6e22e">py38&lt;/span>,&lt;span style="color:#a6e22e">py39&lt;/span>}&lt;span style="color:#a6e22e">-django31&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {&lt;span style="color:#a6e22e">py38&lt;/span>,&lt;span style="color:#a6e22e">py39&lt;/span>}&lt;span style="color:#a6e22e">-django32&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>[&lt;span style="color:#a6e22e">testenv&lt;/span>]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">deps&lt;/span> =
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">coverage&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">pytest-cov&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">pytest-django&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">django31&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">:&lt;/span> &lt;span style="color:#a6e22e">django&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">~&lt;/span>=&lt;span style="color:#ae81ff">3.1&lt;/span>.&lt;span style="color:#ae81ff">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">django32&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">:&lt;/span> &lt;span style="color:#a6e22e">django&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">~&lt;/span>=&lt;span style="color:#ae81ff">3.2&lt;/span>.&lt;span style="color:#ae81ff">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">commands&lt;/span> =
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">coverage&lt;/span> &lt;span style="color:#a6e22e">erase&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">pytest&lt;/span> &lt;span style="color:#a6e22e">tests&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></content></item><item><title>Python Project (3) Test Your Project</title><link>/blog/python-project-3/</link><pubDate>Sat, 24 Apr 2021 00:00:00 +0000</pubDate><guid>/blog/python-project-3/</guid><description>Test 寫測試可以減少改壞以前的東西，加速開發，在原生的 Python 就有提供測試的方法 unittest，然而隨著越來越多的套件支援與其脫鉤，如果是開新專案，可以試著從一開始就使用 pytest
 Pytest 該套件支援簡單的測試方法，多個套件支援其測試，例如在寫 Django Channels 時異步測試就推薦使用 pytest 可以支援其異步測試，該套件也支援 pyproject.toml 當作設定檔
-Usage pip install pytest pytest tests =================================================== test session starts =================================================== platform darwin -- Python 3.8.5, pytest-6.2.3, py-1.10.0, pluggy-0.13.1 -- /Users/super/project/prj/venv/bin/python3 cachedir: .pytest_cache django: settings: settings (from ini) rootdir: /Users/super/project/prj, configfile: pyproject.toml plugins: cov-2.11.1, django-4.1.0 collected 26 items Creating test database for alias &amp;#39;default&amp;#39;... tests/test_admin/test_actions.py::TestCreateTransformationAction::test_transformation_action_check_fk_values PASSED tests/test_models/test_copy.py::TestInnerCopy::test_copy_to_new_diagram_inner_attr_are_copied PASSED tests/test_models/test_copy.py::TestInnerCopy::test_copy_to_new_diagram_nodes_will_be_copied PASSED tests/test_models/test_copy.py::TestInnerCopy::test_copy_to_new_diagram_transitions_will_be_copied PASSED tests/test_models/test_copy.py::TestDeepCopy::test_copy_to_new_diagram_inner_attr_are_copied PASSED tests/test_models/test_copy.py::TestDeepCopy::test_copy_to_new_diagram_nodes_will_be_copied PASSED tests/test_models/test_copy.</description></item><item><title>Python Project (2) Lint Your Project</title><link>/blog/python-project-2/</link><pubDate>Fri, 23 Apr 2021 00:00:00 +0000</pubDate><guid>/blog/python-project-2/</guid><description>Lint 程式寫出來不難，但是要寫的好看很難很難，在多人協作時就需要一個標準，讓大家可以寫起來差不多，Python 給出了 PEP (Python Enhancement Proposals) 8 Style Guide for Python Code 當然正常人不會去看完，所以有工具幫忙就很重要了，這邊介紹 falke8, black, isort 等，工具，方便統一 Coding Style
+Usage pip install pytest pytest tests =================================================== test session starts =================================================== platform darwin -- Python 3.8.5, pytest-6.2.3, py-1.10.0, pluggy-0.13.1 -- /Users/super/project/prj/venv/bin/python3 cachedir: .pytest_cache django: settings: settings (from ini) rootdir: /Users/super/project/prj, configfile: pyproject.toml plugins: cov-2.11.1, django-4.1.0 collected 26 items Creating test database for alias &amp;#39;default&amp;#39;... tests/test_admin/test_actions.py::TestCreateTransformationAction::test_transformation_action_check_fk_values PASSED tests/test_models/test_copy.py::TestInnerCopy::test_copy_to_new_diagram_inner_attr_are_copied PASSED tests/test_models/test_copy.py::TestInnerCopy::test_copy_to_new_diagram_nodes_will_be_copied PASSED tests/test_models/test_copy.py::TestInnerCopy::test_copy_to_new_diagram_transitions_will_be_copied PASSED tests/test_models/test_copy.py::TestDeepCopy::test_copy_to_new_diagram_inner_attr_are_copied PASSED tests/test_models/test_copy.py::TestDeepCopy::test_copy_to_new_diagram_nodes_will_be_copied PASSED tests/test_models/test_copy.</description><content>&lt;h1 id="test">Test&lt;/h1>
+&lt;p>寫測試可以減少改壞以前的東西，加速開發，在原生的 Python 就有提供測試的方法 &lt;a href="https://docs.python.org/3/library/unittest.html">&lt;code>unittest&lt;/code>&lt;/a>，然而隨著越來越多的套件支援與其脫鉤，如果是開新專案，可以試著從一開始就使用 &lt;a href="https://github.com/pytest-dev/pytest">&lt;code>pytest&lt;/code>&lt;/a>&lt;/p>
+&lt;h2 id="pytest">Pytest&lt;/h2>
+&lt;p>該套件支援簡單的測試方法，多個套件支援其測試，例如在寫 &lt;code>Django Channels&lt;/code> 時異步測試就推薦使用 &lt;code>pytest&lt;/code> 可以支援其異步測試，該套件也支援 &lt;code>pyproject.toml&lt;/code> 當作設定檔&lt;/p>
+&lt;h3 id="usage">Usage&lt;/h3>
+&lt;pre tabindex="0">&lt;code class="language-shell-script" data-lang="shell-script">pip install pytest
+pytest tests
+=================================================== test session starts ===================================================
+platform darwin -- Python 3.8.5, pytest-6.2.3, py-1.10.0, pluggy-0.13.1 -- /Users/super/project/prj/venv/bin/python3
+cachedir: .pytest_cache
+django: settings: settings (from ini)
+rootdir: /Users/super/project/prj, configfile: pyproject.toml
+plugins: cov-2.11.1, django-4.1.0
+collected 26 items
+Creating test database for alias &amp;#39;default&amp;#39;...
+tests/test_admin/test_actions.py::TestCreateTransformationAction::test_transformation_action_check_fk_values PASSED
+tests/test_models/test_copy.py::TestInnerCopy::test_copy_to_new_diagram_inner_attr_are_copied PASSED
+tests/test_models/test_copy.py::TestInnerCopy::test_copy_to_new_diagram_nodes_will_be_copied PASSED
+tests/test_models/test_copy.py::TestInnerCopy::test_copy_to_new_diagram_transitions_will_be_copied PASSED
+tests/test_models/test_copy.py::TestDeepCopy::test_copy_to_new_diagram_inner_attr_are_copied PASSED
+tests/test_models/test_copy.py::TestDeepCopy::test_copy_to_new_diagram_nodes_will_be_copied PASSED
+tests/test_models/test_copy.py::TestDeepCopy::test_copy_to_new_diagram_transitions_will_be_copied PASSED
+tests/test_models/test_copy.py::TestDeepCopy::test_deep_inner_copy_to_new_diagram_inner_attr_are_copied PASSED
+tests/test_models/test_freeze.py::TestFreeze::test_freeze_diagram_will_create_static_diagram PASSED
+tests/test_models/test_freeze.py::TestFreeze::test_freeze_diagram_with_inner_diagram PASSED
+tests/test_models/test_freeze.py::TestFreeze::test_freeze_node_will_take_permissions PASSED
+tests/test_models/test_freeze.py::TestFreeze::test_freeze_node_will_take_updateable_fields PASSED
+tests/test_models/test_freeze.py::TestFreeze::test_freeze_transformation_will_take_all_things PASSED
+tests/test_models/test_freeze.py::TestFreeze::test_freeze_uuid_pk_mode PASSED
+tests/test_models/test_inner_enter.py::TestDeepInnerEnter::test_deep_enter PASSED
+tests/test_models/test_inner_enter.py::TestDeepInnerEnter::test_deep_leave PASSED
+tests/test_models/test_inner_enter.py::TestDeepInnerEnter::test_leave_inner_deep_will_not_present PASSED
+tests/test_models/test_inner_enter.py::TestInnerEnter::test_enter_inner_forward_node_will_check_forward_number PASSED
+tests/test_models/test_inner_enter.py::TestInnerEnter::test_enter_node_with_inner_will_create_init_nodes_present PASSED
+tests/test_models/test_inner_enter.py::TestInnerEnter::test_enter_rollback_will_create_outer_rollback_node_present PASSED
+tests/test_models/test_nodes.py::TestFreeze::test_enter_node_will_change_present_node PASSED
+tests/test_models/test_permissions.py::TestFreeze::test_get_permission_pks PASSED
+tests/test_utils/test_context_utils.py::TestIterKeys::test_simple_case PASSED
+tests/test_utils/test_parser_utils.py::TestIterKeys::test_deep_comparison PASSED
+tests/test_utils/test_parser_utils.py::TestIterKeys::test_has_attribute PASSED
+tests/test_utils/test_parser_utils.py::TestIterKeys::test_simple_case PASSED
+Destroying test database for alias &amp;#39;default&amp;#39;...
+&lt;/code>&lt;/pre>&lt;h3 id="configuration">Configuration&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-toml" data-lang="toml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"># pyproject.toml&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>[&lt;span style="color:#a6e22e">tool&lt;/span>.&lt;span style="color:#a6e22e">pytest&lt;/span>.&lt;span style="color:#a6e22e">ini_options&lt;/span>]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">addopts&lt;/span> = &lt;span style="color:#e6db74">&amp;#34;--tb=short -p no:warnings -s -v -ra&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">DJANGO_SETTINGS_MODULE&lt;/span> = &lt;span style="color:#e6db74">&amp;#34;settings&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"># -- recommended but optional:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">python_files&lt;/span> = [
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;tests.py&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;test_*.py&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;*_tests.py&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>]
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="coverage">Coverage&lt;/h2>
+&lt;p>跑了測試還不夠，為了要知道哪些程式碼有被測試到，甚至是哪些程式碼被哪些測試程式測試，我們可以使用 &lt;code>coverage&lt;/code> 套件來達成，該套件也支援 &lt;code>pyproject.toml&lt;/code>&lt;/p>
+&lt;h3 id="normal-usage">Normal usage&lt;/h3>
+&lt;pre tabindex="0">&lt;code class="language-shell-script" data-lang="shell-script">pip install coverage
+python -m unittest discover
+&lt;/code>&lt;/pre>&lt;h3 id="integrate-with-pytest">Integrate with pytest&lt;/h3>
+&lt;pre tabindex="0">&lt;code>pip install coverage
+coverage run --source=prj -m pytest
+coverage report -m
+Name Stmts Miss Branch BrPart Cover Missing
+----------------------------------------------------------------------------------------------------------------------------
+prj/__init__.py 1 0 0 0 100%
+prj/admin/__init__.py 28 9 2 0 63% 17-35
+prj/admin/actions.py 64 33 14 1 44% 14-&amp;gt;30, 44-58, 61-82, 103-122
+prj/admin/base.py 47 47 14 0 0% 1-95
+prj/admin/helpers.py 18 11 4 0 32% 8, 13, 18-19, 22-32
+prj/apps.py 3 3 0 0 0% 1-5
+prj/models.py 195 7 67 5 95% 24, 45, 65, 121, 129, 239-&amp;gt;238, 373-&amp;gt;376, 381-&amp;gt;390, 422, 458
+prj/tests/__init__.py 0 0 0 0 100%
+prj/utils/__init__.py 0 0 0 0 100%
+prj/utils/ast_parser_utils.py 16 0 10 1 96% 27-&amp;gt;exit
+prj/utils/rule_context_utils.py 7 1 4 2 73% 9
+----------------------------------------------------------------------------------------------------------------------------
+TOTAL 379 111 115 9 70%
+&lt;/code>&lt;/pre>&lt;h3 id="configuration-1">Configuration&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-toml" data-lang="toml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"># pyproject.toml&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>[&lt;span style="color:#a6e22e">tool&lt;/span>.&lt;span style="color:#a6e22e">coverage&lt;/span>.&lt;span style="color:#a6e22e">report&lt;/span>]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">exclude_lines&lt;/span> = [
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;pragma: no cover&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;def __repr__&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;if __name__ == .__main__.:&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;nocov&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;if TYPE_CHECKING:&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>[&lt;span style="color:#a6e22e">tool&lt;/span>.&lt;span style="color:#a6e22e">coverage&lt;/span>.&lt;span style="color:#a6e22e">run&lt;/span>]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"># Activating branch coverage is super important&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">branch&lt;/span> = &lt;span style="color:#66d9ef">true&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">omit&lt;/span> = [
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;*/migrations/*&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">source&lt;/span> = &lt;span style="color:#e6db74">&amp;#34;prj&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="pytest-cov">pytest-cov&lt;/h2>
+&lt;p>為了讓 pytest 執行時不要那麼麻煩改用 &lt;code>coverage&lt;/code>，我們使用該套件去讓 &lt;code>pytest&lt;/code> 直接整合 &lt;code>coverage&lt;/code> 以後寫測試就只要下 &lt;code>pytest --cov=prj&lt;/code> 就好了&lt;/p>
+&lt;h3 id="usage-1">Usage&lt;/h3>
+&lt;pre tabindex="0">&lt;code class="language-shell-script" data-lang="shell-script">pip install pytest-cov
+pytest --cov=prj
+=================================================== test session starts ===================================================
+platform darwin -- Python 3.8.5, pytest-6.2.3, py-1.10.0, pluggy-0.13.1 -- /Users/super/project/prj/venv/bin/python3
+cachedir: .pytest_cache
+django: settings: settings (from ini)
+rootdir: /Users/super/project/prj, configfile: pyproject.toml
+plugins: cov-2.11.1, django-4.1.0
+collected 26 items
+Creating test database for alias &amp;#39;default&amp;#39;...
+tests/test_admin/test_actions.py::TestCreateTransformationAction::test_transformation_action_check_fk_values PASSED
+tests/test_models/test_copy.py::TestInnerCopy::test_copy_to_new_diagram_inner_attr_are_copied PASSED
+tests/test_models/test_copy.py::TestInnerCopy::test_copy_to_new_diagram_nodes_will_be_copied PASSED
+tests/test_models/test_copy.py::TestInnerCopy::test_copy_to_new_diagram_transitions_will_be_copied PASSED
+tests/test_models/test_copy.py::TestDeepCopy::test_copy_to_new_diagram_inner_attr_are_copied PASSED
+tests/test_models/test_copy.py::TestDeepCopy::test_copy_to_new_diagram_nodes_will_be_copied PASSED
+tests/test_models/test_copy.py::TestDeepCopy::test_copy_to_new_diagram_transitions_will_be_copied PASSED
+tests/test_models/test_copy.py::TestDeepCopy::test_deep_inner_copy_to_new_diagram_inner_attr_are_copied PASSED
+tests/test_models/test_freeze.py::TestFreeze::test_freeze_diagram_will_create_static_diagram PASSED
+tests/test_models/test_freeze.py::TestFreeze::test_freeze_diagram_with_inner_diagram PASSED
+tests/test_models/test_freeze.py::TestFreeze::test_freeze_node_will_take_permissions PASSED
+tests/test_models/test_freeze.py::TestFreeze::test_freeze_node_will_take_updateable_fields PASSED
+tests/test_models/test_freeze.py::TestFreeze::test_freeze_transformation_will_take_all_things PASSED
+tests/test_models/test_freeze.py::TestFreeze::test_freeze_uuid_pk_mode PASSED
+tests/test_models/test_inner_enter.py::TestDeepInnerEnter::test_deep_enter PASSED
+tests/test_models/test_inner_enter.py::TestDeepInnerEnter::test_deep_leave PASSED
+tests/test_models/test_inner_enter.py::TestDeepInnerEnter::test_leave_inner_deep_will_not_present PASSED
+tests/test_models/test_inner_enter.py::TestInnerEnter::test_enter_inner_forward_node_will_check_forward_number PASSED
+tests/test_models/test_inner_enter.py::TestInnerEnter::test_enter_node_with_inner_will_create_init_nodes_present PASSED
+tests/test_models/test_inner_enter.py::TestInnerEnter::test_enter_rollback_will_create_outer_rollback_node_present PASSED
+tests/test_models/test_nodes.py::TestFreeze::test_enter_node_will_change_present_node PASSED
+tests/test_models/test_permissions.py::TestFreeze::test_get_permission_pks PASSED
+tests/test_utils/test_context_utils.py::TestIterKeys::test_simple_case PASSED
+tests/test_utils/test_parser_utils.py::TestIterKeys::test_deep_comparison PASSED
+tests/test_utils/test_parser_utils.py::TestIterKeys::test_has_attribute PASSED
+tests/test_utils/test_parser_utils.py::TestIterKeys::test_simple_case PASSED
+Destroying test database for alias &amp;#39;default&amp;#39;...
+---------- coverage: platform darwin, python 3.8.5-final-0 -----------
+Name Stmts Miss Branch BrPart Cover
+----------------------------------------------------------------------
+prj/__init__.py 1 0 0 0 100%
+prj/admin/__init__.py 28 9 2 0 63%
+prj/admin/actions.py 64 33 14 1 44%
+prj/admin/base.py 47 47 14 0 0%
+prj/admin/helpers.py 18 11 4 0 32%
+prj/apps.py 3 3 0 0 0%
+prj/models.py 195 7 67 5 95%
+prj/tests/__init__.py 0 0 0 0 100%
+prj/utils/__init__.py 0 0 0 0 100%
+prj/utils/ast_parser_utils.py 16 0 10 1 96%
+prj/utils/rule_context_utils.py 7 1 4 2 73%
+----------------------------------------------------------------------
+TOTAL 379 111 115 9 70%
+&lt;/code>&lt;/pre>&lt;h3 id="configuration-2">Configuration&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-toml" data-lang="toml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"># pyproject.toml&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>[&lt;span style="color:#a6e22e">tool&lt;/span>.&lt;span style="color:#a6e22e">pytest&lt;/span>.&lt;span style="color:#a6e22e">ini_options&lt;/span>]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"># 多加一個參數即可&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">addopts&lt;/span> = &lt;span style="color:#e6db74">&amp;#34;--tb=short -p no:warnings -s -v -ra --cov=prj&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">DJANGO_SETTINGS_MODULE&lt;/span> = &lt;span style="color:#e6db74">&amp;#34;settings&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"># -- recommended but optional:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">python_files&lt;/span> = [
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;tests.py&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;test_*.py&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;*_tests.py&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>]
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></content></item><item><title>Python Project (2) Lint Your Project</title><link>/blog/python-project-2/</link><pubDate>Fri, 23 Apr 2021 00:00:00 +0000</pubDate><guid>/blog/python-project-2/</guid><description>Lint 程式寫出來不難，但是要寫的好看很難很難，在多人協作時就需要一個標準，讓大家可以寫起來差不多，Python 給出了 PEP (Python Enhancement Proposals) 8 Style Guide for Python Code 當然正常人不會去看完，所以有工具幫忙就很重要了，這邊介紹 falke8, black, isort 等，工具，方便統一 Coding Style
 Flake8 Flake8 可以檢查專案是否符合 PEP 8 ，然而，該檢查有些過時或是有些規範是相互違反的，這部分就有待團隊自行去規定，此時就需要設定他，Flake8 支援 setup.cfg, tox.ini, 或 .flake8 檔，作為設定，此處為了減少檔案，我們使用上次使用到的 setup.cfg 作為我們的設定檔
 Usage 裝好該指令後就可以對你的專案進行檢查
 pip3 install flake8 flake8 Max Line Length PEP 8 最常被調整的設定就是其每一行程式碼不可超過的字數，該設定原本為每一行不可以超過 79 字元，其由來是以前的 Terminal 長度為 80 字元，為了不讓他換行，所以建議使用該設定，但是現在螢幕都很寬，所以我們可以與團隊溝通調整最大長度
 # setup.cfg [flake8] max-line-length = 88 Exclude 某些檔案可能是由機器自動產生的，你不希望被納入控管，可以使用 exclude 的設定讓他跳過該檔案或目錄，這邊以 Django 的 migration file (機器產生)，以及常見虛擬環境目錄 (他人專案) 作為範例
-#setup.cfg [flake8] exclude = */migrations/,env/,venv/ Ignore 在 PEP 8 中不少警告是對立的，如：W503、W504，他們的 Best practice 剛好是對方的 Anti-pattern 團隊們可以選擇對於團隊而言比較好的選項，此時我們就可以忽略該筆檢查</description></item><item><title>Python Project (1) setup.py setup.cfg</title><link>/blog/python-project-1/</link><pubDate>Thu, 22 Apr 2021 00:00:00 +0000</pubDate><guid>/blog/python-project-1/</guid><description>Create Project 開專案一直以來都不是一個簡單的事情，專案開的好可以讓後面的開發更有效率，團隊也可以有比較一致開發準則，接下來幾篇文章會大該說說之前研究開 Python 專案的一些經驗
+#setup.cfg [flake8] exclude = */migrations/,env/,venv/ Ignore 在 PEP 8 中不少警告是對立的，如：W503、W504，他們的 Best practice 剛好是對方的 Anti-pattern 團隊們可以選擇對於團隊而言比較好的選項，此時我們就可以忽略該筆檢查</description><content>&lt;h1 id="lint">Lint&lt;/h1>
+&lt;p>程式寫出來不難，但是要寫的好看很難很難，在多人協作時就需要一個標準，讓大家可以寫起來差不多，Python 給出了 &lt;a href="https://www.python.org/dev/peps/pep-0008/">PEP (Python Enhancement Proposals) 8 Style Guide for Python Code&lt;/a> 當然正常人不會去看完，所以有工具幫忙就很重要了，這邊介紹 &lt;code>falke8&lt;/code>, &lt;code>black&lt;/code>, &lt;code>isort&lt;/code> 等，工具，方便統一 Coding Style&lt;/p>
+&lt;h2 id="flake8">Flake8&lt;/h2>
+&lt;p>&lt;code>Flake8&lt;/code> 可以檢查專案是否符合 &lt;code>PEP 8&lt;/code> ，然而，該檢查有些過時或是有些規範是相互違反的，這部分就有待團隊自行去規定，此時就需要設定他，&lt;code>Flake8&lt;/code> 支援 &lt;code>setup.cfg&lt;/code>, &lt;code>tox.ini&lt;/code>, 或 &lt;code>.flake8&lt;/code> 檔，作為設定，此處為了減少檔案，我們使用上次使用到的 &lt;code>setup.cfg&lt;/code> 作為我們的設定檔&lt;/p>
+&lt;h3 id="usage">Usage&lt;/h3>
+&lt;p>裝好該指令後就可以對你的專案進行檢查&lt;/p>
+&lt;pre tabindex="0">&lt;code class="language-shell-script" data-lang="shell-script">pip3 install flake8
+flake8
+&lt;/code>&lt;/pre>&lt;h3 id="max-line-length">Max Line Length&lt;/h3>
+&lt;p>&lt;code>PEP 8&lt;/code> 最常被調整的設定就是其每一行程式碼不可超過的字數，該設定原本為每一行不可以超過 79 字元，其由來是以前的 Terminal 長度為 80 字元，為了不讓他換行，所以建議使用該設定，但是現在螢幕都很寬，所以我們可以與團隊溝通調整最大長度&lt;/p>
+&lt;pre tabindex="0">&lt;code># setup.cfg
+[flake8]
+max-line-length = 88
+&lt;/code>&lt;/pre>&lt;h3 id="exclude">Exclude&lt;/h3>
+&lt;p>某些檔案可能是由機器自動產生的，你不希望被納入控管，可以使用 &lt;code>exclude&lt;/code> 的設定讓他跳過該檔案或目錄，這邊以 Django 的 migration file (機器產生)，以及常見虛擬環境目錄 (他人專案) 作為範例&lt;/p>
+&lt;pre tabindex="0">&lt;code>#setup.cfg
+[flake8]
+exclude = */migrations/,env/,venv/
+&lt;/code>&lt;/pre>&lt;h3 id="ignore">Ignore&lt;/h3>
+&lt;p>在 &lt;code>PEP 8&lt;/code> 中不少警告是對立的，如：&lt;a href="https://www.flake8rules.com/rules/W503.html">W503&lt;/a>、&lt;a href="https://www.flake8rules.com/rules/W504.html">W504&lt;/a>，他們的 &lt;code>Best practice&lt;/code> 剛好是對方的 &lt;code>Anti-pattern&lt;/code> 團隊們可以選擇對於團隊而言比較好的選項，此時我們就可以忽略該筆檢查&lt;/p>
+&lt;pre tabindex="0">&lt;code>#setup.cfg
+[flake8]
+ignore = W503
+&lt;/code>&lt;/pre>&lt;h2 id="black">Black&lt;/h2>
+&lt;p>除了 &lt;code>PEP 8&lt;/code> 如何讓團隊寫起來的程式碼都更加相同呢？&lt;a href="https://github.com/psf/black">&lt;code>Black&lt;/code>&lt;/a> 提供了自動格式程式碼的功能，我們可以利用它來檢查以及自動格式化所有程式碼，讓它符合規範，該套件支援的設定檔是：&lt;a href="https://www.python.org/dev/peps/pep-0518/">&lt;code>pyproject.toml&lt;/code>&lt;/a>&lt;/p>
+&lt;h3 id="note">Note&lt;/h3>
+&lt;p>另一個差不多功能的套件是 &lt;a href="https://github.com/google/yapf">&lt;code>yapf&lt;/code>&lt;/a>&lt;/p>
+&lt;h3 id="usage-1">Usage&lt;/h3>
+&lt;pre tabindex="0">&lt;code class="language-shell-script" data-lang="shell-script">pip install black
+# Check
+black --check .
+# Format
+black .
+&lt;/code>&lt;/pre>&lt;h3 id="line-length">Line Length&lt;/h3>
+&lt;p>和 &lt;code>Flake8&lt;/code> 一樣的問題這邊我們也把自動排版的每行長度加大&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-toml" data-lang="toml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"># pyproject.toml&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>[&lt;span style="color:#a6e22e">tool&lt;/span>.&lt;span style="color:#a6e22e">black&lt;/span>]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">line-length&lt;/span> = &lt;span style="color:#ae81ff">88&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="exclude-1">Exclude&lt;/h3>
+&lt;p>一樣我們可以略過不需要排版的資料夾或檔案&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-toml" data-lang="toml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"># pyproject.toml&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>[&lt;span style="color:#a6e22e">tool&lt;/span>.&lt;span style="color:#a6e22e">black&lt;/span>]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">exclude&lt;/span> = &lt;span style="color:#e6db74">&amp;#39;&amp;#39;&amp;#39;
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74">/(
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> | migrations
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74">)/
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74">&amp;#39;&amp;#39;&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="isort">isort&lt;/h2>
+&lt;p>在 Python 我們常常 import 多個套件但是多人協作可能就不會把相同的 Library 放在附近，會導致程式碼很混亂，這時候 &lt;a href="https://pycqa.github.io/isort/">isort&lt;/a> 就可以處理我們的問題，他可以檢查 import 順序，也可以自動幫你排序，該套件也使用 &lt;a href="https://www.python.org/dev/peps/pep-0518/">&lt;code>pyproject.toml&lt;/code>&lt;/a>&lt;/p>
+&lt;h3 id="usage-2">Usage&lt;/h3>
+&lt;pre tabindex="0">&lt;code class="language-shell-script" data-lang="shell-script">pip install isort
+# Check
+isort -c .
+# Format
+isort .
+&lt;/code>&lt;/pre>&lt;h3 id="configuration">Configuration&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-toml" data-lang="toml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"># pyproject.toml&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>[&lt;span style="color:#a6e22e">tool&lt;/span>.&lt;span style="color:#a6e22e">isort&lt;/span>]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">multi_line_output&lt;/span> = &lt;span style="color:#ae81ff">3&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">include_trailing_comma&lt;/span> = &lt;span style="color:#66d9ef">true&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">force_grid_wrap&lt;/span> = &lt;span style="color:#ae81ff">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">use_parentheses&lt;/span> = &lt;span style="color:#66d9ef">true&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">ensure_newline_before_comments&lt;/span> = &lt;span style="color:#66d9ef">true&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">line_length&lt;/span> = &lt;span style="color:#ae81ff">88&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">extend_skip&lt;/span> = [
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;migrations&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>]
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="conclusion">Conclusion&lt;/h2>
+&lt;p>介紹了新的設定檔，&lt;a href="https://www.python.org/dev/peps/pep-0518/">&lt;code>pyproject.toml&lt;/code>&lt;/a> 他是 &lt;code>PEP 518&lt;/code> 所定義的，未來套件大部分都會支援這個設定檔案，所以只要有套件支援，就放進去吧，至少專案看起來會比較統一，當然不可避免的，比較古老的套件可能還沒有完全支援，那就選擇無可避免的檔案去放他吧，這邊我們優先權，先寫起來， &lt;code>pyproject.toml &amp;gt; setup.cfg&lt;/code>&lt;/p></content></item><item><title>Python Project (1) setup.py setup.cfg</title><link>/blog/python-project-1/</link><pubDate>Thu, 22 Apr 2021 00:00:00 +0000</pubDate><guid>/blog/python-project-1/</guid><description>Create Project 開專案一直以來都不是一個簡單的事情，專案開的好可以讓後面的開發更有效率，團隊也可以有比較一致開發準則，接下來幾篇文章會大該說說之前研究開 Python 專案的一些經驗
 Create setup.py For Install 如果專案要可以被安裝，就需要寫這檔案，裡面可寫詳述該套件需要裝哪些東西，以及一些資訊，建議放在專案的根目錄，這樣別人就可以直接用你的 Git Repo 去安裝你的套件
-from pathlib import Path from setuptools import find_packages, setup REPO_URL = &amp;#34;https://github.com/lambdaTW/python-project&amp;#34; def get_version(rel_path): for line in Path(rel_path).open().read().splitlines(): if line.startswith(&amp;#34;__version__&amp;#34;): delim = &amp;#39;&amp;#34;&amp;#39; if &amp;#39;&amp;#34;&amp;#39; in line else &amp;#34;&amp;#39;&amp;#34; return line.split(delim)[1] raise RuntimeError(&amp;#34;Unable to find version string.&amp;#34;) setup( name=&amp;#34;python-project&amp;#34;, version=get_version(&amp;#34;src/python-project/__init__.py&amp;#34;), description=&amp;#34;My python project&amp;#34;, long_description=Path(&amp;#34;README.md&amp;#34;).open().read(), long_description_content_type=&amp;#34;text/markdown&amp;#34;, python_requires=&amp;#34;&amp;gt;=3.8&amp;#34;, classifiers=[ &amp;#34;Programming Language :: Python :: 3.8&amp;#34;, ], keywords=[&amp;#34;python&amp;#34;, &amp;#34;project&amp;#34;], url=REPO_URL, author=&amp;#34;lambdaTW&amp;#34;, author_email=&amp;#34;lambda@lambda.</description></item><item><title>Closure</title><link>/blog/closure/</link><pubDate>Thu, 18 Apr 2019 00:00:00 +0000</pubDate><guid>/blog/closure/</guid><description>Closure What is closure Closure 簡單來說，就是某函數在另一個函數內被創造並且參照了創建函數的某些變數，此時該變數會存留於記憶內，儘管創建函數已經結束。
+from pathlib import Path from setuptools import find_packages, setup REPO_URL = &amp;#34;https://github.com/lambdaTW/python-project&amp;#34; def get_version(rel_path): for line in Path(rel_path).open().read().splitlines(): if line.startswith(&amp;#34;__version__&amp;#34;): delim = &amp;#39;&amp;#34;&amp;#39; if &amp;#39;&amp;#34;&amp;#39; in line else &amp;#34;&amp;#39;&amp;#34; return line.split(delim)[1] raise RuntimeError(&amp;#34;Unable to find version string.&amp;#34;) setup( name=&amp;#34;python-project&amp;#34;, version=get_version(&amp;#34;src/python-project/__init__.py&amp;#34;), description=&amp;#34;My python project&amp;#34;, long_description=Path(&amp;#34;README.md&amp;#34;).open().read(), long_description_content_type=&amp;#34;text/markdown&amp;#34;, python_requires=&amp;#34;&amp;gt;=3.8&amp;#34;, classifiers=[ &amp;#34;Programming Language :: Python :: 3.8&amp;#34;, ], keywords=[&amp;#34;python&amp;#34;, &amp;#34;project&amp;#34;], url=REPO_URL, author=&amp;#34;lambdaTW&amp;#34;, author_email=&amp;#34;lambda@lambda.</description><content>&lt;h1 id="create-project">Create Project&lt;/h1>
+&lt;p>開專案一直以來都不是一個簡單的事情，專案開的好可以讓後面的開發更有效率，團隊也可以有比較一致開發準則，接下來幾篇文章會大該說說之前研究開 Python 專案的一些經驗&lt;/p>
+&lt;h2 id="create-setuppy-for-install">Create &lt;code>setup.py&lt;/code> For Install&lt;/h2>
+&lt;p>如果專案要可以被安裝，就需要寫這檔案，裡面可寫詳述該套件需要裝哪些東西，以及一些資訊，建議放在專案的根目錄，這樣別人就可以直接用你的 Git Repo 去安裝你的套件&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python" data-lang="python">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> pathlib &lt;span style="color:#f92672">import&lt;/span> Path
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> setuptools &lt;span style="color:#f92672">import&lt;/span> find_packages, setup
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>REPO_URL &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&amp;#34;https://github.com/lambdaTW/python-project&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">get_version&lt;/span>(rel_path):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">for&lt;/span> line &lt;span style="color:#f92672">in&lt;/span> Path(rel_path)&lt;span style="color:#f92672">.&lt;/span>open()&lt;span style="color:#f92672">.&lt;/span>read()&lt;span style="color:#f92672">.&lt;/span>splitlines():
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> line&lt;span style="color:#f92672">.&lt;/span>startswith(&lt;span style="color:#e6db74">&amp;#34;__version__&amp;#34;&lt;/span>):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> delim &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&amp;#39;&amp;#34;&amp;#39;&lt;/span> &lt;span style="color:#66d9ef">if&lt;/span> &lt;span style="color:#e6db74">&amp;#39;&amp;#34;&amp;#39;&lt;/span> &lt;span style="color:#f92672">in&lt;/span> line &lt;span style="color:#66d9ef">else&lt;/span> &lt;span style="color:#e6db74">&amp;#34;&amp;#39;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> line&lt;span style="color:#f92672">.&lt;/span>split(delim)[&lt;span style="color:#ae81ff">1&lt;/span>]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">raise&lt;/span> &lt;span style="color:#a6e22e">RuntimeError&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;Unable to find version string.&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>setup(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> name&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;python-project&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> version&lt;span style="color:#f92672">=&lt;/span>get_version(&lt;span style="color:#e6db74">&amp;#34;src/python-project/__init__.py&amp;#34;&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> description&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;My python project&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> long_description&lt;span style="color:#f92672">=&lt;/span>Path(&lt;span style="color:#e6db74">&amp;#34;README.md&amp;#34;&lt;/span>)&lt;span style="color:#f92672">.&lt;/span>open()&lt;span style="color:#f92672">.&lt;/span>read(),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> long_description_content_type&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;text/markdown&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> python_requires&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&amp;gt;=3.8&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> classifiers&lt;span style="color:#f92672">=&lt;/span>[
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;Programming Language :: Python :: 3.8&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ],
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> keywords&lt;span style="color:#f92672">=&lt;/span>[&lt;span style="color:#e6db74">&amp;#34;python&amp;#34;&lt;/span>, &lt;span style="color:#e6db74">&amp;#34;project&amp;#34;&lt;/span>],
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> url&lt;span style="color:#f92672">=&lt;/span>REPO_URL,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> author&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;lambdaTW&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> author_email&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;lambda@lambda.tw&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> license&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;MIT&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> packages&lt;span style="color:#f92672">=&lt;/span>find_packages(where&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;src&amp;#34;&lt;/span>, exclude&lt;span style="color:#f92672">=&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;test*&amp;#34;&lt;/span>,)),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> package_dir&lt;span style="color:#f92672">=&lt;/span>{&lt;span style="color:#e6db74">&amp;#34;&amp;#34;&lt;/span>: &lt;span style="color:#e6db74">&amp;#34;src&amp;#34;&lt;/span>},
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># namespace_packages=[&amp;#34;lambdatw&amp;#34;],&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> install_requires&lt;span style="color:#f92672">=&lt;/span>Path(&lt;span style="color:#e6db74">&amp;#34;requirements/base.in&amp;#34;&lt;/span>)&lt;span style="color:#f92672">.&lt;/span>open()&lt;span style="color:#f92672">.&lt;/span>read()&lt;span style="color:#f92672">.&lt;/span>splitlines(),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> include_package_data&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#66d9ef">True&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> zip_safe&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#66d9ef">False&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>)
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="create-setupcfg">Create &lt;code>setup.cfg&lt;/code>&lt;/h2>
+&lt;p>&lt;code>setup.cfg&lt;/code> 原本是拿來做 &lt;code>setup.py&lt;/code> 的設定檔，但是很多 Python 相關的 Library 也把它當作設定檔，所以除了可以替代 setup.py 的設定也可以用來設定很多東西&lt;/p>
+&lt;h3 id="for-install">For Install&lt;/h3>
+&lt;p>如果你不想寫很多東西在 &lt;code>setup.py&lt;/code> 像是 &lt;a href="https://github.com/pytest-dev/pytest">pytest&lt;/a> 的 &lt;code>setup.py&lt;/code> 就十分乾淨只有以下幾行，其他都寫在其 &lt;a href="https://github.com/pytest-dev/pytest/blob/main/setup.cfg">&lt;code>setup.cfg&lt;/code>&lt;/a>，由於是設定檔一樣大部分都放根目錄&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python" data-lang="python">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"># setup.py&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> setuptools &lt;span style="color:#f92672">import&lt;/span> setup
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">if&lt;/span> __name__ &lt;span style="color:#f92672">==&lt;/span> &lt;span style="color:#e6db74">&amp;#34;__main__&amp;#34;&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> setup()
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>下面可以看到 &lt;code>setup.cfg&lt;/code> 在 &lt;code>metadata&lt;/code>、&lt;code>options&lt;/code> 的部分就是 &lt;code>setup.py&lt;/code> 的參數&lt;/p>
+&lt;pre tabindex="0">&lt;code># setup.cfg
+[metadata]
+name = pytest
+description = pytest: simple powerful testing with Python
+long_description = file: README.rst
+long_description_content_type = text/x-rst
+# ... more than 100 lines
+&lt;/code>&lt;/pre>&lt;h3 id="for-setting">For Setting&lt;/h3>
+&lt;p>由於很多套件都會使用 &lt;code>setup.cfg&lt;/code> 當作他的設定檔，只要設定相對應的名稱在 &lt;code>[ ]&lt;/code> 中，就可以使用，至於要設定什麼，就要依照該套件的說明去看，例如：&lt;code>mypy&lt;/code> 這套件是用來做型別靜態檢查的，我們就可以在 &lt;code>setup.cfg&lt;/code> 設定他的參數如下&lt;/p>
+&lt;pre tabindex="0">&lt;code># setup.cfg
+[mypy]
+follow_imports = silent
+show_column_numbers = true
+ignore_missing_imports = true
+&lt;/code>&lt;/pre></content></item><item><title>Closure</title><link>/blog/closure/</link><pubDate>Thu, 18 Apr 2019 00:00:00 +0000</pubDate><guid>/blog/closure/</guid><description>Closure What is closure Closure 簡單來說，就是某函數在另一個函數內被創造並且參照了創建函數的某些變數，此時該變數會存留於記憶內，儘管創建函數已經結束。
 First time meet to Closure N年前在學習 Common Lisp 時教學內出現了一個陌生又奇特的技巧，Closure，以下是他的實做
 (let ((counter 0)) (defun reset () (setf counter 0)) (defun stamp () (setf counter (+ counter 1)))) (list (stamp) (stamp) (reset) (stamp)) ; (1 2 0 1) 為了怕正常人看不懂，以下用 Python 翻譯
-def gen_counter(): counter = 0 def reset(): nonlocal counter counter = 0 return counter def stamp(): nonlocal counter counter += 1 return counter return reset, stamp reset, stamp = gen_counter() print(stamp()) # 1 print(stamp()) # 2 print(reset()) # 0 print(stamp()) # 1 可以看出在 gen_counter 內的 兩個函數 (reset, stamp) 一同共用內部變數 counter 儘管 gen_counter 已經回傳並且結束，但是在之後的程式卻還是擁有當初初始化的 count，亦即 counter 在記憶體中不會因為 gen_counter 已經回傳就被回收。</description></item></channel></rss>
+def gen_counter(): counter = 0 def reset(): nonlocal counter counter = 0 return counter def stamp(): nonlocal counter counter += 1 return counter return reset, stamp reset, stamp = gen_counter() print(stamp()) # 1 print(stamp()) # 2 print(reset()) # 0 print(stamp()) # 1 可以看出在 gen_counter 內的 兩個函數 (reset, stamp) 一同共用內部變數 counter 儘管 gen_counter 已經回傳並且結束，但是在之後的程式卻還是擁有當初初始化的 count，亦即 counter 在記憶體中不會因為 gen_counter 已經回傳就被回收。</description><content>&lt;h1 id="closure">Closure&lt;/h1>
+&lt;h2 id="what-is-closure">What is closure&lt;/h2>
+&lt;p>Closure 簡單來說，就是某函數在另一個函數內被創造並且參照了創建函數的某些變數，此時該變數會存留於記憶內，儘管創建函數已經結束。&lt;/p>
+&lt;h2 id="first-time-meet-to-closure">First time meet to Closure&lt;/h2>
+&lt;p>N年前在學習 Common Lisp 時教學內出現了一個陌生又奇特的技巧，&lt;a href="https://acl.readthedocs.io/en/latest/zhTW/ch6.html#closures">Closure&lt;/a>，以下是他的實做&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-lisp" data-lang="lisp">&lt;span style="display:flex;">&lt;span>(&lt;span style="color:#66d9ef">let&lt;/span> ((counter &lt;span style="color:#ae81ff">0&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (defun reset ()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (setf counter &lt;span style="color:#ae81ff">0&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (defun stamp ()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (setf counter (&lt;span style="color:#a6e22e">+&lt;/span> counter &lt;span style="color:#ae81ff">1&lt;/span>))))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>(&lt;span style="color:#a6e22e">list&lt;/span> (stamp) (stamp) (reset) (stamp))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">; (1 2 0 1)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;p>為了怕正常人看不懂，以下用 Python 翻譯&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">gen_counter&lt;/span>():
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> counter &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">reset&lt;/span>():
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">nonlocal&lt;/span> counter
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> counter &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> counter
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">stamp&lt;/span>():
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">nonlocal&lt;/span> counter
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> counter &lt;span style="color:#f92672">+=&lt;/span> &lt;span style="color:#ae81ff">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> counter
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> reset, stamp
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>reset, stamp &lt;span style="color:#f92672">=&lt;/span> gen_counter()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>print(stamp()) &lt;span style="color:#75715e"># 1&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>print(stamp()) &lt;span style="color:#75715e"># 2&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>print(reset()) &lt;span style="color:#75715e"># 0&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>print(stamp()) &lt;span style="color:#75715e"># 1&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;p>可以看出在 &lt;code>gen_counter&lt;/code> 內的 兩個函數 (reset, stamp) 一同共用內部變數 &lt;code>counter&lt;/code> 儘管 gen_counter 已經回傳並且結束，但是在之後的程式卻還是擁有當初初始化的 count，亦即 &lt;code>counter&lt;/code> 在記憶體中不會因為 gen_counter 已經回傳就被回收。&lt;/p>
+&lt;h1 id="django-q">Django Q&lt;/h1>
+&lt;h2 id="what-is-django-q">What is Django Q&lt;/h2>
+&lt;p>Django 的 ORM 十分的簡易讓新手們可以簡單的寫出一般的增刪改查，但是如果要用比較進階的搜尋 (SQL WHERE CLAUSE)，例如：正常人都寫的出來的 OR&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-postgresql" data-lang="postgresql">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">SELECT&lt;/span> &lt;span style="color:#f92672">*&lt;/span> &lt;span style="color:#66d9ef">FROM&lt;/span> post
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">WHERE&lt;/span> &lt;span style="color:#66d9ef">content&lt;/span> &lt;span style="color:#66d9ef">LIKE&lt;/span> &lt;span style="color:#e6db74">&amp;#39;%HELLO%&amp;#39;&lt;/span> &lt;span style="color:#66d9ef">OR&lt;/span> title &lt;span style="color:#66d9ef">LIKE&lt;/span> &lt;span style="color:#e6db74">&amp;#39;%HELLO%&amp;#39;&lt;/span>;&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;p>在 Django ORM 就必須要使用 Q 來達成&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> django.db.models &lt;span style="color:#f92672">import&lt;/span> Q
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Post&lt;span style="color:#f92672">.&lt;/span>objects&lt;span style="color:#f92672">.&lt;/span>filter(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Q(content__contains&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;HELLO&amp;#39;&lt;/span>) &lt;span style="color:#f92672">|&lt;/span> Q(title__contains&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;HELLO&amp;#39;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>)&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;p>其中使用 &lt;code>|&lt;/code> 作為 &lt;code>OR&lt;/code> 所有的 Q 就如同原本寫 ORM 的條件&lt;/p>
+&lt;h1 id="dancing-with">Dancing with&lt;/h1>
+&lt;p>在專案中有一項很常見的功能，就是關鍵字搜尋，很容易想像的是，如果使用一般的 SQL 就用 &lt;code>LIKE&lt;/code> 慢慢組起來，但是在每個需要搜尋的功能中使用 Django Q 來組建實在很不好維護，以下利用簡化版的真實專案的案例演示 Closure 如何使它看起來更優雅&lt;/p>
+&lt;h3 id="modelspy">models.py&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> django.db &lt;span style="color:#f92672">import&lt;/span> models
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> django.contrib.postgres.fields &lt;span style="color:#f92672">import&lt;/span> JSONField
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">Content&lt;/span>(models&lt;span style="color:#f92672">.&lt;/span>Model):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> title &lt;span style="color:#f92672">=&lt;/span> models&lt;span style="color:#f92672">.&lt;/span>CharField(max_length&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">200&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> title_pinyin &lt;span style="color:#f92672">=&lt;/span> models&lt;span style="color:#f92672">.&lt;/span>CharField(max_length&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">400&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> tags &lt;span style="color:#f92672">=&lt;/span> JSONField(default&lt;span style="color:#f92672">=&lt;/span>list)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> content &lt;span style="color:#f92672">=&lt;/span> models&lt;span style="color:#f92672">.&lt;/span>TextField()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> content_pinyin &lt;span style="color:#f92672">=&lt;/span> models&lt;span style="color:#f92672">.&lt;/span>TextField()&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;h3 id="sqlpy">sql.py&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> django.db.models &lt;span style="color:#f92672">import&lt;/span> Q
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">gen_keywords_search&lt;/span>():
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> q &lt;span style="color:#f92672">=&lt;/span> Q()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">icontains&lt;/span>(contain&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#66d9ef">None&lt;/span>):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">nonlocal&lt;/span> q
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> contain:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> q &lt;span style="color:#f92672">=&lt;/span> (q &lt;span style="color:#f92672">|&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Q(title__icontains&lt;span style="color:#f92672">=&lt;/span>contain) &lt;span style="color:#f92672">|&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Q(title_pinyin__icontains&lt;span style="color:#f92672">=&lt;/span>contain) &lt;span style="color:#f92672">|&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Q(tags__icontains&lt;span style="color:#f92672">=&lt;/span>contain) &lt;span style="color:#f92672">|&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Q(content__icontains&lt;span style="color:#f92672">=&lt;/span>contain) &lt;span style="color:#f92672">|&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Q(content_pinyin__icontains&lt;span style="color:#f92672">=&lt;/span>contain))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> q
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> icontains&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;h3 id="viewspy">views.py&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> rest_framework.decorators &lt;span style="color:#f92672">import&lt;/span> api_view
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> api.page &lt;span style="color:#f92672">import&lt;/span> pager
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> .models &lt;span style="color:#f92672">import&lt;/span> Content
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> .sql &lt;span style="color:#f92672">import&lt;/span> gen_keywords_search
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> .serializer &lt;span style="color:#f92672">import&lt;/span> PostListSerializer, SearchContentSerializer
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">@api_view&lt;/span>([&lt;span style="color:#e6db74">&amp;#39;post&amp;#39;&lt;/span>])
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">search&lt;/span>(request):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> serializer &lt;span style="color:#f92672">=&lt;/span> SearchContentSerializer(data&lt;span style="color:#f92672">=&lt;/span>request&lt;span style="color:#f92672">.&lt;/span>data)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> serializer&lt;span style="color:#f92672">.&lt;/span>is_valid(raise_exception&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#66d9ef">True&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> data &lt;span style="color:#f92672">=&lt;/span> serializer&lt;span style="color:#f92672">.&lt;/span>data
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> qs &lt;span style="color:#f92672">=&lt;/span> request&lt;span style="color:#f92672">.&lt;/span>user&lt;span style="color:#f92672">.&lt;/span>post_set&lt;span style="color:#f92672">.&lt;/span>all()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> &lt;span style="color:#e6db74">&amp;#39;keywords&amp;#39;&lt;/span> &lt;span style="color:#f92672">in&lt;/span> data:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> q &lt;span style="color:#f92672">=&lt;/span> gen_keywords_search()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> [q(key) &lt;span style="color:#66d9ef">for&lt;/span> key &lt;span style="color:#f92672">in&lt;/span> data[&lt;span style="color:#e6db74">&amp;#39;keywords&amp;#39;&lt;/span>]&lt;span style="color:#f92672">.&lt;/span>split()]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> qs &lt;span style="color:#f92672">=&lt;/span> qs&lt;span style="color:#f92672">.&lt;/span>filter(q())
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> pager(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> request,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> qs,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> PostListSerializer,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> page_size&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">5&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> )&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></content></item></channel></rss>

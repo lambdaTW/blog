@@ -1,3 +1,208 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Index on Lambda</title><link>/tags/index/</link><description>Recent content in Index on Lambda</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 26 Apr 2019 00:00:00 +0000</lastBuildDate><atom:link href="/tags/index/index.xml" rel="self" type="application/rss+xml"/><item><title>Create a GIN index with Django on AWS RDS</title><link>/blog/create-a-gin-index-with-django-on-aws-rds/</link><pubDate>Fri, 26 Apr 2019 00:00:00 +0000</pubDate><guid>/blog/create-a-gin-index-with-django-on-aws-rds/</guid><description>GIN What is it GIN 是一種 INDEX 可以幫助加速全文搜索的速度
 GIN stands for Generalized Inverted Index. GIN is designed for handling cases where the items to be indexed are composite values, and the queries to be handled by the index need to search for element values that appear within the composite items. For example, the items could be documents, and the queries could be searches for documents containing specific words.
-Normal SQL 在傳統 SQL 下可以用以下幾個步驟完成建立 GIN INDEX</description></item></channel></rss>
+Normal SQL 在傳統 SQL 下可以用以下幾個步驟完成建立 GIN INDEX</description><content>&lt;h2 id="gin">GIN&lt;/h2>
+&lt;h3 id="what-is-it">What is it&lt;/h3>
+&lt;p>GIN 是一種 INDEX 可以幫助加速全文搜索的速度&lt;/p>
+&lt;blockquote>
+&lt;p>GIN stands for Generalized Inverted Index. GIN is designed for handling cases where the items to be indexed are composite values, and the queries to be handled by the index need to search for element values that appear within the composite items. For example, the items could be documents, and the queries could be searches for documents containing specific words.&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="normal-sql">Normal SQL&lt;/h3>
+&lt;p>在傳統 SQL 下可以用以下幾個步驟完成建立 GIN INDEX&lt;/p>
+&lt;ul>
+&lt;li>Install gin extension&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-postgresql" data-lang="postgresql">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">CREATE&lt;/span> &lt;span style="color:#66d9ef">EXTENSION&lt;/span> &lt;span style="color:#66d9ef">IF&lt;/span> &lt;span style="color:#66d9ef">NOT&lt;/span> &lt;span style="color:#66d9ef">EXISTS&lt;/span> pg_trgm;&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;ul>
+&lt;li>Create index for table&amp;rsquo;s column
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-postgresql" data-lang="postgresql">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">CREATE&lt;/span> &lt;span style="color:#66d9ef">INDEX&lt;/span> &lt;span style="color:#f92672">&amp;lt;&lt;/span>index_name&lt;span style="color:#f92672">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">ON&lt;/span> &lt;span style="color:#f92672">&amp;lt;&lt;/span>schema_name&lt;span style="color:#f92672">&amp;gt;&lt;/span>&lt;span style="color:#ae81ff">.&lt;/span>&lt;span style="color:#f92672">&amp;lt;&lt;/span>table_name&lt;span style="color:#f92672">&amp;gt;&lt;/span> &lt;span style="color:#66d9ef">USING&lt;/span> gin
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (&lt;span style="color:#f92672">&amp;lt;&lt;/span>column_name&lt;span style="color:#f92672">&amp;gt;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">TABLESPACE&lt;/span> pg_default;&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;h4 id="special-type">Special type&lt;/h4>
+&lt;p>但是如果你是特殊的欄位，例如：varchar、text，此時你就必須要給它特定的 operator 才能建立&lt;/p>
+&lt;h5 id="create-gin-index-for-varchar-column">Create GIN INDEX for varchar column&lt;/h5>
+&lt;ul>
+&lt;li>Use gin_trgm_ops as operator&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-postgresql" data-lang="postgresql">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">CREATE&lt;/span> &lt;span style="color:#66d9ef">INDEX&lt;/span> &lt;span style="color:#f92672">&amp;lt;&lt;/span>index_name&lt;span style="color:#f92672">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">ON&lt;/span> &lt;span style="color:#f92672">&amp;lt;&lt;/span>schema_name&lt;span style="color:#f92672">&amp;gt;&lt;/span>&lt;span style="color:#ae81ff">.&lt;/span>&lt;span style="color:#f92672">&amp;lt;&lt;/span>table_name&lt;span style="color:#f92672">&amp;gt;&lt;/span> &lt;span style="color:#66d9ef">USING&lt;/span> gin
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (&lt;span style="color:#f92672">&amp;lt;&lt;/span>column_name &lt;span style="color:#66d9ef">COLLATE&lt;/span> pg_catalog&lt;span style="color:#ae81ff">.&lt;/span>&lt;span style="color:#e6db74">&amp;#34;default&amp;#34;&lt;/span> gin_trgm_ops)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">TABLESPACE&lt;/span> pg_default;&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;h5 id="or-you-can-set-gin_trgm_ops-as-default">Or, you can set &lt;code>gin_trgm_ops&lt;/code> as default&lt;/h5>
+&lt;ul>
+&lt;li>Set default operator class&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-postgresql" data-lang="postgresql">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">UPDATE&lt;/span> pg_opclass &lt;span style="color:#66d9ef">SET&lt;/span> opcdefault &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#66d9ef">true&lt;/span> &lt;span style="color:#66d9ef">WHERE&lt;/span> opcname&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;gin_trgm_ops&amp;#39;&lt;/span>;&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;ul>
+&lt;li>Create the index like other types of column&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-postgresql" data-lang="postgresql">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">CREATE&lt;/span> &lt;span style="color:#66d9ef">INDEX&lt;/span> &lt;span style="color:#f92672">&amp;lt;&lt;/span>index_name&lt;span style="color:#f92672">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">ON&lt;/span> &lt;span style="color:#f92672">&amp;lt;&lt;/span>schema_name&lt;span style="color:#f92672">&amp;gt;&lt;/span>&lt;span style="color:#ae81ff">.&lt;/span>&lt;span style="color:#f92672">&amp;lt;&lt;/span>table_name&lt;span style="color:#f92672">&amp;gt;&lt;/span> &lt;span style="color:#66d9ef">USING&lt;/span> gin
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (&lt;span style="color:#f92672">&amp;lt;&lt;/span>column_name&lt;span style="color:#f92672">&amp;gt;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">TABLESPACE&lt;/span> pg_default;&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;h3 id="use-django-postgres-contribution-library">Use Django Postgres contribution library&lt;/h3>
+&lt;p>對於 PostgreSQL 有較完善的 Django 對於 GIN INDEX 也是有支援的，所以你可以在 &lt;code>models.py&lt;/code> 直接使用它&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> django.db &lt;span style="color:#f92672">import&lt;/span> models
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> django.contrib.postgres.fields &lt;span style="color:#f92672">import&lt;/span> JSONField
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> django.contrib.postgres.indexes &lt;span style="color:#f92672">import&lt;/span> GinIndex
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">Post&lt;/span>(models&lt;span style="color:#f92672">.&lt;/span>Model):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> content_segment &lt;span style="color:#f92672">=&lt;/span> JSONField(default&lt;span style="color:#f92672">=&lt;/span>list)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">Meta&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> indexes &lt;span style="color:#f92672">=&lt;/span> [GinIndex(fields&lt;span style="color:#f92672">=&lt;/span>[&lt;span style="color:#e6db74">&amp;#39;content_segment&amp;#39;&lt;/span>])]&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;h3 id="the-char-field-in-django">The char field in Django&lt;/h3>
+&lt;p>在 Django 中 Char、Text 等 &lt;code>varchar&lt;/code> 類型的欄位要使用 GIN 和原生 SQL 一樣需要去設定需要使用的 &lt;code>operator&lt;/code>， 產出 migration file, 並且 migrate 以後你應該會看到類似下面的錯誤&lt;/p>
+&lt;pre tabindex="0">&lt;code>ERROR: data type character varying has no default operator class for access method &amp;#34;gin&amp;#34;
+&lt;/code>&lt;/pre>&lt;p>我們很簡單的可以在 Add Index 前加上設定 default operator 去 by pass&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">import&lt;/span> django.contrib.postgres.indexes
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> django.db &lt;span style="color:#f92672">import&lt;/span> migrations, models
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">Migration&lt;/span>(migrations&lt;span style="color:#f92672">.&lt;/span>Migration):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> dependencies &lt;span style="color:#f92672">=&lt;/span> [
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (&lt;span style="color:#e6db74">&amp;#39;posts&amp;#39;&lt;/span>, &lt;span style="color:#e6db74">&amp;#39;....&amp;#39;&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> operations &lt;span style="color:#f92672">=&lt;/span> [
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> migrations&lt;span style="color:#f92672">.&lt;/span>RunSQL([
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;UPDATE pg_opclass SET opcdefault = true WHERE opcname=&amp;#39;gin_trgm_ops&amp;#39;;&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ]),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> migrations&lt;span style="color:#f92672">.&lt;/span>AddIndex(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> model_name&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;post&amp;#39;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> index&lt;span style="color:#f92672">=&lt;/span>django&lt;span style="color:#f92672">.&lt;/span>contrib&lt;span style="color:#f92672">.&lt;/span>postgres&lt;span style="color:#f92672">.&lt;/span>indexes&lt;span style="color:#f92672">.&lt;/span>GinIndex(fields&lt;span style="color:#f92672">=&lt;/span>[&lt;span style="color:#e6db74">&amp;#39;title&amp;#39;&lt;/span>], name&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;posts_po_title_374d31_gin&amp;#39;&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> )
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ]&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;p>你應該會看到下面的錯誤&lt;/p>
+&lt;pre tabindex="0">&lt;code>django.db.utils.ProgrammingError: operator class &amp;#34;gin_trgm_ops&amp;#34; does not exist for access method &amp;#34;gin&amp;#34;
+&lt;/code>&lt;/pre>&lt;p>表示你家的 PostgreSQL 沒有安裝 GIN 的套件，這很簡單，只需要改改 migration file 就好&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">import&lt;/span> django.contrib.postgres.indexes
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> django.db &lt;span style="color:#f92672">import&lt;/span> migrations, models
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">Migration&lt;/span>(migrations&lt;span style="color:#f92672">.&lt;/span>Migration):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> dependencies &lt;span style="color:#f92672">=&lt;/span> [
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (&lt;span style="color:#e6db74">&amp;#39;posts&amp;#39;&lt;/span>, &lt;span style="color:#e6db74">&amp;#39;....&amp;#39;&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> operations &lt;span style="color:#f92672">=&lt;/span> [
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> migrations&lt;span style="color:#f92672">.&lt;/span>RunSQL([
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;CREATE EXTENSION IF NOT EXISTS pg_trgm;&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;UPDATE pg_opclass SET opcdefault = true WHERE opcname=&amp;#39;gin_trgm_ops&amp;#39;;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ]),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> migrations&lt;span style="color:#f92672">.&lt;/span>AddIndex(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> model_name&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;post&amp;#39;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> index&lt;span style="color:#f92672">=&lt;/span>django&lt;span style="color:#f92672">.&lt;/span>contrib&lt;span style="color:#f92672">.&lt;/span>postgres&lt;span style="color:#f92672">.&lt;/span>indexes&lt;span style="color:#f92672">.&lt;/span>GinIndex(fields&lt;span style="color:#f92672">=&lt;/span>[&lt;span style="color:#e6db74">&amp;#39;title&amp;#39;&lt;/span>], name&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;posts_po_title_374d31_gin&amp;#39;&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> )
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ]&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;p>再次 migrate 相信你已經成功了&lt;/p>
+&lt;h2 id="aws-rds-is-secure-than-your-local-db-server">AWS RDS is secure than your local DB server&lt;/h2>
+&lt;p>AWS RDS 預設不會給你 superuser 權限，所以你沒有辦法直接執行&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-postgresql" data-lang="postgresql">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">UPDATE&lt;/span> pg_opclass &lt;span style="color:#66d9ef">SET&lt;/span> opcdefault &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#66d9ef">true&lt;/span> &lt;span style="color:#66d9ef">WHERE&lt;/span> opcname&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;gin_trgm_ops&amp;#39;&lt;/span>;&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;p>這會讓你在 Django migrate 時看到以下錯誤&lt;/p>
+&lt;pre tabindex="0">&lt;code>permission denied for relation pg_opclass
+&lt;/code>&lt;/pre>&lt;h3 id="fix-it">Fix it&lt;/h3>
+&lt;p>記得我們在最一開始如何使用免設定預設 &lt;code>operator&lt;/code> 就產生了一個 GIN 的 index 嗎？&lt;/p>
+&lt;p>如法炮製我們直接把 &lt;code>operator&lt;/code> 插入在 CREATE INDEX 的 SQL 就可以達到了&lt;/p>
+&lt;h4 id="source-code-tour">Source code tour&lt;/h4>
+&lt;ul>
+&lt;li>GINIndex forefathers
+我們可以在發現 SQL statement 是由 &lt;code>schema_editor&lt;/code> 的 &lt;code>_create_index_sql&lt;/code> 產生出來的&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># django/contrib/postgres/indexes.py&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">from&lt;/span> django.db.models &lt;span style="color:#f92672">import&lt;/span> Index
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">PostgresIndex&lt;/span>(Index):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># ...&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">GinIndex&lt;/span>(PostgresIndex):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">create_sql&lt;/span>(self, model, schema_editor, using&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;&amp;#39;&lt;/span>):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> statement &lt;span style="color:#f92672">=&lt;/span> super()&lt;span style="color:#f92672">.&lt;/span>create_sql(model, schema_editor, using&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39; USING &lt;/span>&lt;span style="color:#e6db74">%s&lt;/span>&lt;span style="color:#e6db74">&amp;#39;&lt;/span> &lt;span style="color:#f92672">%&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>suffix)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> with_params &lt;span style="color:#f92672">=&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>get_with_params()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> with_params:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> statement&lt;span style="color:#f92672">.&lt;/span>parts[&lt;span style="color:#e6db74">&amp;#39;extra&amp;#39;&lt;/span>] &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&amp;#39;WITH (&lt;/span>&lt;span style="color:#e6db74">%s&lt;/span>&lt;span style="color:#e6db74">) &lt;/span>&lt;span style="color:#e6db74">%s&lt;/span>&lt;span style="color:#e6db74">&amp;#39;&lt;/span> &lt;span style="color:#f92672">%&lt;/span> (
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#39;, &amp;#39;&lt;/span>&lt;span style="color:#f92672">.&lt;/span>join(with_params),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> statement&lt;span style="color:#f92672">.&lt;/span>parts[&lt;span style="color:#e6db74">&amp;#39;extra&amp;#39;&lt;/span>],
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> )
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> statement
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># django/db/models/indexes.py&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">Index&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">create_sql&lt;/span>(self, model, schema_editor, using&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;&amp;#39;&lt;/span>):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> fields &lt;span style="color:#f92672">=&lt;/span> [model&lt;span style="color:#f92672">.&lt;/span>_meta&lt;span style="color:#f92672">.&lt;/span>get_field(field_name) &lt;span style="color:#66d9ef">for&lt;/span> field_name, _ &lt;span style="color:#f92672">in&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>fields_orders]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> col_suffixes &lt;span style="color:#f92672">=&lt;/span> [order[&lt;span style="color:#ae81ff">1&lt;/span>] &lt;span style="color:#66d9ef">for&lt;/span> order &lt;span style="color:#f92672">in&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>fields_orders]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> schema_editor&lt;span style="color:#f92672">.&lt;/span>_create_index_sql(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> model, fields, name&lt;span style="color:#f92672">=&lt;/span>self&lt;span style="color:#f92672">.&lt;/span>name, using&lt;span style="color:#f92672">=&lt;/span>using, db_tablespace&lt;span style="color:#f92672">=&lt;/span>self&lt;span style="color:#f92672">.&lt;/span>db_tablespace,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> col_suffixes&lt;span style="color:#f92672">=&lt;/span>col_suffixes,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> )&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;ul>
+&lt;li>How &lt;code>schema_edit&lt;/code> create SQL statement&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># django/db/backends/postgresql/schema.py&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">from&lt;/span> django.db.backends.base.schema &lt;span style="color:#f92672">import&lt;/span> BaseDatabaseSchemaEditor
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">DatabaseSchemaEditor&lt;/span>(BaseDatabaseSchemaEditor):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># ...&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> sql_create_index &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&amp;#34;CREATE INDEX &lt;/span>&lt;span style="color:#e6db74">%(name)s&lt;/span>&lt;span style="color:#e6db74"> ON &lt;/span>&lt;span style="color:#e6db74">%(table)s%(using)s&lt;/span>&lt;span style="color:#e6db74"> (&lt;/span>&lt;span style="color:#e6db74">%(columns)s&lt;/span>&lt;span style="color:#e6db74">)&lt;/span>&lt;span style="color:#e6db74">%(extra)s&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># schema.py&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">BaseDatabaseSchemaEditor&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">_create_index_sql&lt;/span>(self, model, fields, &lt;span style="color:#f92672">*&lt;/span>, name&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#66d9ef">None&lt;/span>, suffix&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;&amp;#39;&lt;/span>, using&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;&amp;#39;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> db_tablespace&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#66d9ef">None&lt;/span>, col_suffixes&lt;span style="color:#f92672">=&lt;/span>(), sql&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#66d9ef">None&lt;/span>):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;&amp;#34;&amp;#34;
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> Return the SQL statement to create the index for one or several fields.
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> `sql` can be specified if the syntax differs from the standard (GIS
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> indexes, ...).
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> &amp;#34;&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> tablespace_sql &lt;span style="color:#f92672">=&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>_get_index_tablespace_sql(model, fields, db_tablespace&lt;span style="color:#f92672">=&lt;/span>db_tablespace)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> columns &lt;span style="color:#f92672">=&lt;/span> [field&lt;span style="color:#f92672">.&lt;/span>column &lt;span style="color:#66d9ef">for&lt;/span> field &lt;span style="color:#f92672">in&lt;/span> fields]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> sql_create_index &lt;span style="color:#f92672">=&lt;/span> sql &lt;span style="color:#f92672">or&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>sql_create_index
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> table &lt;span style="color:#f92672">=&lt;/span> model&lt;span style="color:#f92672">.&lt;/span>_meta&lt;span style="color:#f92672">.&lt;/span>db_table
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">create_index_name&lt;/span>(&lt;span style="color:#f92672">*&lt;/span>args, &lt;span style="color:#f92672">**&lt;/span>kwargs):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">nonlocal&lt;/span> name
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> name &lt;span style="color:#f92672">is&lt;/span> &lt;span style="color:#66d9ef">None&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> name &lt;span style="color:#f92672">=&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>_create_index_name(&lt;span style="color:#f92672">*&lt;/span>args, &lt;span style="color:#f92672">**&lt;/span>kwargs)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>quote_name(name)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> Statement(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> sql_create_index,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> table&lt;span style="color:#f92672">=&lt;/span>Table(table, self&lt;span style="color:#f92672">.&lt;/span>quote_name),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> name&lt;span style="color:#f92672">=&lt;/span>IndexName(table, columns, suffix, create_index_name),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> using&lt;span style="color:#f92672">=&lt;/span>using,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> columns&lt;span style="color:#f92672">=&lt;/span>Columns(table, columns, self&lt;span style="color:#f92672">.&lt;/span>quote_name, col_suffixes&lt;span style="color:#f92672">=&lt;/span>col_suffixes),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> extra&lt;span style="color:#f92672">=&lt;/span>tablespace_sql,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> )&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;ul>
+&lt;li>Override the &lt;code>create_sql&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">from&lt;/span> django.contrib.postgres.indexes &lt;span style="color:#f92672">import&lt;/span> GinIndex
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">CharGinIndex&lt;/span>(GinIndex):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">create_sql&lt;/span>(self, model, schema_editor, using&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;&amp;#39;&lt;/span>):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">assert&lt;/span> len(self&lt;span style="color:#f92672">.&lt;/span>fields_orders) &lt;span style="color:#f92672">==&lt;/span> &lt;span style="color:#ae81ff">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> original_sql &lt;span style="color:#f92672">=&lt;/span> schema_editor&lt;span style="color:#f92672">.&lt;/span>sql_create_index
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> schema_editor&lt;span style="color:#f92672">.&lt;/span>sql_create_index &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&amp;#39;CREATE INDEX &lt;/span>&lt;span style="color:#e6db74">%(name)s&lt;/span>&lt;span style="color:#e6db74"> ON &lt;/span>&lt;span style="color:#e6db74">%(table)s%(using)s&lt;/span>&lt;span style="color:#e6db74"> (&lt;/span>&lt;span style="color:#e6db74">%(columns)s&lt;/span>&lt;span style="color:#e6db74"> COLLATE pg_catalog.&amp;#34;default&amp;#34; gin_trgm_ops)&lt;/span>&lt;span style="color:#e6db74">%(extra)s&lt;/span>&lt;span style="color:#e6db74">&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> statement &lt;span style="color:#f92672">=&lt;/span> super()&lt;span style="color:#f92672">.&lt;/span>create_sql(model, schema_editor, using)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> schema_editor&lt;span style="color:#f92672">.&lt;/span>sql_create_index &lt;span style="color:#f92672">=&lt;/span> original_sql
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> statement&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;p>我們在 &lt;code>create_sql&lt;/code> 上面覆寫掉 &lt;code>schema_editor&lt;/code> 的 &lt;code>sql_create_index&lt;/code> 語法，並且在呼叫完 &lt;code>create_sql&lt;/code> 以後把它還原（因為一次 migrate 中 schema editor 會被重複使用，若沒有還原其他在同一次 migrate 中使用到相同 schema editor 的就會被影響)&lt;/p>
+&lt;h2 id="conclusion">Conclusion&lt;/h2>
+&lt;p>在這邊用比較髒的方式處理了這個問題，主要是因為在 &lt;code>BaseDatabaseSchemaEditor&lt;/code> 有以下方式可以更改 &lt;code>sql&lt;/code> 參數就可以達到這功能，但是在 &lt;code>Index&lt;/code> 類別並沒有把此參數讓我們可以丟進去，由於不會影響功能，暫時就不重複造輪子。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">BaseDatabaseSchemaEditor&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">_create_index_sql&lt;/span>(self, model, fields, &lt;span style="color:#f92672">*&lt;/span>, name&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#66d9ef">None&lt;/span>, suffix&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;&amp;#39;&lt;/span>, using&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;&amp;#39;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> db_tablespace&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#66d9ef">None&lt;/span>, col_suffixes&lt;span style="color:#f92672">=&lt;/span>(), sql&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#66d9ef">None&lt;/span>):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># ...&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> sql_create_index &lt;span style="color:#f92672">=&lt;/span> sql &lt;span style="color:#f92672">or&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>sql_create_index
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># ...&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></content></item></channel></rss>

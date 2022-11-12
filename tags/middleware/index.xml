@@ -1,2 +1,165 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Middleware on Lambda</title><link>/tags/middleware/</link><description>Recent content in Middleware on Lambda</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 25 Jan 2020 00:00:00 +0000</lastBuildDate><atom:link href="/tags/middleware/index.xml" rel="self" type="application/rss+xml"/><item><title>How to fix no route found error on Django Channels</title><link>/blog/how-to-fix-no-route-found-error-on-django-channels/</link><pubDate>Sat, 25 Jan 2020 00:00:00 +0000</pubDate><guid>/blog/how-to-fix-no-route-found-error-on-django-channels/</guid><description>Issue description Django Channels 對於不存在的路徑存取，全部會拋出錯誤，而不是一般性的警告處理，所以如果和我一樣在 Djangoo Channels 有裝上 Sentry ，而且伺服器在被惡意嘗試路徑時就會看到一堆 ValueError: No route found for path '...'. 的錯誤資訊，好處是知道被打了，壞處就是會噴錢（如果不是自己 Hosting）。
-Fix it Make HandleRouteNotFoundMiddleware for this issue from datetime import datetime from logging import getLogger from django.urls.exceptions import Resolver404 logger = getLogger(__file__) class HandleRouteNotFoundMiddleware: def __init__(self, inner): self.inner = inner def __call__(self, scope): try: inner_instance = self.inner(scope) return inner_instance except (Resolver404, ValueError) as e: if &amp;#39;No route found for path&amp;#39; not in str(e) and \ scope[&amp;#34;type&amp;#34;] not in [&amp;#39;http&amp;#39;, &amp;#39;websocket&amp;#39;]: raise e logger.</description></item></channel></rss>
+Fix it Make HandleRouteNotFoundMiddleware for this issue from datetime import datetime from logging import getLogger from django.urls.exceptions import Resolver404 logger = getLogger(__file__) class HandleRouteNotFoundMiddleware: def __init__(self, inner): self.inner = inner def __call__(self, scope): try: inner_instance = self.inner(scope) return inner_instance except (Resolver404, ValueError) as e: if &amp;#39;No route found for path&amp;#39; not in str(e) and \ scope[&amp;#34;type&amp;#34;] not in [&amp;#39;http&amp;#39;, &amp;#39;websocket&amp;#39;]: raise e logger.</description><content>&lt;h1 id="issue-description">Issue description&lt;/h1>
+&lt;p>Django Channels 對於不存在的路徑存取，全部會拋出錯誤，而不是一般性的警告處理，所以如果和我一樣在 Djangoo Channels 有裝上 Sentry ，而且伺服器在被惡意嘗試路徑時就會看到一堆 &lt;code>ValueError: No route found for path '...'.&lt;/code> 的錯誤資訊，好處是知道被打了，壞處就是會噴錢（如果不是自己 Hosting）。&lt;/p>
+&lt;h1 id="fix-it">Fix it&lt;/h1>
+&lt;h2 id="make-handleroutenotfoundmiddleware-for-this-issue">Make &lt;code>HandleRouteNotFoundMiddleware&lt;/code> for this issue&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> datetime &lt;span style="color:#f92672">import&lt;/span> datetime
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> logging &lt;span style="color:#f92672">import&lt;/span> getLogger
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> django.urls.exceptions &lt;span style="color:#f92672">import&lt;/span> Resolver404
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>logger &lt;span style="color:#f92672">=&lt;/span> getLogger(__file__)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">HandleRouteNotFoundMiddleware&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> __init__(self, inner):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> self&lt;span style="color:#f92672">.&lt;/span>inner &lt;span style="color:#f92672">=&lt;/span> inner
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> __call__(self, scope):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">try&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> inner_instance &lt;span style="color:#f92672">=&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>inner(scope)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> inner_instance
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">except&lt;/span> (Resolver404, &lt;span style="color:#a6e22e">ValueError&lt;/span>) &lt;span style="color:#66d9ef">as&lt;/span> e:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> &lt;span style="color:#e6db74">&amp;#39;No route found for path&amp;#39;&lt;/span> &lt;span style="color:#f92672">not&lt;/span> &lt;span style="color:#f92672">in&lt;/span> str(e) &lt;span style="color:#f92672">and&lt;/span> \
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> scope[&lt;span style="color:#e6db74">&amp;#34;type&amp;#34;&lt;/span>] &lt;span style="color:#f92672">not&lt;/span> &lt;span style="color:#f92672">in&lt;/span> [&lt;span style="color:#e6db74">&amp;#39;http&amp;#39;&lt;/span>, &lt;span style="color:#e6db74">&amp;#39;websocket&amp;#39;&lt;/span>]:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">raise&lt;/span> e
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> logger&lt;span style="color:#f92672">.&lt;/span>warning(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">f&lt;/span>&lt;span style="color:#e6db74">&amp;#39;&lt;/span>&lt;span style="color:#e6db74">{&lt;/span>datetime&lt;span style="color:#f92672">.&lt;/span>now()&lt;span style="color:#e6db74">}&lt;/span>&lt;span style="color:#e6db74"> - &lt;/span>&lt;span style="color:#e6db74">{&lt;/span>e&lt;span style="color:#e6db74">}&lt;/span>&lt;span style="color:#e6db74"> - &lt;/span>&lt;span style="color:#e6db74">{&lt;/span>scope&lt;span style="color:#e6db74">}&lt;/span>&lt;span style="color:#e6db74">&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> )
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> scope[&lt;span style="color:#e6db74">&amp;#34;type&amp;#34;&lt;/span>] &lt;span style="color:#f92672">==&lt;/span> &lt;span style="color:#e6db74">&amp;#34;http&amp;#34;&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>handle_http_route_error
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">elif&lt;/span> scope[&lt;span style="color:#e6db74">&amp;#34;type&amp;#34;&lt;/span>] &lt;span style="color:#f92672">==&lt;/span> &lt;span style="color:#e6db74">&amp;#34;websocket&amp;#34;&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>handle_ws_route_error
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">async&lt;/span> &lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">handle_ws_route_error&lt;/span>(self, receive, send):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">await&lt;/span> send({&lt;span style="color:#e6db74">&amp;#34;type&amp;#34;&lt;/span>: &lt;span style="color:#e6db74">&amp;#34;websocket.close&amp;#34;&lt;/span>})
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">async&lt;/span> &lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">handle_http_route_error&lt;/span>(self, receive, send):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">await&lt;/span> send({
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;type&amp;#34;&lt;/span>: &lt;span style="color:#e6db74">&amp;#34;http.response.start&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;status&amp;#34;&lt;/span>: &lt;span style="color:#ae81ff">404&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;headers&amp;#34;&lt;/span>: {},
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> })
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">await&lt;/span> send({
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;type&amp;#34;&lt;/span>: &lt;span style="color:#e6db74">&amp;#34;http.response.body&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;body&amp;#34;&lt;/span>: &lt;span style="color:#e6db74">&amp;#34;&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;more_body&amp;#34;&lt;/span>: &lt;span style="color:#e6db74">&amp;#34;&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> })
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="usage">Usage&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> core.middleware &lt;span style="color:#f92672">import&lt;/span> HandleRouteNotFoundMiddleware
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>application &lt;span style="color:#f92672">=&lt;/span> ProtocolTypeRouter({
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#39;websocket&amp;#39;&lt;/span>: AuthMiddlewareStack(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> HandleRouteNotFoundMiddleware(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> URLRouter(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> routing&lt;span style="color:#f92672">.&lt;/span>websocket_urlpatterns
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> )
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> )
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#39;channel&amp;#39;&lt;/span>: router,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#39;http&amp;#39;&lt;/span>: HandleRouteNotFoundMiddleware(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> URLRouter(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> urlpatterns
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> )
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> )
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>})
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="how-it-works">How it works&lt;/h1>
+&lt;h2 id="protocoltyperouter">ProtocolTypeRouter&lt;/h2>
+&lt;p>首先我們看到在 Django Channels 我們使用的 Router，可以看到在 &lt;code>__init__&lt;/code> 時把我們對應表放進去，在被 &lt;code>Call&lt;/code> 時直接把 &lt;code>scope&lt;/code> 塞到對應的 &lt;code>Instance&lt;/code> 一樣是執行該 &lt;code>Instance&lt;/code> 的 &lt;code>__call__&lt;/code> （或是該物件已經是 Function 可以直接執行）&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">ProtocolTypeRouter&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;&amp;#34;&amp;#34;
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> Takes a mapping of protocol type names to other Application instances,
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> and dispatches to the right one based on protocol name (or raises an error)
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> &amp;#34;&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> __init__(self, application_mapping):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> self&lt;span style="color:#f92672">.&lt;/span>application_mapping &lt;span style="color:#f92672">=&lt;/span> application_mapping
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> &lt;span style="color:#e6db74">&amp;#34;http&amp;#34;&lt;/span> &lt;span style="color:#f92672">not&lt;/span> &lt;span style="color:#f92672">in&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>application_mapping:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> self&lt;span style="color:#f92672">.&lt;/span>application_mapping[&lt;span style="color:#e6db74">&amp;#34;http&amp;#34;&lt;/span>] &lt;span style="color:#f92672">=&lt;/span> AsgiHandler
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> __call__(self, scope):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> scope[&lt;span style="color:#e6db74">&amp;#34;type&amp;#34;&lt;/span>] &lt;span style="color:#f92672">in&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>application_mapping:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>application_mapping[scope[&lt;span style="color:#e6db74">&amp;#34;type&amp;#34;&lt;/span>]](scope)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">else&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">raise&lt;/span> &lt;span style="color:#a6e22e">ValueError&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;No application configured for scope type &lt;/span>&lt;span style="color:#e6db74">%r&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span> &lt;span style="color:#f92672">%&lt;/span> scope[&lt;span style="color:#e6db74">&amp;#34;type&amp;#34;&lt;/span>])
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="urlrouter">URLRouter&lt;/h2>
+&lt;p>依照上面所述說的，我們常在 &lt;code>Protocol&lt;/code> 對應裡面放入 &lt;code>URLRouter&lt;/code> 所以我們這裡就只要看 &lt;code>___call__&lt;/code> 就好了，可以看到在最後 &lt;code>else&lt;/code> 的部份，會拋出兩個錯誤，也是我們這次主要要修正的問題。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">URLRouter&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;&amp;#34;&amp;#34;
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> Routes to different applications/consumers based on the URL path.
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> Works with anything that has a ``path`` key, but intended for WebSocket
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> and HTTP. Uses Django&amp;#39;s django.conf.urls objects for resolution -
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> url() or path().
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> &amp;#34;&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># ...&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> __call__(self, scope):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># Get the path&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> path &lt;span style="color:#f92672">=&lt;/span> scope&lt;span style="color:#f92672">.&lt;/span>get(&lt;span style="color:#e6db74">&amp;#34;path_remaining&amp;#34;&lt;/span>, scope&lt;span style="color:#f92672">.&lt;/span>get(&lt;span style="color:#e6db74">&amp;#34;path&amp;#34;&lt;/span>, &lt;span style="color:#66d9ef">None&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> path &lt;span style="color:#f92672">is&lt;/span> &lt;span style="color:#66d9ef">None&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">raise&lt;/span> &lt;span style="color:#a6e22e">ValueError&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;No &amp;#39;path&amp;#39; key in connection scope, cannot route URLs&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># Remove leading / to match Django&amp;#39;s handling&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> path &lt;span style="color:#f92672">=&lt;/span> path&lt;span style="color:#f92672">.&lt;/span>lstrip(&lt;span style="color:#e6db74">&amp;#34;/&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># Run through the routes we have until one matches&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">for&lt;/span> route &lt;span style="color:#f92672">in&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>routes:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">try&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> match &lt;span style="color:#f92672">=&lt;/span> route_pattern_match(route, path)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> match:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> new_path, args, kwargs &lt;span style="color:#f92672">=&lt;/span> match
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># Add args or kwargs into the scope&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> outer &lt;span style="color:#f92672">=&lt;/span> scope&lt;span style="color:#f92672">.&lt;/span>get(&lt;span style="color:#e6db74">&amp;#34;url_route&amp;#34;&lt;/span>, {})
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> route&lt;span style="color:#f92672">.&lt;/span>callback(dict(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> scope,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> path_remaining&lt;span style="color:#f92672">=&lt;/span>new_path,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> url_route&lt;span style="color:#f92672">=&lt;/span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;args&amp;#34;&lt;/span>: outer&lt;span style="color:#f92672">.&lt;/span>get(&lt;span style="color:#e6db74">&amp;#34;args&amp;#34;&lt;/span>, ()) &lt;span style="color:#f92672">+&lt;/span> args,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;kwargs&amp;#34;&lt;/span>: {&lt;span style="color:#f92672">**&lt;/span>outer&lt;span style="color:#f92672">.&lt;/span>get(&lt;span style="color:#e6db74">&amp;#34;kwargs&amp;#34;&lt;/span>, {}), &lt;span style="color:#f92672">**&lt;/span>kwargs},
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> },
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">except&lt;/span> Resolver404 &lt;span style="color:#66d9ef">as&lt;/span> e:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">pass&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">else&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> &lt;span style="color:#e6db74">&amp;#34;path_remaining&amp;#34;&lt;/span> &lt;span style="color:#f92672">in&lt;/span> scope:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">raise&lt;/span> Resolver404(&lt;span style="color:#e6db74">&amp;#34;No route found for path &lt;/span>&lt;span style="color:#e6db74">%r&lt;/span>&lt;span style="color:#e6db74">.&amp;#34;&lt;/span> &lt;span style="color:#f92672">%&lt;/span> path)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># We are the outermost URLRouter&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">raise&lt;/span> &lt;span style="color:#a6e22e">ValueError&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;No route found for path &lt;/span>&lt;span style="color:#e6db74">%r&lt;/span>&lt;span style="color:#e6db74">.&amp;#34;&lt;/span> &lt;span style="color:#f92672">%&lt;/span> path)
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="middleware">Middleware&lt;/h2>
+&lt;p>我們要想辦法在 &lt;code>ProtocolTypeRouter&lt;/code> 呼叫 &lt;code>URLRouter&lt;/code> 前，想辦法抓住這個錯誤，回傳正確找不到路徑的回傳，並且寫下 Log，為此，我們參考 &lt;code>Django Channels&lt;/code> 的 &lt;code>Middleware&lt;/code> ，它通常被包在 &lt;code>URLRouter&lt;/code> 外層，在 &lt;code>consumer&lt;/code> 前後處理 &lt;code>scope&lt;/code>，並參考其實做方法，最後自己刻一個專門處理此問題的 &lt;code>Middleware&lt;/code>。&lt;/p>
+&lt;h3 id="how-django-channels-middlewares-work">How Django Channels middlewares work&lt;/h3>
+&lt;p>首先我們可以看到 &lt;code>Django Channels&lt;/code> 的 &lt;code>BaseMiddleware&lt;/code> 在 &lt;code>__init__&lt;/code> 時，只是把它傳來的值放進 &lt;code>inner&lt;/code> 這個變數，在被呼叫時 (&lt;code>__call__&lt;/code>) 回傳一個可以接受 &lt;code>receive&lt;/code> 和 &lt;code>send&lt;/code> 的異步函數，這個函數會在連線近來時被建立，且將 &lt;code>receive&lt;/code> 和 &lt;code>send&lt;/code> 被丟入 &lt;code>epoll&lt;/code> 監聽的事件內，供異步伺服器和 client 溝通。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">BaseMiddleware&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> __init__(self, inner):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;&amp;#34;&amp;#34;
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> Middleware constructor - just takes inner application.
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> &amp;#34;&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> self&lt;span style="color:#f92672">.&lt;/span>inner &lt;span style="color:#f92672">=&lt;/span> inner
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> __call__(self, scope):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;&amp;#34;&amp;#34;
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> ASGI constructor; can insert things into the scope, but not
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> run asynchronous code.
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> &amp;#34;&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># Copy scope to stop changes going upstream&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> scope &lt;span style="color:#f92672">=&lt;/span> dict(scope)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># Allow subclasses to change the scope&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> self&lt;span style="color:#f92672">.&lt;/span>populate_scope(scope)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># Call the inner application&amp;#39;s init&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> inner_instance &lt;span style="color:#f92672">=&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>inner(scope)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># Partially bind it to our coroutine entrypoint along with the scope&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> partial(self&lt;span style="color:#f92672">.&lt;/span>coroutine_call, inner_instance, scope)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">async&lt;/span> &lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">coroutine_call&lt;/span>(self, inner_instance, scope, receive, send):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;&amp;#34;&amp;#34;
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> ASGI coroutine; where we can resolve items in the scope
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> (but you can&amp;#39;t modify it at the top level here!)
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> &amp;#34;&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">await&lt;/span> self&lt;span style="color:#f92672">.&lt;/span>resolve_scope(scope)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">await&lt;/span> inner_instance(receive, send)
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="ps">PS&lt;/h1>
+&lt;p>以上程式我也回在 &lt;a href="https://github.com/django/daphne/issues/165#issuecomment-577024577">GitHub issue&lt;/a> 上，有任何更好的建議也希望您能發出來，幫助大家。&lt;/p></content></item></channel></rss>

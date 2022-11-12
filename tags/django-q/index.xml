@@ -1,4 +1,110 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>django q on Lambda</title><link>/tags/django-q/</link><description>Recent content in django q on Lambda</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 18 Apr 2019 00:00:00 +0000</lastBuildDate><atom:link href="/tags/django-q/index.xml" rel="self" type="application/rss+xml"/><item><title>Closure</title><link>/blog/closure/</link><pubDate>Thu, 18 Apr 2019 00:00:00 +0000</pubDate><guid>/blog/closure/</guid><description>Closure What is closure Closure 簡單來說，就是某函數在另一個函數內被創造並且參照了創建函數的某些變數，此時該變數會存留於記憶內，儘管創建函數已經結束。
 First time meet to Closure N年前在學習 Common Lisp 時教學內出現了一個陌生又奇特的技巧，Closure，以下是他的實做
 (let ((counter 0)) (defun reset () (setf counter 0)) (defun stamp () (setf counter (+ counter 1)))) (list (stamp) (stamp) (reset) (stamp)) ; (1 2 0 1) 為了怕正常人看不懂，以下用 Python 翻譯
-def gen_counter(): counter = 0 def reset(): nonlocal counter counter = 0 return counter def stamp(): nonlocal counter counter += 1 return counter return reset, stamp reset, stamp = gen_counter() print(stamp()) # 1 print(stamp()) # 2 print(reset()) # 0 print(stamp()) # 1 可以看出在 gen_counter 內的 兩個函數 (reset, stamp) 一同共用內部變數 counter 儘管 gen_counter 已經回傳並且結束，但是在之後的程式卻還是擁有當初初始化的 count，亦即 counter 在記憶體中不會因為 gen_counter 已經回傳就被回收。</description></item></channel></rss>
+def gen_counter(): counter = 0 def reset(): nonlocal counter counter = 0 return counter def stamp(): nonlocal counter counter += 1 return counter return reset, stamp reset, stamp = gen_counter() print(stamp()) # 1 print(stamp()) # 2 print(reset()) # 0 print(stamp()) # 1 可以看出在 gen_counter 內的 兩個函數 (reset, stamp) 一同共用內部變數 counter 儘管 gen_counter 已經回傳並且結束，但是在之後的程式卻還是擁有當初初始化的 count，亦即 counter 在記憶體中不會因為 gen_counter 已經回傳就被回收。</description><content>&lt;h1 id="closure">Closure&lt;/h1>
+&lt;h2 id="what-is-closure">What is closure&lt;/h2>
+&lt;p>Closure 簡單來說，就是某函數在另一個函數內被創造並且參照了創建函數的某些變數，此時該變數會存留於記憶內，儘管創建函數已經結束。&lt;/p>
+&lt;h2 id="first-time-meet-to-closure">First time meet to Closure&lt;/h2>
+&lt;p>N年前在學習 Common Lisp 時教學內出現了一個陌生又奇特的技巧，&lt;a href="https://acl.readthedocs.io/en/latest/zhTW/ch6.html#closures">Closure&lt;/a>，以下是他的實做&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-lisp" data-lang="lisp">&lt;span style="display:flex;">&lt;span>(&lt;span style="color:#66d9ef">let&lt;/span> ((counter &lt;span style="color:#ae81ff">0&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (defun reset ()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (setf counter &lt;span style="color:#ae81ff">0&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (defun stamp ()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (setf counter (&lt;span style="color:#a6e22e">+&lt;/span> counter &lt;span style="color:#ae81ff">1&lt;/span>))))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>(&lt;span style="color:#a6e22e">list&lt;/span> (stamp) (stamp) (reset) (stamp))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">; (1 2 0 1)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;p>為了怕正常人看不懂，以下用 Python 翻譯&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">gen_counter&lt;/span>():
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> counter &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">reset&lt;/span>():
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">nonlocal&lt;/span> counter
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> counter &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> counter
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">stamp&lt;/span>():
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">nonlocal&lt;/span> counter
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> counter &lt;span style="color:#f92672">+=&lt;/span> &lt;span style="color:#ae81ff">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> counter
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> reset, stamp
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>reset, stamp &lt;span style="color:#f92672">=&lt;/span> gen_counter()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>print(stamp()) &lt;span style="color:#75715e"># 1&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>print(stamp()) &lt;span style="color:#75715e"># 2&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>print(reset()) &lt;span style="color:#75715e"># 0&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>print(stamp()) &lt;span style="color:#75715e"># 1&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;p>可以看出在 &lt;code>gen_counter&lt;/code> 內的 兩個函數 (reset, stamp) 一同共用內部變數 &lt;code>counter&lt;/code> 儘管 gen_counter 已經回傳並且結束，但是在之後的程式卻還是擁有當初初始化的 count，亦即 &lt;code>counter&lt;/code> 在記憶體中不會因為 gen_counter 已經回傳就被回收。&lt;/p>
+&lt;h1 id="django-q">Django Q&lt;/h1>
+&lt;h2 id="what-is-django-q">What is Django Q&lt;/h2>
+&lt;p>Django 的 ORM 十分的簡易讓新手們可以簡單的寫出一般的增刪改查，但是如果要用比較進階的搜尋 (SQL WHERE CLAUSE)，例如：正常人都寫的出來的 OR&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-postgresql" data-lang="postgresql">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">SELECT&lt;/span> &lt;span style="color:#f92672">*&lt;/span> &lt;span style="color:#66d9ef">FROM&lt;/span> post
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">WHERE&lt;/span> &lt;span style="color:#66d9ef">content&lt;/span> &lt;span style="color:#66d9ef">LIKE&lt;/span> &lt;span style="color:#e6db74">&amp;#39;%HELLO%&amp;#39;&lt;/span> &lt;span style="color:#66d9ef">OR&lt;/span> title &lt;span style="color:#66d9ef">LIKE&lt;/span> &lt;span style="color:#e6db74">&amp;#39;%HELLO%&amp;#39;&lt;/span>;&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;p>在 Django ORM 就必須要使用 Q 來達成&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> django.db.models &lt;span style="color:#f92672">import&lt;/span> Q
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Post&lt;span style="color:#f92672">.&lt;/span>objects&lt;span style="color:#f92672">.&lt;/span>filter(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Q(content__contains&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;HELLO&amp;#39;&lt;/span>) &lt;span style="color:#f92672">|&lt;/span> Q(title__contains&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#39;HELLO&amp;#39;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>)&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;p>其中使用 &lt;code>|&lt;/code> 作為 &lt;code>OR&lt;/code> 所有的 Q 就如同原本寫 ORM 的條件&lt;/p>
+&lt;h1 id="dancing-with">Dancing with&lt;/h1>
+&lt;p>在專案中有一項很常見的功能，就是關鍵字搜尋，很容易想像的是，如果使用一般的 SQL 就用 &lt;code>LIKE&lt;/code> 慢慢組起來，但是在每個需要搜尋的功能中使用 Django Q 來組建實在很不好維護，以下利用簡化版的真實專案的案例演示 Closure 如何使它看起來更優雅&lt;/p>
+&lt;h3 id="modelspy">models.py&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> django.db &lt;span style="color:#f92672">import&lt;/span> models
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> django.contrib.postgres.fields &lt;span style="color:#f92672">import&lt;/span> JSONField
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">Content&lt;/span>(models&lt;span style="color:#f92672">.&lt;/span>Model):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> title &lt;span style="color:#f92672">=&lt;/span> models&lt;span style="color:#f92672">.&lt;/span>CharField(max_length&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">200&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> title_pinyin &lt;span style="color:#f92672">=&lt;/span> models&lt;span style="color:#f92672">.&lt;/span>CharField(max_length&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">400&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> tags &lt;span style="color:#f92672">=&lt;/span> JSONField(default&lt;span style="color:#f92672">=&lt;/span>list)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> content &lt;span style="color:#f92672">=&lt;/span> models&lt;span style="color:#f92672">.&lt;/span>TextField()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> content_pinyin &lt;span style="color:#f92672">=&lt;/span> models&lt;span style="color:#f92672">.&lt;/span>TextField()&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;h3 id="sqlpy">sql.py&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> django.db.models &lt;span style="color:#f92672">import&lt;/span> Q
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">gen_keywords_search&lt;/span>():
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> q &lt;span style="color:#f92672">=&lt;/span> Q()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">icontains&lt;/span>(contain&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#66d9ef">None&lt;/span>):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">nonlocal&lt;/span> q
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> contain:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> q &lt;span style="color:#f92672">=&lt;/span> (q &lt;span style="color:#f92672">|&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Q(title__icontains&lt;span style="color:#f92672">=&lt;/span>contain) &lt;span style="color:#f92672">|&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Q(title_pinyin__icontains&lt;span style="color:#f92672">=&lt;/span>contain) &lt;span style="color:#f92672">|&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Q(tags__icontains&lt;span style="color:#f92672">=&lt;/span>contain) &lt;span style="color:#f92672">|&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Q(content__icontains&lt;span style="color:#f92672">=&lt;/span>contain) &lt;span style="color:#f92672">|&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Q(content_pinyin__icontains&lt;span style="color:#f92672">=&lt;/span>contain))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> q
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> icontains&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;h3 id="viewspy">views.py&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python3" data-lang="python3">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> rest_framework.decorators &lt;span style="color:#f92672">import&lt;/span> api_view
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> api.page &lt;span style="color:#f92672">import&lt;/span> pager
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> .models &lt;span style="color:#f92672">import&lt;/span> Content
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> .sql &lt;span style="color:#f92672">import&lt;/span> gen_keywords_search
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">from&lt;/span> .serializer &lt;span style="color:#f92672">import&lt;/span> PostListSerializer, SearchContentSerializer
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">@api_view&lt;/span>([&lt;span style="color:#e6db74">&amp;#39;post&amp;#39;&lt;/span>])
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">search&lt;/span>(request):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> serializer &lt;span style="color:#f92672">=&lt;/span> SearchContentSerializer(data&lt;span style="color:#f92672">=&lt;/span>request&lt;span style="color:#f92672">.&lt;/span>data)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> serializer&lt;span style="color:#f92672">.&lt;/span>is_valid(raise_exception&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#66d9ef">True&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> data &lt;span style="color:#f92672">=&lt;/span> serializer&lt;span style="color:#f92672">.&lt;/span>data
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> qs &lt;span style="color:#f92672">=&lt;/span> request&lt;span style="color:#f92672">.&lt;/span>user&lt;span style="color:#f92672">.&lt;/span>post_set&lt;span style="color:#f92672">.&lt;/span>all()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> &lt;span style="color:#e6db74">&amp;#39;keywords&amp;#39;&lt;/span> &lt;span style="color:#f92672">in&lt;/span> data:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> q &lt;span style="color:#f92672">=&lt;/span> gen_keywords_search()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> [q(key) &lt;span style="color:#66d9ef">for&lt;/span> key &lt;span style="color:#f92672">in&lt;/span> data[&lt;span style="color:#e6db74">&amp;#39;keywords&amp;#39;&lt;/span>]&lt;span style="color:#f92672">.&lt;/span>split()]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> qs &lt;span style="color:#f92672">=&lt;/span> qs&lt;span style="color:#f92672">.&lt;/span>filter(q())
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> pager(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> request,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> qs,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> PostListSerializer,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> page_size&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">5&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> )&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></content></item></channel></rss>
