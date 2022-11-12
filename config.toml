@@ -114,12 +114,6 @@ canonifyURLs = true
 # Sets the menu items in the navigation bar
 # Identifier prepends a Font Awesome icon to the menu item
 [[menu.main]]
-  name = "Home"
-  url = "/"
-  identifier = "fa fa-home"
-  weight = 1
-
-[[menu.main]]
   name = "Blog"
   url = "/blog/"
   identifier = "fa fa-newspaper-o"
@@ -130,6 +124,13 @@ canonifyURLs = true
   url = "/categories/"
   identifier = "fa fa-sitemap"
   weight = 5
+
+[[menu.main]]
+  name = "About"
+  url = "/about"
+  identifier = "fa fa-home"
+  weight = 7
+
 
 # Sets Social Media icons to appear and link to your account. Value should be your
 # username unless otherwise noted. These are the icons affected by socialAppearAtTop
