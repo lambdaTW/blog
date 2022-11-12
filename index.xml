@@ -1,4 +1,57 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lambda</title><link>/</link><description>Recent content on Lambda</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 12 Nov 2022 11:19:38 +0800</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>AWS Architecture ContactSuite</title><link>/blog/aws-architecture-contactsuite/</link><pubDate>Sat, 12 Nov 2022 11:19:38 +0800</pubDate><guid>/blog/aws-architecture-contactsuite/</guid><description> 簡介 ContactSuite 是一家做客戶服務系統的公司，讓客服可以在一個介面上完成所有客戶服務所需要的事情
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lambda</title><link>/</link><description>Recent content on Lambda</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 12 Nov 2022 12:26:12 +0800</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>AWS Architecture Quantiphi Real-Time Call Analytics</title><link>/blog/aws-architecture-quantiphi/</link><pubDate>Sat, 12 Nov 2022 12:26:12 +0800</pubDate><guid>/blog/aws-architecture-quantiphi/</guid><description>簡介 Quantiphi 是一家 AI 公司，提供各式解決方案，包括
+金融服務 教育 健康 保險 智造 多媒體娛樂產業 能源 公共設施 零售與民生消費 網路 架構 運用 Amazon Chime Voice Connector 讓企業可以整合電話線路讓客戶服務人員可以使用軟體接聽來電 運用 Kinesis Video Stream 把來電進行串流 來電得開始與結束運用 EventBridge 來寄送通知到以下三個 SQS Queue Transcription 從 Kinesis Video Stream 讀取來電 運用 Amazon Transcribe 把語音轉文字記錄下來並存到 DynamoDB 將來電轉成 mp3 存到 S3 Keyword-extraction 截取關鍵字並存到 DynamoDB 關鍵字送回 Quantiphi Web Application Metadata-extraction 利用 Amazon Comprehend 擷取 Metadata 存到 DynamoDB 並傳回 Quantiphi Web Application 最後在 Quantiphi Web Application 就可以在服務人員接到電話前拿到上方所有資訊，讓客戶服務人員可以在接電話前就可以相對了解來電者的需求，加速整體服務，亦提高服務滿意度 架構之我建 Quantiphi 運用 API Gateway 串起整個服務，如果在沒有特別資安的考慮下面，其實可以使用 DynamoDB 的 Stream 服務，這樣 Web 服務就可以簡單的去更新該來電者的資訊給客戶服務人員</description><content>&lt;h2 id="簡介">簡介&lt;/h2>
+&lt;p>Quantiphi 是一家 AI 公司，提供各式解決方案，包括&lt;/p>
+&lt;ul>
+&lt;li>金融服務&lt;/li>
+&lt;li>教育&lt;/li>
+&lt;li>健康&lt;/li>
+&lt;li>保險&lt;/li>
+&lt;li>智造&lt;/li>
+&lt;li>多媒體娛樂產業&lt;/li>
+&lt;li>能源&lt;/li>
+&lt;li>公共設施&lt;/li>
+&lt;li>零售與民生消費&lt;/li>
+&lt;li>網路&lt;/li>
+&lt;/ul>
+&lt;h2 id="架構">架構&lt;/h2>
+&lt;p>&lt;img src="https://d1.awsstatic.com/partner-network/QuickStart/datasheets/quantiphi-real-time-analytics-architecture-diagram.ceeb134f5a044dd97d79a61c20763c8cb5a245b4.png" alt="Quantiphi AWS Architecture">&lt;/p>
+&lt;ul>
+&lt;li>運用 Amazon Chime Voice Connector 讓企業可以整合電話線路讓客戶服務人員可以使用軟體接聽來電&lt;/li>
+&lt;li>運用 Kinesis Video Stream 把來電進行串流&lt;/li>
+&lt;li>來電得開始與結束運用 EventBridge 來寄送通知到以下三個 SQS Queue
+&lt;ul>
+&lt;li>Transcription
+&lt;ul>
+&lt;li>從 Kinesis Video Stream 讀取來電&lt;/li>
+&lt;li>運用 Amazon Transcribe 把語音轉文字記錄下來並存到 DynamoDB&lt;/li>
+&lt;li>將來電轉成 mp3 存到 S3&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Keyword-extraction
+&lt;ul>
+&lt;li>截取關鍵字並存到 DynamoDB&lt;/li>
+&lt;li>關鍵字送回 Quantiphi Web Application&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Metadata-extraction
+&lt;ul>
+&lt;li>利用 Amazon Comprehend 擷取 Metadata&lt;/li>
+&lt;li>存到 DynamoDB&lt;/li>
+&lt;li>並傳回 Quantiphi Web Application&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>最後在 Quantiphi Web Application 就可以在服務人員接到電話前拿到上方所有資訊，讓客戶服務人員可以在接電話前就可以相對了解來電者的需求，加速整體服務，亦提高服務滿意度&lt;/li>
+&lt;/ul>
+&lt;h2 id="架構之我建">架構之我建&lt;/h2>
+&lt;p>&lt;img src="/img/2022/11/QuantiphiStreamArchitecture.drawio.svg" alt="Quantiphi Stream Architecture">
+Quantiphi 運用 API Gateway 串起整個服務，如果在沒有特別資安的考慮下面，其實可以使用 DynamoDB 的 Stream 服務，這樣 Web 服務就可以簡單的去更新該來電者的資訊給客戶服務人員&lt;/p>
+&lt;blockquote>
+&lt;p>DynamoDB Streams are charged at $0.02 per 100,000 read operations.&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="ref">Ref&lt;/h2>
+&lt;p>&lt;a href="https://aws.amazon.com/quickstart/architecture/quantiphi-real-time-call-analytics/">Quantiphi Real-Time Call Analytics on the AWS Cloud&lt;/a>&lt;/p></content></item><item><title>AWS Architecture ContactSuite</title><link>/blog/aws-architecture-contactsuite/</link><pubDate>Sat, 12 Nov 2022 11:19:38 +0800</pubDate><guid>/blog/aws-architecture-contactsuite/</guid><description> 簡介 ContactSuite 是一家做客戶服務系統的公司，讓客服可以在一個介面上完成所有客戶服務所需要的事情
 可以馬上知道打過來的客戶的 email 或是 ID 整合到現有的 CRM 系統 整合現有知識庫 AWS 架構 依照服務， ContactSuite 架構可以粗分為以下三個資料流
 電話或文字訊息 客戶打電話或是使用文字客服，該資訊會用 Amazon Connect 利用 IVR (互動式語音應答) 的方式，讓一些比較制式化的流程讓 lambda 處理 處理後的資料透過 Amazon ECS 轉換成客服人員有用的資訊 顯示在 ContactSuite 的頁面上 Email 透過 AWS SES 收件 Lambda 處理後送至 DyanamoDB 顯示在 ContactSuite 的頁面上 報告 ContactSuite 的系統會記錄有用的資訊到 RDS 利用 AWS SES 寄送 Report 給需要看到的人員</description><content>
 &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
