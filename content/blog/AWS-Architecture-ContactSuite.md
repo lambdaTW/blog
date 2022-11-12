@@ -3,6 +3,8 @@ title = "AWS Architecture ContactSuite"
 date = 2022-11-12T11:19:38+08:00
 categories = ["architecture"]
 tags = ["architecture"]
+cover = "/img/2022/11/ContactSuiteAWSArchitecture.png"
+description = "來看看傳統客戶服務系統如何運用 AWS 雲端提供服務，幫助企業強化客戶服務體驗"
 +++
 {{< youtube BPvr0qWpJlA >}}
 ## 簡介

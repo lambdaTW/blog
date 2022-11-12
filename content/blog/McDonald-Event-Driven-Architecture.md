@@ -3,6 +3,8 @@ title = "McDonald Event Driven Architecture"
 date = 2022-11-08T21:16:20+08:00
 categories = ["architecture"]
 tags = ["architecture"]
+cover = "https://miro.medium.com/max/1400/1*gCOnmHq4jXNjSX8Jp0NgOA.jpeg"
+description = "本篇介紹 McDonald 如何運用 Event Driven 來服務全球等級的客戶"
 +++
 ## 簡介
 麥當勞，就是早餐滿福堡很好吃的那家，不服來辯

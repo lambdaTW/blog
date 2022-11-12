@@ -3,6 +3,8 @@ title = "AWS Architecture Study Mobileye"
 date = 2022-11-04T21:39:03+08:00
 categories = ["architecture"]
 tags = ["architecture"]
+cover = "/img/2022/11/MyMobileyeIoTArchitecture.png"
+description = "Mobileye 是提供汽車自駕 (ADAS) 的晶片以及演算法的廠商，本篇文章會介紹他是如何處理每天千萬級的資料量"
 +++
 {{< youtube 5hjkSczrke4 >}}
 

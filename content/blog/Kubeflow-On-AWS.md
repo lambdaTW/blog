@@ -3,6 +3,8 @@ title = "Kubeflow on AWS"
 date = 2022-11-12T10:59:12+08:00
 categories = ["AWS"]
 tags = ["AWS"]
+cover = "/img/2022/11/EKSwithAWSSStateful.png"
+description = "你也在 AI 公司嗎？你在處理 MLOps 相關議題嗎？那你該來看看 AWS 專家推薦的雲端訓練架構"
 +++
 {{< youtube EtEg6P-XLvg >}}
 

@@ -3,6 +3,8 @@ title = "AWS Architecture Study Halter"
 date = 2022-11-06T20:30:18+08:00
 categories = ["architecture"]
 tags = ["architecture"]
+cover = "/img/2022/11/HalterAWSArchitecture.png"
+description = "Halter 提供遠端農場管理，來看看他是如何使用 IoT 和 AWS 服務客戶的吧"
 +++
 
 {{< youtube j-lPgPGBTwQ >}}
