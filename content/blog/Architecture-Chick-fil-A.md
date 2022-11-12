@@ -1,5 +1,5 @@
 +++
-title = "AWS Architecture Chick-Fil-A"
+title = "Chick-Fil-A Architecture"
 date = 2022-11-12T14:22:22+08:00
 cover = "http://www.chick-fil-a.com/-/media/images/cfacom/default-images/chick-fil-a-logo-vector.ashx"
 description = "本篇介紹美國連鎖速食業，從 Docker 到 Kubernetes，在各個千家商店使用的混合雲架構的演化"
@@ -76,3 +76,6 @@ Chick-Fil-A 自己做的 Ansible 工具，當機器啟動時，可以自動註�
   - Highlander，找到叢集需要的三台機器運行 RKE
   - 每台機器個別註冊 AWS SSM (運用 Hooves Up)
   - MQTT 通知 Fleet Vessel 自動從線上抓軟體並且部署
+
+## Ref
+[InfoQ](https://www.infoq.com/presentations/chick-fil-a-k8-clusters/)
