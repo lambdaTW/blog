@@ -18,6 +18,9 @@ canonifyURLs = true
   navbarTitle          = "lambda"
   # Sets where "View More Posts" links
   viewMorePostLink     = "/blog/"
+  contentTypeName = "blog"
+  centerTheme = true
+  autoCover = true
 
 # Optional Params
   # Sets navbarTitle to match the section of the website
@@ -177,3 +180,9 @@ canonifyURLs = true
   researchgate     = ""
   # Email
   email            = "lambda@lambda.tw"
+
+[languages]
+  [languages.en]
+    [languages.en.params.logo]
+      logoText = "Lambda"
+      logoHomeLink = "/"
