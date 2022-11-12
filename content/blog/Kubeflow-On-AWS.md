@@ -1,7 +1,8 @@
 +++
 title = "Kubeflow on AWS"
 date = 2022-11-12T10:59:12+08:00
-draft = true
+categories = ["AWS"]
+tags = ["AWS"]
 +++
 {{< youtube EtEg6P-XLvg >}}
 
