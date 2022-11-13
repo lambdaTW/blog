@@ -1,4 +1,153 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>architecture on Lambda</title><link>/tags/architecture/</link><description>Recent content in architecture on Lambda</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 12 Nov 2022 11:19:38 +0800</lastBuildDate><atom:link href="/tags/architecture/index.xml" rel="self" type="application/rss+xml"/><item><title>AWS Architecture ContactSuite</title><link>/blog/aws-architecture-contactsuite/</link><pubDate>Sat, 12 Nov 2022 11:19:38 +0800</pubDate><guid>/blog/aws-architecture-contactsuite/</guid><description> 簡介 ContactSuite 是一家做客戶服務系統的公司，讓客服可以在一個介面上完成所有客戶服務所需要的事情
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>architecture on Lambda</title><link>/tags/architecture/</link><description>Recent content in architecture on Lambda</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 12 Nov 2022 14:22:22 +0800</lastBuildDate><atom:link href="/tags/architecture/index.xml" rel="self" type="application/rss+xml"/><item><title>Chick-Fil-A Architecture</title><link>/blog/architecture-chick-fil-a/</link><pubDate>Sat, 12 Nov 2022 14:22:22 +0800</pubDate><guid>/blog/architecture-chick-fil-a/</guid><description>簡介 2017 架構 在這個階段已經有 MQTT 作為訊息傳遞 運用 Docker 去做大部分的事情 2018 架構 改用 K8s 因為 K8s 可以更簡單的用 Prometheus 做監控 用 Fleet 去做部署 Equirements 3 NCU with Quadcore processor, 8 GB RAM, SSD
+Goals 非工程人員也可以簡單安裝 可以遠端管理 可以自動發現已經安裝的裝置和裝置上的 K8s 叢集 可以自己恢復，可以做到 HA Bare Metal Cluster K8s at scale Highlander 為了解決三台機器在內網，開機時要找到誰當 K8s cluster 的 Leader，Chick-Fil-A 自己做了這個工具去
+確認誰是老大 執行 RKE 安裝一些基本的 Pods (ex: Istio&amp;hellip;) Resetting Cluster State 當機器有任何問題時，透過 OverlayFS 讓遠端可以去清除機器 (回到 Golden image 的狀態)
+Hooves Up Chick-Fil-A 自己做的 Ansible 工具，當機器啟動時，可以自動註冊到 AWS SSM</description><content>&lt;h2 id="簡介">簡介&lt;/h2>
+&lt;h2 id="2017-架構">2017 架構&lt;/h2>
+&lt;ul>
+&lt;li>在這個階段已經有 MQTT 作為訊息傳遞&lt;/li>
+&lt;li>運用 Docker 去做大部分的事情&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://res.infoq.com/presentations/chick-fil-a-k8-clusters/en/slides/sl5-1531966648307.jpg" alt="Chick-Fil-A 2017 Architecture">&lt;/p>
+&lt;h2 id="2018-架構">2018 架構&lt;/h2>
+&lt;ul>
+&lt;li>改用 K8s&lt;/li>
+&lt;li>因為 K8s 可以更簡單的用 Prometheus 做監控&lt;/li>
+&lt;li>用 Fleet 去做部署&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://res.infoq.com/presentations/chick-fil-a-k8-clusters/en/slides/sl6-1531966652646.jpg" alt="Chick-Fil-A 2018 Architecture">&lt;/p>
+&lt;h2 id="equirements">Equirements&lt;/h2>
+&lt;blockquote>
+&lt;p>3 NCU with Quadcore processor, 8 GB RAM, SSD&lt;/p>
+&lt;/blockquote>
+&lt;p>&lt;img src="https://res.infoq.com/presentations/chick-fil-a-k8-clusters/en/slides/sl11-1531966645373.jpg" alt="Equirements">&lt;/p>
+&lt;h2 id="goals">Goals&lt;/h2>
+&lt;ul>
+&lt;li>非工程人員也可以簡單安裝&lt;/li>
+&lt;li>可以遠端管理&lt;/li>
+&lt;li>可以自動發現已經安裝的裝置和裝置上的 K8s 叢集&lt;/li>
+&lt;li>可以自己恢復，可以做到 HA&lt;/li>
+&lt;/ul>
+&lt;h2 id="bare-metal-cluster-k8s-at-scale">Bare Metal Cluster K8s at scale&lt;/h2>
+&lt;p>&lt;img src="https://res.infoq.com/presentations/chick-fil-a-k8-clusters/en/slides/sl14-1531966652381.jpg" alt="Bare Metal Cluster K8s at scale">&lt;/p>
+&lt;h3 id="highlander">Highlander&lt;/h3>
+&lt;p>為了解決三台機器在內網，開機時要找到誰當 K8s cluster 的 Leader，Chick-Fil-A 自己做了這個工具去&lt;/p>
+&lt;ul>
+&lt;li>確認誰是老大&lt;/li>
+&lt;li>執行 RKE&lt;/li>
+&lt;li>安裝一些基本的 Pods (ex: Istio&amp;hellip;)&lt;/li>
+&lt;/ul>
+&lt;h3 id="resetting-cluster-state">Resetting Cluster State&lt;/h3>
+&lt;p>當機器有任何問題時，透過 OverlayFS 讓遠端可以去清除機器 (回到 Golden image 的狀態)&lt;/p>
+&lt;h3 id="hooves-uphttpsgithubcomchick-fil-ahoovesup">&lt;a href="https://github.com/chick-fil-a/hoovesup">Hooves Up&lt;/a>&lt;/h3>
+&lt;p>Chick-Fil-A 自己做的 Ansible 工具，當機器啟動時，可以自動註冊到 AWS SSM&lt;/p>
+&lt;h3 id="fleet">Fleet&lt;/h3>
+&lt;p>為了要部署到全部的店家中，Chick-Fil-A 遇到了幾個問題&lt;/p>
+&lt;ul>
+&lt;li>如果有一千的叢集，部署中有 900 個部署成功，另外 100 個失敗，那要
+&lt;ul>
+&lt;li>全部 rollback?&lt;/li>
+&lt;li>手動解決並且處理掉那 100 個失敗?&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>最後他們建立了 Fleet 來做部署，這邊他們使用現有的 message broker (MQTT &amp;amp; Amazon SQS)，來通知地端的 Cluster 去做部署&lt;/p>
+&lt;blockquote>
+&lt;p>Fleet Ecosystem Components&lt;/p>
+&lt;/blockquote>
+&lt;ul>
+&lt;li>Fleet Client&lt;/li>
+&lt;li>Fleet Server API
+&lt;ul>
+&lt;li>產生部署需要的 k8s yaml&lt;/li>
+&lt;li>管理 Cluster 的 Git&lt;/li>
+&lt;li>部署狀態監控&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Atlas
+&lt;ul>
+&lt;li>存放已經測試過的 k8s yaml&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Vessel
+&lt;ul>
+&lt;li>放在店家的 Agent 用來做部署&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Dashboards&lt;/li>
+&lt;/ul>
+&lt;h2 id="entire-flow">Entire Flow&lt;/h2>
+&lt;ul>
+&lt;li>在工程機房
+&lt;ul>
+&lt;li>使用 Golden image 去安裝系統，內建 Ansible&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>運送機器&lt;/li>
+&lt;li>店家
+&lt;ul>
+&lt;li>安裝人員打開機器&lt;/li>
+&lt;li>Sherlock 運行，確認在店內網路，並且信任機器&lt;/li>
+&lt;li>Highlander，找到叢集需要的三台機器運行 RKE&lt;/li>
+&lt;li>每台機器個別註冊 AWS SSM (運用 Hooves Up)&lt;/li>
+&lt;li>MQTT 通知 Fleet Vessel 自動從線上抓軟體並且部署&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="ref">Ref&lt;/h2>
+&lt;p>&lt;a href="https://www.infoq.com/presentations/chick-fil-a-k8-clusters/">InfoQ&lt;/a>&lt;/p></content></item><item><title>AWS Architecture Quantiphi Real-Time Call Analytics</title><link>/blog/aws-architecture-quantiphi/</link><pubDate>Sat, 12 Nov 2022 12:26:12 +0800</pubDate><guid>/blog/aws-architecture-quantiphi/</guid><description>簡介 Quantiphi 是一家 AI 公司，提供各式解決方案，包括
+金融服務 教育 健康 保險 智造 多媒體娛樂產業 能源 公共設施 零售與民生消費 網路 架構 運用 Amazon Chime Voice Connector 讓企業可以整合電話線路讓客戶服務人員可以使用軟體接聽來電 運用 Kinesis Video Stream 把來電進行串流 來電得開始與結束運用 EventBridge 來寄送通知到以下三個 SQS Queue Transcription 從 Kinesis Video Stream 讀取來電 運用 Amazon Transcribe 把語音轉文字記錄下來並存到 DynamoDB 將來電轉成 mp3 存到 S3 Keyword-extraction 截取關鍵字並存到 DynamoDB 關鍵字送回 Quantiphi Web Application Metadata-extraction 利用 Amazon Comprehend 擷取 Metadata 存到 DynamoDB 並傳回 Quantiphi Web Application 最後在 Quantiphi Web Application 就可以在服務人員接到電話前拿到上方所有資訊，讓客戶服務人員可以在接電話前就可以相對了解來電者的需求，加速整體服務，亦提高服務滿意度 架構之我建 Quantiphi 運用 API Gateway 串起整個服務，如果在沒有特別資安的考慮下面，其實可以使用 DynamoDB 的 Stream 服務，這樣 Web 服務就可以簡單的去更新該來電者的資訊給客戶服務人員</description><content>&lt;h2 id="簡介">簡介&lt;/h2>
+&lt;p>Quantiphi 是一家 AI 公司，提供各式解決方案，包括&lt;/p>
+&lt;ul>
+&lt;li>金融服務&lt;/li>
+&lt;li>教育&lt;/li>
+&lt;li>健康&lt;/li>
+&lt;li>保險&lt;/li>
+&lt;li>智造&lt;/li>
+&lt;li>多媒體娛樂產業&lt;/li>
+&lt;li>能源&lt;/li>
+&lt;li>公共設施&lt;/li>
+&lt;li>零售與民生消費&lt;/li>
+&lt;li>網路&lt;/li>
+&lt;/ul>
+&lt;h2 id="架構">架構&lt;/h2>
+&lt;p>&lt;img src="https://d1.awsstatic.com/partner-network/QuickStart/datasheets/quantiphi-real-time-analytics-architecture-diagram.ceeb134f5a044dd97d79a61c20763c8cb5a245b4.png" alt="Quantiphi AWS Architecture">&lt;/p>
+&lt;ul>
+&lt;li>運用 Amazon Chime Voice Connector 讓企業可以整合電話線路讓客戶服務人員可以使用軟體接聽來電&lt;/li>
+&lt;li>運用 Kinesis Video Stream 把來電進行串流&lt;/li>
+&lt;li>來電得開始與結束運用 EventBridge 來寄送通知到以下三個 SQS Queue
+&lt;ul>
+&lt;li>Transcription
+&lt;ul>
+&lt;li>從 Kinesis Video Stream 讀取來電&lt;/li>
+&lt;li>運用 Amazon Transcribe 把語音轉文字記錄下來並存到 DynamoDB&lt;/li>
+&lt;li>將來電轉成 mp3 存到 S3&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Keyword-extraction
+&lt;ul>
+&lt;li>截取關鍵字並存到 DynamoDB&lt;/li>
+&lt;li>關鍵字送回 Quantiphi Web Application&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Metadata-extraction
+&lt;ul>
+&lt;li>利用 Amazon Comprehend 擷取 Metadata&lt;/li>
+&lt;li>存到 DynamoDB&lt;/li>
+&lt;li>並傳回 Quantiphi Web Application&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>最後在 Quantiphi Web Application 就可以在服務人員接到電話前拿到上方所有資訊，讓客戶服務人員可以在接電話前就可以相對了解來電者的需求，加速整體服務，亦提高服務滿意度&lt;/li>
+&lt;/ul>
+&lt;h2 id="架構之我建">架構之我建&lt;/h2>
+&lt;p>&lt;img src="/img/2022/11/QuantiphiStreamArchitecture.drawio.svg" alt="Quantiphi Stream Architecture">
+Quantiphi 運用 API Gateway 串起整個服務，如果在沒有特別資安的考慮下面，其實可以使用 DynamoDB 的 Stream 服務，這樣 Web 服務就可以簡單的去更新該來電者的資訊給客戶服務人員&lt;/p>
+&lt;blockquote>
+&lt;p>DynamoDB Streams are charged at $0.02 per 100,000 read operations.&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="ref">Ref&lt;/h2>
+&lt;p>&lt;a href="https://aws.amazon.com/quickstart/architecture/quantiphi-real-time-call-analytics/">Quantiphi Real-Time Call Analytics on the AWS Cloud&lt;/a>&lt;/p></content></item><item><title>AWS Architecture ContactSuite</title><link>/blog/aws-architecture-contactsuite/</link><pubDate>Sat, 12 Nov 2022 11:19:38 +0800</pubDate><guid>/blog/aws-architecture-contactsuite/</guid><description> 簡介 ContactSuite 是一家做客戶服務系統的公司，讓客服可以在一個介面上完成所有客戶服務所需要的事情
 可以馬上知道打過來的客戶的 email 或是 ID 整合到現有的 CRM 系統 整合現有知識庫 AWS 架構 依照服務， ContactSuite 架構可以粗分為以下三個資料流
 電話或文字訊息 客戶打電話或是使用文字客服，該資訊會用 Amazon Connect 利用 IVR (互動式語音應答) 的方式，讓一些比較制式化的流程讓 lambda 處理 處理後的資料透過 Amazon ECS 轉換成客服人員有用的資訊 顯示在 ContactSuite 的頁面上 Email 透過 AWS SES 收件 Lambda 處理後送至 DyanamoDB 顯示在 ContactSuite 的頁面上 報告 ContactSuite 的系統會記錄有用的資訊到 RDS 利用 AWS SES 寄送 Report 給需要看到的人員</description><content>
 &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
