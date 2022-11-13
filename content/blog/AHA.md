@@ -67,5 +67,5 @@ Chick-fil-A 是一間總部位於美國喬治亞州 College Park 的美式連鎖
 最後平板只有 USB, Power, Camera，他們認為已經有足夠少的 failure point ，壞掉機率也夠低，足以支撐他們的服務
 
 ## Ref
-[AHA 2.0](https://medium.com/chick-fil-atech/aha-2-0-623a0ec1cacc)
-[Edge AI in a Smarter Chick-fil-A](https://medium.com/chick-fil-atech/edge-ai-in-a-smarter-chick-fil-a-2e2112f5e5d8)
+- [AHA 2.0](https://medium.com/chick-fil-atech/aha-2-0-623a0ec1cacc)
+- [Edge AI in a Smarter Chick-fil-A](https://medium.com/chick-fil-atech/edge-ai-in-a-smarter-chick-fil-a-2e2112f5e5d8)
