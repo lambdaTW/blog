@@ -3,6 +3,8 @@ title = "AWS Architecture Quantiphi Real-Time Call Analytics"
 date = 2022-11-12T12:26:12+08:00
 cover = "https://cdn.quantiphi.com/2021/07/dc2fc96e-telecom-homepage.png"
 description = "靠 AWS 就可以達成智慧客戶服務，來看看如何使用 Combo 技，簡單整合 AWS 的服務就可以提供 AI 服務"
+categories = ["architecture"]
+tags = ["architecture"]
 +++
 
 ## 簡介
