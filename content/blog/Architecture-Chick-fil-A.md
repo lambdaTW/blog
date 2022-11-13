@@ -8,13 +8,30 @@ tags = ["architecture"]
 +++
 
 ## 簡介
+Chick-fil-A 是一間總部位於美國喬治亞州 College Park 的美式連鎖速食店，以雞肉三明治為主 (圖片看起來其實是漢堡) ，目前有超過 2,200 間連鎖餐廳
 
 ## 2017 架構
 - 在這個階段已經有 MQTT 作為訊息傳遞
-- 運用 Docker 去做大部分的事情
+- 運用 Docker 去做大部分的事情，使用 Docker Swarm
+- 使用 Fluentd 做 Event & Log Forwarding
+  - MQTT
+  - Docker log
+- Redis cluster 作為 Persistence 層
 
 ![Chick-Fil-A 2017 Architecture](https://res.infoq.com/presentations/chick-fil-a-k8-clusters/en/slides/sl5-1531966648307.jpg)
 
+### IoT
+![Bring IoT up](https://res.infoq.com/presentations/chickfila-iot/en/slides/sl16-1515812662954.jpg)
+![OAuth](https://res.infoq.com/presentations/chickfila-iot/en/slides/sl31-1515812667345.jpg)
+- 透過 OAuth 流程，註冊 IoT (包含人工流程)
+- 利用 Local OAuth 來達到本地認證，除了第一次啟動 IoT 設備以外，IoT 本人就不用再連接到網際網路也可以進行 refresh token
+
+![MQTT](https://res.infoq.com/presentations/chickfila-iot/en/slides/sl20-1515812665143.jpg)
+
+- 獲取 JWT Token 以後都透過 MQTT broker 進行溝通
+
+### Deployment flow
+![Deployment Flow 2017](https://res.infoq.com/presentations/chickfila-iot/en/slides/sl35-1515812668341.jpg)
 ## 2018 架構
 - 改用 K8s
 - 因為 K8s 可以更簡單的用 Prometheus 做監控
@@ -80,4 +97,5 @@ Chick-Fil-A 自己做的 Ansible 工具，當機器啟動時，可以自動註�
   - MQTT 通知 Fleet Vessel 自動從線上抓軟體並且部署
 
 ## Ref
-[InfoQ](https://www.infoq.com/presentations/chick-fil-a-k8-clusters/)
+- [Chick-Fil-A-K8-Clusters](https://www.infoq.com/presentations/chick-fil-a-k8-clusters/)
+- [Chick-Fil-A-IoT](https://www.infoq.com/presentations/chickfila-iot/)
