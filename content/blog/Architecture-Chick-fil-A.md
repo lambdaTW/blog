@@ -2,7 +2,7 @@
 title = "Chick-Fil-A Architecture"
 date = 2022-11-12T14:22:22+08:00
 cover = "http://www.chick-fil-a.com/-/media/images/cfacom/default-images/chick-fil-a-logo-vector.ashx"
-description = "本篇介紹美國連鎖速食業，從 Docker 到 Kubernetes，在各個千家商店使用的混合雲架構的演化"
+description = "本篇介紹美國連鎖速食業，從 Docker 到 Kubernetes，在千家商店使用的混合雲架構的演化"
 categories = ["architecture"]
 tags = ["architecture"]
 +++
