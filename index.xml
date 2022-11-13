@@ -1,13 +1,32 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lambda</title><link>/</link><description>Recent content on Lambda</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 12 Nov 2022 14:22:22 +0800</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Chick-Fil-A Architecture</title><link>/blog/architecture-chick-fil-a/</link><pubDate>Sat, 12 Nov 2022 14:22:22 +0800</pubDate><guid>/blog/architecture-chick-fil-a/</guid><description>簡介 2017 架構 在這個階段已經有 MQTT 作為訊息傳遞 運用 Docker 去做大部分的事情 2018 架構 改用 K8s 因為 K8s 可以更簡單的用 Prometheus 做監控 用 Fleet 去做部署 Equirements 3 NCU with Quadcore processor, 8 GB RAM, SSD
-Goals 非工程人員也可以簡單安裝 可以遠端管理 可以自動發現已經安裝的裝置和裝置上的 K8s 叢集 可以自己恢復，可以做到 HA Bare Metal Cluster K8s at scale Highlander 為了解決三台機器在內網，開機時要找到誰當 K8s cluster 的 Leader，Chick-Fil-A 自己做了這個工具去
-確認誰是老大 執行 RKE 安裝一些基本的 Pods (ex: Istio&amp;hellip;) Resetting Cluster State 當機器有任何問題時，透過 OverlayFS 讓遠端可以去清除機器 (回到 Golden image 的狀態)
-Hooves Up Chick-Fil-A 自己做的 Ansible 工具，當機器啟動時，可以自動註冊到 AWS SSM</description><content>&lt;h2 id="簡介">簡介&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lambda</title><link>/</link><description>Recent content on Lambda</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 12 Nov 2022 14:22:22 +0800</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Chick-Fil-A Architecture</title><link>/blog/architecture-chick-fil-a/</link><pubDate>Sat, 12 Nov 2022 14:22:22 +0800</pubDate><guid>/blog/architecture-chick-fil-a/</guid><description>簡介 Chick-fil-A 是一間總部位於美國喬治亞州 College Park 的美式連鎖速食店，以雞肉三明治為主 (圖片看起來其實是漢堡) ，目前有超過 2,200 間連鎖餐廳
+2017 架構 在這個階段已經有 MQTT 作為訊息傳遞 運用 Docker 去做大部分的事情，使用 Docker Swarm 使用 Fluentd 做 Event &amp;amp; Log Forwarding MQTT Docker log Redis cluster 作為 Persistence 層 IoT 透過 OAuth 流程，註冊 IoT (包含人工流程) 利用 Local OAuth 來達到本地認證，除了第一次啟動 IoT 設備以外，IoT 本人就不用再連接到網際網路也可以進行 refresh token 獲取 JWT Token 以後都透過 MQTT broker 進行溝通 Deployment flow 2018 架構 改用 K8s 因為 K8s 可以更簡單的用 Prometheus 做監控 用 Fleet 去做部署 Equirements 3 NCU with Quadcore processor, 8 GB RAM, SSD</description><content>&lt;h2 id="簡介">簡介&lt;/h2>
+&lt;p>Chick-fil-A 是一間總部位於美國喬治亞州 College Park 的美式連鎖速食店，以雞肉三明治為主 (圖片看起來其實是漢堡) ，目前有超過 2,200 間連鎖餐廳&lt;/p>
 &lt;h2 id="2017-架構">2017 架構&lt;/h2>
 &lt;ul>
 &lt;li>在這個階段已經有 MQTT 作為訊息傳遞&lt;/li>
-&lt;li>運用 Docker 去做大部分的事情&lt;/li>
+&lt;li>運用 Docker 去做大部分的事情，使用 Docker Swarm&lt;/li>
+&lt;li>使用 Fluentd 做 Event &amp;amp; Log Forwarding
+&lt;ul>
+&lt;li>MQTT&lt;/li>
+&lt;li>Docker log&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Redis cluster 作為 Persistence 層&lt;/li>
 &lt;/ul>
 &lt;p>&lt;img src="https://res.infoq.com/presentations/chick-fil-a-k8-clusters/en/slides/sl5-1531966648307.jpg" alt="Chick-Fil-A 2017 Architecture">&lt;/p>
+&lt;h3 id="iot">IoT&lt;/h3>
+&lt;p>&lt;img src="https://res.infoq.com/presentations/chickfila-iot/en/slides/sl16-1515812662954.jpg" alt="Bring IoT up">
+&lt;img src="https://res.infoq.com/presentations/chickfila-iot/en/slides/sl31-1515812667345.jpg" alt="OAuth">&lt;/p>
+&lt;ul>
+&lt;li>透過 OAuth 流程，註冊 IoT (包含人工流程)&lt;/li>
+&lt;li>利用 Local OAuth 來達到本地認證，除了第一次啟動 IoT 設備以外，IoT 本人就不用再連接到網際網路也可以進行 refresh token&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://res.infoq.com/presentations/chickfila-iot/en/slides/sl20-1515812665143.jpg" alt="MQTT">&lt;/p>
+&lt;ul>
+&lt;li>獲取 JWT Token 以後都透過 MQTT broker 進行溝通&lt;/li>
+&lt;/ul>
+&lt;h3 id="deployment-flow">Deployment flow&lt;/h3>
+&lt;p>&lt;img src="https://res.infoq.com/presentations/chickfila-iot/en/slides/sl35-1515812668341.jpg" alt="Deployment Flow 2017">&lt;/p>
 &lt;h2 id="2018-架構">2018 架構&lt;/h2>
 &lt;ul>
 &lt;li>改用 K8s&lt;/li>
@@ -94,7 +113,10 @@ Hooves Up Chick-Fil-A 自己做的 Ansible 工具，當機器啟動時，可以�
 &lt;/li>
 &lt;/ul>
 &lt;h2 id="ref">Ref&lt;/h2>
-&lt;p>&lt;a href="https://www.infoq.com/presentations/chick-fil-a-k8-clusters/">InfoQ&lt;/a>&lt;/p></content></item><item><title>AWS Architecture Quantiphi Real-Time Call Analytics</title><link>/blog/aws-architecture-quantiphi/</link><pubDate>Sat, 12 Nov 2022 12:26:12 +0800</pubDate><guid>/blog/aws-architecture-quantiphi/</guid><description>簡介 Quantiphi 是一家 AI 公司，提供各式解決方案，包括
+&lt;ul>
+&lt;li>&lt;a href="https://www.infoq.com/presentations/chick-fil-a-k8-clusters/">Chick-Fil-A-K8-Clusters&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://www.infoq.com/presentations/chickfila-iot/">Chick-Fil-A-IoT&lt;/a>&lt;/li>
+&lt;/ul></content></item><item><title>AWS Architecture Quantiphi Real-Time Call Analytics</title><link>/blog/aws-architecture-quantiphi/</link><pubDate>Sat, 12 Nov 2022 12:26:12 +0800</pubDate><guid>/blog/aws-architecture-quantiphi/</guid><description>簡介 Quantiphi 是一家 AI 公司，提供各式解決方案，包括
 金融服務 教育 健康 保險 智造 多媒體娛樂產業 能源 公共設施 零售與民生消費 網路 架構 運用 Amazon Chime Voice Connector 讓企業可以整合電話線路讓客戶服務人員可以使用軟體接聽來電 運用 Kinesis Video Stream 把來電進行串流 來電得開始與結束運用 EventBridge 來寄送通知到以下三個 SQS Queue Transcription 從 Kinesis Video Stream 讀取來電 運用 Amazon Transcribe 把語音轉文字記錄下來並存到 DynamoDB 將來電轉成 mp3 存到 S3 Keyword-extraction 截取關鍵字並存到 DynamoDB 關鍵字送回 Quantiphi Web Application Metadata-extraction 利用 Amazon Comprehend 擷取 Metadata 存到 DynamoDB 並傳回 Quantiphi Web Application 最後在 Quantiphi Web Application 就可以在服務人員接到電話前拿到上方所有資訊，讓客戶服務人員可以在接電話前就可以相對了解來電者的需求，加速整體服務，亦提高服務滿意度 架構之我建 Quantiphi 運用 API Gateway 串起整個服務，如果在沒有特別資安的考慮下面，其實可以使用 DynamoDB 的 Stream 服務，這樣 Web 服務就可以簡單的去更新該來電者的資訊給客戶服務人員</description><content>&lt;h2 id="簡介">簡介&lt;/h2>
 &lt;p>Quantiphi 是一家 AI 公司，提供各式解決方案，包括&lt;/p>
 &lt;ul>
