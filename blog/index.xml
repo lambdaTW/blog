@@ -62,8 +62,10 @@ Training Data 用 3D camera 擷取沒有鍋子的影像 為了模擬真實店家
 &lt;/ul>
 &lt;p>最後平板只有 USB, Power, Camera，他們認為已經有足夠少的 failure point ，壞掉機率也夠低，足以支撐他們的服務&lt;/p>
 &lt;h2 id="ref">Ref&lt;/h2>
-&lt;p>&lt;a href="https://medium.com/chick-fil-atech/aha-2-0-623a0ec1cacc">AHA 2.0&lt;/a>
-&lt;a href="https://medium.com/chick-fil-atech/edge-ai-in-a-smarter-chick-fil-a-2e2112f5e5d8">Edge AI in a Smarter Chick-fil-A&lt;/a>&lt;/p></content></item><item><title>Chick-Fil-A Architecture</title><link>/blog/architecture-chick-fil-a/</link><pubDate>Sat, 12 Nov 2022 14:22:22 +0800</pubDate><guid>/blog/architecture-chick-fil-a/</guid><description>簡介 Chick-fil-A 是一間總部位於美國喬治亞州 College Park 的美式連鎖速食店，以雞肉三明治為主 (圖片看起來其實是漢堡) ，目前有超過 2,200 間連鎖餐廳
+&lt;ul>
+&lt;li>&lt;a href="https://medium.com/chick-fil-atech/aha-2-0-623a0ec1cacc">AHA 2.0&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://medium.com/chick-fil-atech/edge-ai-in-a-smarter-chick-fil-a-2e2112f5e5d8">Edge AI in a Smarter Chick-fil-A&lt;/a>&lt;/li>
+&lt;/ul></content></item><item><title>Chick-Fil-A Architecture</title><link>/blog/architecture-chick-fil-a/</link><pubDate>Sat, 12 Nov 2022 14:22:22 +0800</pubDate><guid>/blog/architecture-chick-fil-a/</guid><description>簡介 Chick-fil-A 是一間總部位於美國喬治亞州 College Park 的美式連鎖速食店，以雞肉三明治為主 (圖片看起來其實是漢堡) ，目前有超過 2,200 間連鎖餐廳
 2017 架構 在這個階段已經有 MQTT 作為訊息傳遞 運用 Docker 去做大部分的事情，使用 Docker Swarm 使用 Fluentd 做 Event &amp;amp; Log Forwarding MQTT Docker log Redis cluster 作為 Persistence 層 IoT 透過 OAuth 流程，註冊 IoT (包含人工流程) 利用 Local OAuth 來達到本地認證，除了第一次啟動 IoT 設備以外，IoT 本人就不用再連接到網際網路也可以進行 refresh token 獲取 JWT Token 以後都透過 MQTT broker 進行溝通 Deployment flow 2018 架構 改用 K8s 因為 K8s 可以更簡單的用 Prometheus 做監控 用 Fleet 去做部署 Equirements 3 NCU with Quadcore processor, 8 GB RAM, SSD</description><content>&lt;h2 id="簡介">簡介&lt;/h2>
 &lt;p>Chick-fil-A 是一間總部位於美國喬治亞州 College Park 的美式連鎖速食店，以雞肉三明治為主 (圖片看起來其實是漢堡) ，目前有超過 2,200 間連鎖餐廳&lt;/p>
 &lt;h2 id="2017-架構">2017 架構&lt;/h2>
