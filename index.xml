@@ -1,4 +1,26 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lambda</title><link>/</link><description>Recent content on Lambda</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 13 Nov 2022 09:59:48 +0800</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Chick-Fil-A AHA</title><link>/blog/aha/</link><pubDate>Sun, 13 Nov 2022 09:59:48 +0800</pubDate><guid>/blog/aha/</guid><description>簡介 Chick-fil-A 是一間總部位於美國喬治亞州 College Park 的美式連鎖速食店，以雞肉三明治為主 (圖片看起來其實是漢堡) ，目前有超過 2,200 間連鎖餐廳
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lambda</title><link>/</link><description>Recent content on Lambda</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 14 Nov 2022 20:44:42 +0800</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>AWS Architecture ITTStar AI Powered Search</title><link>/blog/aws-architecture-ittstar-ai-powered-search/</link><pubDate>Mon, 14 Nov 2022 20:44:42 +0800</pubDate><guid>/blog/aws-architecture-ittstar-ai-powered-search/</guid><description> 簡介 ITTStar 主要是幫助企業做上雲的資訊顧問服務，提供老舊系統雲端遷移以產業上雲服務，網站客戶寫很多，但是我看得懂的只有 Whirlpool 和 AT&amp;amp;T
+要解決什麼問題 AI powered search 主要是做商品資訊辨識，可以想像你上傳幾張圖片，他可以幫你辨識出這是哪個品牌、哪個型號，大概的市場價格，主要提供給精品產業品牌以及零售與批發的估價師
+架構 Amplify 的 App 使用 Cognito 做身份驗證 使用者上傳的影像會傳到 S3 S3 的更新會通知 Lambda 去 Trigger Rekognition 去做物品辨識 如果影像中有大量文字，他們會用 Textract 去擷取，並且去更正 Rekognition 辨識出來的資訊 可能可以知道品牌，型號，地點等等 最後把資料都丟到 DynamoDB</description><content>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+&lt;iframe src="https://www.youtube.com/embed/Qi9soN5bpU4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;/div>
+&lt;h2 id="簡介">簡介&lt;/h2>
+&lt;p>&lt;a href="https://www.ittstar.com/">ITTStar&lt;/a> 主要是幫助企業做上雲的資訊顧問服務，提供老舊系統雲端遷移以產業上雲服務，網站客戶寫很多，但是我看得懂的只有 Whirlpool 和 AT&amp;amp;T&lt;/p>
+&lt;h2 id="要解決什麼問題">要解決什麼問題&lt;/h2>
+&lt;p>AI powered search 主要是做商品資訊辨識，可以想像你上傳幾張圖片，他可以幫你辨識出這是哪個品牌、哪個型號，大概的市場價格，主要提供給精品產業品牌以及零售與批發的估價師&lt;/p>
+&lt;h2 id="架構">架構&lt;/h2>
+&lt;p>&lt;img src="/img/2022/11/ITTStartAIpoweredSearchArchitecture.svg" alt="Architecture">&lt;/p>
+&lt;ul>
+&lt;li>Amplify 的 App 使用 Cognito 做身份驗證&lt;/li>
+&lt;li>使用者上傳的影像會傳到 S3&lt;/li>
+&lt;li>S3 的更新會通知 Lambda 去 Trigger Rekognition 去做物品辨識&lt;/li>
+&lt;li>如果影像中有大量文字，他們會用 Textract 去擷取，並且去更正 Rekognition 辨識出來的資訊
+&lt;ul>
+&lt;li>可能可以知道品牌，型號，地點等等&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>最後把資料都丟到 DynamoDB&lt;/li>
+&lt;/ul></content></item><item><title>Chick-Fil-A AHA</title><link>/blog/aha/</link><pubDate>Sun, 13 Nov 2022 09:59:48 +0800</pubDate><guid>/blog/aha/</guid><description>簡介 Chick-fil-A 是一間總部位於美國喬治亞州 College Park 的美式連鎖速食店，以雞肉三明治為主 (圖片看起來其實是漢堡) ，目前有超過 2,200 間連鎖餐廳
 遇到的問題 在速食產業 (QSR) 中，大部分食物都會有所謂的有效期，在食物放到備料區以後，如果超過該食物的有效期，食物就會被倒掉，以保證食物比較不會有食安上的問題，傳統上都是人工去點擊計時器，但是
 “Ain’t nobody got time for that!”
 如果說人員忘記點擊開始，下一次想起來再來去點，該食物的計時是完全沒有效用的
