@@ -1,4 +1,53 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lambda</title><link>/</link><description>Recent content on Lambda</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 14 Nov 2022 20:44:42 +0800</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>AWS Architecture ITTStar AI Powered Search</title><link>/blog/aws-architecture-ittstar-ai-powered-search/</link><pubDate>Mon, 14 Nov 2022 20:44:42 +0800</pubDate><guid>/blog/aws-architecture-ittstar-ai-powered-search/</guid><description> 簡介 ITTStar 主要是幫助企業做上雲的資訊顧問服務，提供老舊系統雲端遷移以產業上雲服務，網站客戶寫很多，但是我看得懂的只有 Whirlpool 和 AT&amp;amp;T
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lambda</title><link>/</link><description>Recent content on Lambda</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 16 Nov 2022 21:15:50 +0800</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>AWS Architecture CloudPlex Media</title><link>/blog/aws-architecture-cloudplex-media/</link><pubDate>Wed, 16 Nov 2022 21:15:50 +0800</pubDate><guid>/blog/aws-architecture-cloudplex-media/</guid><description>簡介 CloudPlex Media 提供客戶 VoD (隨選視訊) 與 Streaming (影像串流) 的服務，不僅能夠處理 DRM (數位版權管理)，還有 AI 做字幕自動產生，以及各式影像轉碼服務
+架構 該服務，簡單分成三大項
+Web VoD (隨選視訊) Streaming (影像串流) 我們將分開講解
+Web 我們可以關注左上角藍色的線路
+首先全平台的網頁 (HTML, JS, CSS) 都是放在 S3，使用 S3 靜態網頁託管的功能提供給客戶 當前端網頁載入後，所有功能包含上傳影片、轉碼、影片管理、分析等等，都是由 AWS API Gateway 去做代理，實際功能都以 AWS Lambda 去做實現 VoD 我們可以關注上方綠色的線路
+當使用者使用上傳影片後，Lambda 會讓使用者上傳影片到 S3 當 S3 上傳完成後，會啟用 Media Convert 去做影片的轉碼，或是丟到 Media Package 去做 DRM 的管理 當影片轉碼完成後，會啟用 Step Function 去完成一連串的處理 例如 (關注上方黃色線路)： 使用 AWS Rekognition 去做裸露影像辨識 用 Transcribe 做語音轉文字，用 Translate 翻譯轉換後的文字，自動產生字幕 最後將資料放到該去的地方 其他人就可以透過 AWS S3 或是 CloudFront 去存取該影片 Streaming 我們可以關注下方黑色的線路</description><content>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+&lt;iframe src="https://www.youtube.com/embed/zqiNLMmEeSo" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;/div>
+&lt;h2 id="簡介">簡介&lt;/h2>
+&lt;p>CloudPlex Media 提供客戶 VoD (隨選視訊) 與 Streaming (影像串流) 的服務，不僅能夠處理 DRM (數位版權管理)，還有 AI 做字幕自動產生，以及各式影像轉碼服務&lt;/p>
+&lt;h2 id="架構">架構&lt;/h2>
+&lt;p>該服務，簡單分成三大項&lt;/p>
+&lt;ol>
+&lt;li>Web&lt;/li>
+&lt;li>VoD (隨選視訊)&lt;/li>
+&lt;li>Streaming (影像串流)&lt;/li>
+&lt;/ol>
+&lt;p>我們將分開講解&lt;/p>
+&lt;p>&lt;img src="/img/2022/11/CloudPlexMediaAWSArchitecture.svg" alt="Architecture">&lt;/p>
+&lt;h3 id="web">Web&lt;/h3>
+&lt;p>我們可以關注左上角藍色的線路&lt;/p>
+&lt;ol>
+&lt;li>首先全平台的網頁 (HTML, JS, CSS) 都是放在 S3，使用 S3 &lt;a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteHosting.html">靜態網頁託管&lt;/a>的功能提供給客戶&lt;/li>
+&lt;li>當前端網頁載入後，所有功能包含上傳影片、轉碼、影片管理、分析等等，都是由 AWS API Gateway 去做代理，實際功能都以 AWS Lambda 去做實現&lt;/li>
+&lt;/ol>
+&lt;h3 id="vod">VoD&lt;/h3>
+&lt;p>我們可以關注上方綠色的線路&lt;/p>
+&lt;ul>
+&lt;li>當使用者使用上傳影片後，Lambda 會讓使用者上傳影片到 S3&lt;/li>
+&lt;li>當 S3 上傳完成後，會啟用 Media Convert 去做影片的轉碼，或是丟到 Media Package 去做 DRM 的管理
+&lt;ul>
+&lt;li>當影片轉碼完成後，會啟用 Step Function 去完成一連串的處理&lt;/li>
+&lt;li>例如 (關注上方黃色線路)：
+&lt;ul>
+&lt;li>使用 AWS Rekognition 去做裸露影像辨識&lt;/li>
+&lt;li>用 Transcribe 做語音轉文字，用 Translate 翻譯轉換後的文字，自動產生字幕&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>最後將資料放到該去的地方&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>其他人就可以透過 AWS S3 或是 CloudFront 去存取該影片&lt;/li>
+&lt;/ul>
+&lt;h3 id="streaming">Streaming&lt;/h3>
+&lt;p>我們可以關注下方黑色的線路&lt;/p>
+&lt;ul>
+&lt;li>當使用者開啟直播，前端會將影像用 RTMP 的方式串流到 Media Live&lt;/li>
+&lt;li>這時候，依照觀看流量，利用 Fargate 去自動擴展，來服務觀看者&lt;/li>
+&lt;/ul></content></item><item><title>AWS Architecture ITTStar AI Powered Search</title><link>/blog/aws-architecture-ittstar-ai-powered-search/</link><pubDate>Mon, 14 Nov 2022 20:44:42 +0800</pubDate><guid>/blog/aws-architecture-ittstar-ai-powered-search/</guid><description> 簡介 ITTStar 主要是幫助企業做上雲的資訊顧問服務，提供老舊系統雲端遷移以產業上雲服務，網站客戶寫很多，但是我看得懂的只有 Whirlpool 和 AT&amp;amp;T
 要解決什麼問題 AI powered search 主要是做商品資訊辨識，可以想像你上傳幾張圖片，他可以幫你辨識出這是哪個品牌、哪個型號，大概的市場價格，主要提供給精品產業品牌以及零售與批發的估價師
 架構 Amplify 的 App 使用 Cognito 做身份驗證 使用者上傳的影像會傳到 S3 S3 的更新會通知 Lambda 去 Trigger Rekognition 去做物品辨識 如果影像中有大量文字，他們會用 Textract 去擷取，並且去更正 Rekognition 辨識出來的資訊 可能可以知道品牌，型號，地點等等 最後把資料都丟到 DynamoDB</description><content>
 &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
