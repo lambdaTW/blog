@@ -14,7 +14,7 @@ Accenture 是一家科技顧問公司，其服務包含管理諮詢，科技技�
 
 ### 關聯擷取
 ![Crude Relationship](/img/2022/11/CrudeRelationship.svg)
->他們稱原油：crude，假設某文件中提到 crude A 的 density (濃度) 和 sulfur level (含硫量)，另外的文件提到 crude B 的 density (濃度) 和 sulfur level (含硫量)，還有隱含其風險值，所以，當 crude B 的 density 和 sulfur level 很接近 crude A 時，那就表示 crude A 有很高的機會擁有想同的風險值
+>他們稱原油：crude，假設某文件中提到 crude A 的 density (濃度) 和 sulfur level (含硫量)，另外的文件提到 crude B 的 density (濃度) 和 sulfur level (含硫量)，還有隱含其風險值，所以，當 crude B 的 density 和 sulfur level 很接近 crude A 時，那就表示 crude A 有很高的機會擁有相同的風險值
 
 ## 架構
 ![Architecture](/img/2022/11/AccentureAWSArchitecture.svg)
