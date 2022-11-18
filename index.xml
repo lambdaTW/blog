@@ -1,4 +1,31 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lambda</title><link>/</link><description>Recent content on Lambda</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 16 Nov 2022 21:15:50 +0800</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>AWS Architecture CloudPlex Media</title><link>/blog/aws-architecture-cloudplex-media/</link><pubDate>Wed, 16 Nov 2022 21:15:50 +0800</pubDate><guid>/blog/aws-architecture-cloudplex-media/</guid><description>簡介 CloudPlex Media 提供客戶 VoD (隨選視訊) 與 Streaming (影像串流) 的服務，不僅能夠處理 DRM (數位版權管理)，還有 AI 做字幕自動產生，以及各式影像轉碼服務
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lambda</title><link>/</link><description>Recent content on Lambda</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 17 Nov 2022 19:36:48 +0800</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>AWS Architecture Accenture</title><link>/blog/aws-architecture-accenture/</link><pubDate>Thu, 17 Nov 2022 19:36:48 +0800</pubDate><guid>/blog/aws-architecture-accenture/</guid><description> 簡介 Accenture 是一家科技顧問公司，其服務包含管理諮詢，科技技術與業務流程外包等等，曾被稱作科技業界的麥肯錫
+石油產業 在這產業，沒有精確的時間去購買原油，可能導致每年多出百萬美金的成本，如果有更加好的決策系統或是知識管理的系統就可以幫助他們省下大量的成本
+關聯擷取 他們稱原油：crude，假設某文件中提到 crude A 的 density (濃度) 和 sulfur level (含硫量)，另外的文件提到 crude B 的 density (濃度) 和 sulfur level (含硫量)，還有隱含其風險值，所以，當 crude B 的 density 和 sulfur level 很接近 crude A 時，那就表示 crude A 有很高的機會擁有想同的風險值
+架構 文件餵到 Lambda Lambda 用 SageMaker 中訓練好的模型取得一些 Type 、Key Facts 等等 Lambda 用 Comprehend 獲取詞語分析以及 Token ，和一些 Fact 將其整理後存到 Neptune，例如上方的關聯擷取圖 同時也會將原始資料用 ElasticSearch index 起來，方便後面的全文搜索</description><content>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+&lt;iframe src="https://www.youtube.com/embed/ekXdohpAy5U" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;/div>
+&lt;h2 id="簡介">簡介&lt;/h2>
+&lt;p>Accenture 是一家科技顧問公司，其服務包含管理諮詢，科技技術與業務流程外包等等，曾被稱作科技業界的麥肯錫&lt;/p>
+&lt;h3 id="石油產業">石油產業&lt;/h3>
+&lt;p>在這產業，沒有精確的時間去購買原油，可能導致每年多出百萬美金的成本，如果有更加好的決策系統或是知識管理的系統就可以幫助他們省下大量的成本&lt;/p>
+&lt;h3 id="關聯擷取">關聯擷取&lt;/h3>
+&lt;p>&lt;img src="/img/2022/11/CrudeRelationship.svg" alt="Crude Relationship">&lt;/p>
+&lt;blockquote>
+&lt;p>他們稱原油：crude，假設某文件中提到 crude A 的 density (濃度) 和 sulfur level (含硫量)，另外的文件提到 crude B 的 density (濃度) 和 sulfur level (含硫量)，還有隱含其風險值，所以，當 crude B 的 density 和 sulfur level 很接近 crude A 時，那就表示 crude A 有很高的機會擁有想同的風險值&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="架構">架構&lt;/h2>
+&lt;p>&lt;img src="/img/2022/11/AccentureAWSArchitecture.svg" alt="Architecture">&lt;/p>
+&lt;ul>
+&lt;li>文件餵到 Lambda
+&lt;ul>
+&lt;li>Lambda 用 SageMaker 中訓練好的模型取得一些 Type 、Key Facts 等等&lt;/li>
+&lt;li>Lambda 用 Comprehend 獲取詞語分析以及 Token ，和一些 Fact&lt;/li>
+&lt;li>將其整理後存到 Neptune，例如上方的關聯擷取圖&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>同時也會將原始資料用 ElasticSearch index 起來，方便後面的全文搜索&lt;/li>
+&lt;/ul></content></item><item><title>AWS Architecture CloudPlex Media</title><link>/blog/aws-architecture-cloudplex-media/</link><pubDate>Wed, 16 Nov 2022 21:15:50 +0800</pubDate><guid>/blog/aws-architecture-cloudplex-media/</guid><description>簡介 CloudPlex Media 提供客戶 VoD (隨選視訊) 與 Streaming (影像串流) 的服務，不僅能夠處理 DRM (數位版權管理)，還有 AI 做字幕自動產生，以及各式影像轉碼服務
 架構 該服務，簡單分成三大項
 Web VoD (隨選視訊) Streaming (影像串流) 我們將分開講解
 Web 我們可以關注左上角藍色的線路
