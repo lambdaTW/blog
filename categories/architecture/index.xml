@@ -1,4 +1,322 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>architecture on Lambda</title><link>/categories/architecture/</link><description>Recent content in architecture on Lambda</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 12 Nov 2022 14:22:22 +0800</lastBuildDate><atom:link href="/categories/architecture/index.xml" rel="self" type="application/rss+xml"/><item><title>Chick-Fil-A Architecture</title><link>/blog/architecture-chick-fil-a/</link><pubDate>Sat, 12 Nov 2022 14:22:22 +0800</pubDate><guid>/blog/architecture-chick-fil-a/</guid><description>簡介 Chick-fil-A 是一間總部位於美國喬治亞州 College Park 的美式連鎖速食店，以雞肉三明治為主 (圖片看起來其實是漢堡) ，目前有超過 2,200 間連鎖餐廳
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>architecture on Lambda</title><link>/categories/architecture/</link><description>Recent content in architecture on Lambda</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 21 Nov 2022 18:53:55 +0800</lastBuildDate><atom:link href="/categories/architecture/index.xml" rel="self" type="application/rss+xml"/><item><title>AWS Architecture Swimming Australia</title><link>/blog/aws-architecture-swimming-australia/</link><pubDate>Mon, 21 Nov 2022 18:53:55 +0800</pubDate><guid>/blog/aws-architecture-swimming-australia/</guid><description>簡介 除了運動選手本身的能力以外，在接力比賽中，如何讓所有團隊都能拿到比較好的獎項，排隊伍就是個很關鍵的點
+舉個例子 秒/國 美國 A 美國 B 澳洲 A 澳洲 B 選手1 2 1 選手2 3 5 選手3 2 3 選手4 1 1 合計秒 5 3 6 4 如果 美國 A VS. 澳洲 A ，美國 B VS. 澳洲 B
+依照上面的隊伍排列，澳洲全輸，但是如果這樣排
+秒/國 美國 A 美國 B 澳洲 A 澳洲 B 選手1 2 3 選手2 3 5 選手3 2 1 選手4 1 1 合計秒 5 3 8 2 就可以在 B 組拿到較好的成績</description><content>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+&lt;iframe src="https://www.youtube.com/embed/1VcpCVe3tLQ" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;/div>
+&lt;h2 id="簡介">簡介&lt;/h2>
+&lt;p>除了運動選手本身的能力以外，在接力比賽中，如何讓所有團隊都能拿到比較好的獎項，排隊伍就是個很關鍵的點&lt;/p>
+&lt;h3 id="舉個例子">舉個例子&lt;/h3>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>秒/國&lt;/th>
+&lt;th>美國 A&lt;/th>
+&lt;th>美國 B&lt;/th>
+&lt;th>澳洲 A&lt;/th>
+&lt;th>澳洲 B&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>選手1&lt;/td>
+&lt;td>2&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>1&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>選手2&lt;/td>
+&lt;td>3&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>5&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>選手3&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>2&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>3&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>選手4&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>1&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>1&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>合計秒&lt;/td>
+&lt;td>5&lt;/td>
+&lt;td>3&lt;/td>
+&lt;td>6&lt;/td>
+&lt;td>4&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;blockquote>
+&lt;p>如果 美國 A VS. 澳洲 A ，美國 B VS. 澳洲 B&lt;/p>
+&lt;/blockquote>
+&lt;p>依照上面的隊伍排列，澳洲全輸，但是如果這樣排&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>秒/國&lt;/th>
+&lt;th>美國 A&lt;/th>
+&lt;th>美國 B&lt;/th>
+&lt;th>澳洲 A&lt;/th>
+&lt;th>澳洲 B&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>選手1&lt;/td>
+&lt;td>2&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>3&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>選手2&lt;/td>
+&lt;td>3&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>5&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>選手3&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>2&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>1&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>選手4&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>1&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>1&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>合計秒&lt;/td>
+&lt;td>5&lt;/td>
+&lt;td>3&lt;/td>
+&lt;td>8&lt;/td>
+&lt;td>2&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>就可以在 B 組拿到較好的成績&lt;/p>
+&lt;h2 id="架構">架構&lt;/h2>
+&lt;p>&lt;img src="/img/2022/11/AWS-Architecture-Swimming-Australia.png" alt="Architecture">&lt;/p>
+&lt;p>這裡分三個部分&lt;/p>
+&lt;ul>
+&lt;li>Web&lt;/li>
+&lt;li>Data pipeline&lt;/li>
+&lt;li>Auto training&lt;/li>
+&lt;/ul>
+&lt;h3 id="data-pipeline">Data pipeline&lt;/h3>
+&lt;ul>
+&lt;li>首先來看看上方黃線的部分
+&lt;ul>
+&lt;li>首先來看看上方黃線的部分，資料會由各個不同的方式以及格式 (XML, JSON) ，放到 S3 的 Landing bucket&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>再來看到左半邊紫色的線路
+&lt;ul>
+&lt;li>透過 AWS Glue 將資料整理成統一格式後放到 S3 的 Data Lake bucket&lt;/li>
+&lt;li>AWS Glue 將資料整理資料科學家想要的樣貌後放到 S3 的 Curated bucket&lt;/li>
+&lt;li>資料科學家可以透過 SageMaker notebook 連接 Athena 使用 SQL 語法做資料操作以及訓練&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="web">Web&lt;/h3>
+&lt;p>關注左下角黑色線路&lt;/p>
+&lt;ul>
+&lt;li>使用者透過手機可以從 API Gateway 呼叫 Lambda 取得想要的資料&lt;/li>
+&lt;li>其中包含使用 SageMaker 中已經訓練好的模型，Lambda 透過 Trigger SageMaker Endpoint，來獲得使用者想要的 Inference (AKA: 怎樣的隊伍排起來對這系列的比賽比較好)&lt;/li>
+&lt;/ul>
+&lt;h3 id="auto-training">Auto training&lt;/h3>
+&lt;p>由於比賽資料常常更新，但是資料科學家不會每一次都有時間來重新 Train AI model ，所以他們讓使用者可以控制，是否使用新的資料去重新 Train 一個新的 AI model (關注綠色的線路)&lt;/p>
+&lt;ul>
+&lt;li>使用者 Trigger Lambda&lt;/li>
+&lt;li>Lambda Trigger StepFunction&lt;/li>
+&lt;li>StepFunction 將會完成一整套流程
+&lt;ul>
+&lt;li>使用 Athena 獲取資料 (包含最新的資料)&lt;/li>
+&lt;li>使用 Training 的程式碼去重新產生 AI model&lt;/li>
+&lt;li>驗證產生出來的 AI model 沒有特別的問題 (可以產出資料，且該資料沒有超出設定的預期)&lt;/li>
+&lt;li>將產生出來的 AI model 部署到 Sagemaker Endpoint&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul></content></item><item><title>AWS Architecture Accenture</title><link>/blog/aws-architecture-accenture/</link><pubDate>Thu, 17 Nov 2022 19:36:48 +0800</pubDate><guid>/blog/aws-architecture-accenture/</guid><description> 簡介 Accenture 是一家科技顧問公司，其服務包含管理諮詢，科技技術與業務流程外包等等，曾被稱作科技業界的麥肯錫
+石油產業 在這產業，沒有精確的時間去購買原油，可能導致每年多出百萬美金的成本，如果有更加好的決策系統或是知識管理的系統就可以幫助他們省下大量的成本
+關聯擷取 他們稱原油：crude，假設某文件中提到 crude A 的 density (濃度) 和 sulfur level (含硫量)，另外的文件提到 crude B 的 density (濃度) 和 sulfur level (含硫量)，還有隱含其風險值，所以，當 crude B 的 density 和 sulfur level 很接近 crude A 時，那就表示 crude A 有很高的機會擁有相同的風險值
+架構 文件餵到 Lambda Lambda 用 SageMaker 中訓練好的模型取得一些 Type 、Key Facts 等等 Lambda 用 Comprehend 獲取詞語分析以及 Token ，和一些 Fact 將其整理後存到 Neptune，例如上方的關聯擷取圖 同時也會將原始資料用 ElasticSearch index 起來，方便後面的全文搜索</description><content>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+&lt;iframe src="https://www.youtube.com/embed/ekXdohpAy5U" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;/div>
+&lt;h2 id="簡介">簡介&lt;/h2>
+&lt;p>Accenture 是一家科技顧問公司，其服務包含管理諮詢，科技技術與業務流程外包等等，曾被稱作科技業界的麥肯錫&lt;/p>
+&lt;h3 id="石油產業">石油產業&lt;/h3>
+&lt;p>在這產業，沒有精確的時間去購買原油，可能導致每年多出百萬美金的成本，如果有更加好的決策系統或是知識管理的系統就可以幫助他們省下大量的成本&lt;/p>
+&lt;h3 id="關聯擷取">關聯擷取&lt;/h3>
+&lt;p>&lt;img src="/img/2022/11/CrudeRelationship.svg" alt="Crude Relationship">&lt;/p>
+&lt;blockquote>
+&lt;p>他們稱原油：crude，假設某文件中提到 crude A 的 density (濃度) 和 sulfur level (含硫量)，另外的文件提到 crude B 的 density (濃度) 和 sulfur level (含硫量)，還有隱含其風險值，所以，當 crude B 的 density 和 sulfur level 很接近 crude A 時，那就表示 crude A 有很高的機會擁有相同的風險值&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="架構">架構&lt;/h2>
+&lt;p>&lt;img src="/img/2022/11/AccentureAWSArchitecture.svg" alt="Architecture">&lt;/p>
+&lt;ul>
+&lt;li>文件餵到 Lambda
+&lt;ul>
+&lt;li>Lambda 用 SageMaker 中訓練好的模型取得一些 Type 、Key Facts 等等&lt;/li>
+&lt;li>Lambda 用 Comprehend 獲取詞語分析以及 Token ，和一些 Fact&lt;/li>
+&lt;li>將其整理後存到 Neptune，例如上方的關聯擷取圖&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>同時也會將原始資料用 ElasticSearch index 起來，方便後面的全文搜索&lt;/li>
+&lt;/ul></content></item><item><title>AWS Architecture CloudPlex Media</title><link>/blog/aws-architecture-cloudplex-media/</link><pubDate>Wed, 16 Nov 2022 21:15:50 +0800</pubDate><guid>/blog/aws-architecture-cloudplex-media/</guid><description>簡介 CloudPlex Media 提供客戶 VoD (隨選視訊) 與 Streaming (影像串流) 的服務，不僅能夠處理 DRM (數位版權管理)，還有 AI 做字幕自動產生，以及各式影像轉碼服務
+架構 該服務，簡單分成三大項
+Web VoD (隨選視訊) Streaming (影像串流) 我們將分開講解
+Web 我們可以關注左上角藍色的線路
+首先全平台的網頁 (HTML, JS, CSS) 都是放在 S3，使用 S3 靜態網頁託管的功能提供給客戶 當前端網頁載入後，所有功能包含上傳影片、轉碼、影片管理、分析等等，都是由 AWS API Gateway 去做代理，實際功能都以 AWS Lambda 去做實現 VoD 我們可以關注上方綠色的線路
+當使用者使用上傳影片後，Lambda 會讓使用者上傳影片到 S3 當 S3 上傳完成後，會啟用 Media Convert 去做影片的轉碼，或是丟到 Media Package 去做 DRM 的管理 當影片轉碼完成後，會啟用 Step Function 去完成一連串的處理 例如 (關注上方黃色線路)： 使用 AWS Rekognition 去做裸露影像辨識 用 Transcribe 做語音轉文字，用 Translate 翻譯轉換後的文字，自動產生字幕 最後將資料放到該去的地方 其他人就可以透過 AWS S3 或是 CloudFront 去存取該影片 Streaming 我們可以關注下方黑色的線路</description><content>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+&lt;iframe src="https://www.youtube.com/embed/zqiNLMmEeSo" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;/div>
+&lt;h2 id="簡介">簡介&lt;/h2>
+&lt;p>CloudPlex Media 提供客戶 VoD (隨選視訊) 與 Streaming (影像串流) 的服務，不僅能夠處理 DRM (數位版權管理)，還有 AI 做字幕自動產生，以及各式影像轉碼服務&lt;/p>
+&lt;h2 id="架構">架構&lt;/h2>
+&lt;p>該服務，簡單分成三大項&lt;/p>
+&lt;ol>
+&lt;li>Web&lt;/li>
+&lt;li>VoD (隨選視訊)&lt;/li>
+&lt;li>Streaming (影像串流)&lt;/li>
+&lt;/ol>
+&lt;p>我們將分開講解&lt;/p>
+&lt;p>&lt;img src="/img/2022/11/CloudPlexMediaAWSArchitecture.svg" alt="Architecture">&lt;/p>
+&lt;h3 id="web">Web&lt;/h3>
+&lt;p>我們可以關注左上角藍色的線路&lt;/p>
+&lt;ol>
+&lt;li>首先全平台的網頁 (HTML, JS, CSS) 都是放在 S3，使用 S3 &lt;a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteHosting.html">靜態網頁託管&lt;/a>的功能提供給客戶&lt;/li>
+&lt;li>當前端網頁載入後，所有功能包含上傳影片、轉碼、影片管理、分析等等，都是由 AWS API Gateway 去做代理，實際功能都以 AWS Lambda 去做實現&lt;/li>
+&lt;/ol>
+&lt;h3 id="vod">VoD&lt;/h3>
+&lt;p>我們可以關注上方綠色的線路&lt;/p>
+&lt;ul>
+&lt;li>當使用者使用上傳影片後，Lambda 會讓使用者上傳影片到 S3&lt;/li>
+&lt;li>當 S3 上傳完成後，會啟用 Media Convert 去做影片的轉碼，或是丟到 Media Package 去做 DRM 的管理
+&lt;ul>
+&lt;li>當影片轉碼完成後，會啟用 Step Function 去完成一連串的處理&lt;/li>
+&lt;li>例如 (關注上方黃色線路)：
+&lt;ul>
+&lt;li>使用 AWS Rekognition 去做裸露影像辨識&lt;/li>
+&lt;li>用 Transcribe 做語音轉文字，用 Translate 翻譯轉換後的文字，自動產生字幕&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>最後將資料放到該去的地方&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>其他人就可以透過 AWS S3 或是 CloudFront 去存取該影片&lt;/li>
+&lt;/ul>
+&lt;h3 id="streaming">Streaming&lt;/h3>
+&lt;p>我們可以關注下方黑色的線路&lt;/p>
+&lt;ul>
+&lt;li>當使用者開啟直播，前端會將影像用 RTMP 的方式串流到 Media Live&lt;/li>
+&lt;li>這時候，依照觀看流量，利用 Fargate 去自動擴展，來服務觀看者&lt;/li>
+&lt;/ul></content></item><item><title>AWS Architecture ITTStar AI Powered Search</title><link>/blog/aws-architecture-ittstar-ai-powered-search/</link><pubDate>Mon, 14 Nov 2022 20:44:42 +0800</pubDate><guid>/blog/aws-architecture-ittstar-ai-powered-search/</guid><description> 簡介 ITTStar 主要是幫助企業做上雲的資訊顧問服務，提供老舊系統雲端遷移以產業上雲服務，網站客戶寫很多，但是我看得懂的只有 Whirlpool 和 AT&amp;amp;T
+要解決什麼問題 AI powered search 主要是做商品資訊辨識，可以想像你上傳幾張圖片，他可以幫你辨識出這是哪個品牌、哪個型號，大概的市場價格，主要提供給精品產業品牌以及零售與批發的估價師
+架構 Amplify 的 App 使用 Cognito 做身份驗證 使用者上傳的影像會傳到 S3 S3 的更新會通知 Lambda 去 Trigger Rekognition 去做物品辨識 如果影像中有大量文字，他們會用 Textract 去擷取，並且去更正 Rekognition 辨識出來的資訊 可能可以知道品牌，型號，地點等等 最後把資料都丟到 DynamoDB</description><content>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+&lt;iframe src="https://www.youtube.com/embed/Qi9soN5bpU4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;/div>
+&lt;h2 id="簡介">簡介&lt;/h2>
+&lt;p>&lt;a href="https://www.ittstar.com/">ITTStar&lt;/a> 主要是幫助企業做上雲的資訊顧問服務，提供老舊系統雲端遷移以產業上雲服務，網站客戶寫很多，但是我看得懂的只有 Whirlpool 和 AT&amp;amp;T&lt;/p>
+&lt;h2 id="要解決什麼問題">要解決什麼問題&lt;/h2>
+&lt;p>AI powered search 主要是做商品資訊辨識，可以想像你上傳幾張圖片，他可以幫你辨識出這是哪個品牌、哪個型號，大概的市場價格，主要提供給精品產業品牌以及零售與批發的估價師&lt;/p>
+&lt;h2 id="架構">架構&lt;/h2>
+&lt;p>&lt;img src="/img/2022/11/ITTStartAIpoweredSearchArchitecture.svg" alt="Architecture">&lt;/p>
+&lt;ul>
+&lt;li>Amplify 的 App 使用 Cognito 做身份驗證&lt;/li>
+&lt;li>使用者上傳的影像會傳到 S3&lt;/li>
+&lt;li>S3 的更新會通知 Lambda 去 Trigger Rekognition 去做物品辨識&lt;/li>
+&lt;li>如果影像中有大量文字，他們會用 Textract 去擷取，並且去更正 Rekognition 辨識出來的資訊
+&lt;ul>
+&lt;li>可能可以知道品牌，型號，地點等等&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>最後把資料都丟到 DynamoDB&lt;/li>
+&lt;/ul></content></item><item><title>Chick-Fil-A AHA</title><link>/blog/aha/</link><pubDate>Sun, 13 Nov 2022 09:59:48 +0800</pubDate><guid>/blog/aha/</guid><description>簡介 Chick-fil-A 是一間總部位於美國喬治亞州 College Park 的美式連鎖速食店，以雞肉三明治為主 (圖片看起來其實是漢堡) ，目前有超過 2,200 間連鎖餐廳
+遇到的問題 在速食產業 (QSR) 中，大部分食物都會有所謂的有效期，在食物放到備料區以後，如果超過該食物的有效期，食物就會被倒掉，以保證食物比較不會有食安上的問題，傳統上都是人工去點擊計時器，但是
+“Ain’t nobody got time for that!”
+如果說人員忘記點擊開始，下一次想起來再來去點，該食物的計時是完全沒有效用的
+POC 為了解決這個問題， Chick-Fil-A 直接設計一個新的托盤，讓放食物的鍋子邊邊可以被 3D camera 掃描，並且直接在鍋子上給予 Bar code，這樣就可以知道是哪種食物被放上來，用以重設計時器
+為了做到該功能，他們在托盤與鍋子上面架設 Camera 並且運用 NCU 進行 Bar code 偵測
+AI 何時啟用 Bar code 偵測是一個不小的問題，原本他們使用 3D 相機給予的深度資訊來做 pixel counting，但是，如果 Camera 被動到，或是安裝人員安裝時，把相機安裝比預設的高兩英吋，就有可能讓 Bar code 難以被偵測 (pixel counting)，為了解決該問題，他們打算捨棄傳統的 pixel counting 改用 AI 來判斷鍋子是否安裝到托盤上
+Training Data 用 3D camera 擷取沒有鍋子的影像 為了模擬真實店家情況，他們在影像中加入一些會在店內出現的東西，例如：三明治 一樣方式擷取有鍋子的影像 解析度: 1280 x 720 Neural Network Implementation 很簡單的一層 dense 一層 dropout 的 CNN 就達到不錯的效果，以下為詳細訓練的參數</description><content>&lt;h2 id="簡介">簡介&lt;/h2>
+&lt;p>Chick-fil-A 是一間總部位於美國喬治亞州 College Park 的美式連鎖速食店，以雞肉三明治為主 (圖片看起來其實是漢堡) ，目前有超過 2,200 間連鎖餐廳&lt;/p>
+&lt;h2 id="遇到的問題">遇到的問題&lt;/h2>
+&lt;p>在速食產業 (QSR) 中，大部分食物都會有所謂的有效期，在食物放到備料區以後，如果超過該食物的有效期，食物就會被倒掉，以保證食物比較不會有食安上的問題，傳統上都是人工去點擊計時器，但是&lt;/p>
+&lt;blockquote>
+&lt;p>“Ain’t nobody got time for that!”&lt;/p>
+&lt;/blockquote>
+&lt;p>如果說人員忘記點擊開始，下一次想起來再來去點，該食物的計時是完全沒有效用的&lt;/p>
+&lt;h2 id="poc">POC&lt;/h2>
+&lt;p>為了解決這個問題， Chick-Fil-A 直接設計一個新的托盤，讓放食物的鍋子邊邊可以被 3D camera 掃描，並且直接在鍋子上給予 Bar code，這樣就可以知道是哪種食物被放上來，用以重設計時器&lt;/p>
+&lt;p>&lt;img src="https://miro.medium.com/max/1400/1*cssV3Ug0FAmxx74YlmgTwg.png" alt="Pan and Bracket">&lt;/p>
+&lt;p>為了做到該功能，他們在托盤與鍋子上面架設 Camera 並且運用 NCU 進行 Bar code 偵測&lt;/p>
+&lt;p>&lt;img src="https://miro.medium.com/max/1400/1*iH80Ibk3pN6HJWZxhmQmew.png" alt="NCU install">&lt;/p>
+&lt;h2 id="ai">AI&lt;/h2>
+&lt;p>何時啟用 Bar code 偵測是一個不小的問題，原本他們使用 3D 相機給予的深度資訊來做 pixel counting，但是，如果 Camera 被動到，或是安裝人員安裝時，把相機安裝比預設的高兩英吋，就有可能讓 Bar code 難以被偵測 (pixel counting)，為了解決該問題，他們打算捨棄傳統的 pixel counting 改用 AI 來判斷鍋子是否安裝到托盤上&lt;/p>
+&lt;h3 id="training-data">Training Data&lt;/h3>
+&lt;ul>
+&lt;li>用 3D camera 擷取沒有鍋子的影像
+&lt;ul>
+&lt;li>為了模擬真實店家情況，他們在影像中加入一些會在店內出現的東西，例如：三明治&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>一樣方式擷取有鍋子的影像&lt;/li>
+&lt;li>解析度: 1280 x 720&lt;/li>
+&lt;/ul>
+&lt;h3 id="neural-network-implementation">Neural Network Implementation&lt;/h3>
+&lt;p>很簡單的一層 dense 一層 dropout 的 CNN 就達到不錯的效果，以下為詳細訓練的參數&lt;/p>
+&lt;ul>
+&lt;li>grayscale&lt;/li>
+&lt;li>96 x 96 pixels&lt;/li>
+&lt;li>2 epochs of 600 batches&lt;/li>
+&lt;li>32 images per batch&lt;/li>
+&lt;li>30 validation batches&lt;/li>
+&lt;/ul>
+&lt;h3 id="feature">Feature&lt;/h3>
+&lt;p>運用鍋子的深度，以及計時器的資料，可以知道裡面有多少雞肉，那就可以知道多少肉在何時被煮起來，使用油品的紀錄也可以被知道&lt;/p>
+&lt;h2 id="進化-aha-20">進化 AHA 2.0&lt;/h2>
+&lt;p>完成了相關實驗後，他們要挑戰安裝到 2800 以上的店家，他們做了不少進化，例如&lt;/p>
+&lt;ul>
+&lt;li>如何讓平板 (顯示器)，可以在廚房惡劣的環境下還能使用，而且成本要夠低到可以擴展到所有店家&lt;/li>
+&lt;li>重新設計 機器 - 相機 - 托盤，讓顯示器不會擋到相機&lt;/li>
+&lt;li>加強 AI 的準確度&lt;/li>
+&lt;li>壓力測試鍋子上雷射上去的 Bar code 經過刷洗後，耐用度如何&lt;/li>
+&lt;li>找到更好的 Bar code，就算工作人員的手微微擋住一部分條碼也可以辨識&lt;/li>
+&lt;li>加上一些傳統電腦視覺的算法，讓條碼更好被判斷&lt;/li>
+&lt;li>各式 Bar code 除錯，例如：地板上有條碼，不該被混淆&lt;/li>
+&lt;li>優化深度轉乘雞肉量的轉換&lt;/li>
+&lt;/ul>
+&lt;h3 id="硬體改進">硬體改進&lt;/h3>
+&lt;p>在部署 prototype 到一些店家後，開始進行 &lt;a href="https://en.wikipedia.org/wiki/Failure_mode_and_effects_analysis">Failure Mode and Effects Analysis&lt;/a> 為了要讓他們的解決方案可以支援到 24 常駐&lt;/p>
+&lt;ul>
+&lt;li>一開始想辦法讓 Chrome 直接支援 Intel RealSense camera，這樣就不用 NCU 了，但是失敗&lt;/li>
+&lt;li>找到夠穩定的 Chrome 平板，最後找到一個支援 Linux 的平板&lt;/li>
+&lt;li>讓研究人員確定該平板跑 AI model 是穩定的&lt;/li>
+&lt;/ul>
+&lt;p>最後平板只有 USB, Power, Camera，他們認為已經有足夠少的 failure point ，壞掉機率也夠低，足以支撐他們的服務&lt;/p>
+&lt;h2 id="ref">Ref&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a href="https://medium.com/chick-fil-atech/aha-2-0-623a0ec1cacc">AHA 2.0&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://medium.com/chick-fil-atech/edge-ai-in-a-smarter-chick-fil-a-2e2112f5e5d8">Edge AI in a Smarter Chick-fil-A&lt;/a>&lt;/li>
+&lt;/ul></content></item><item><title>Chick-Fil-A Architecture</title><link>/blog/architecture-chick-fil-a/</link><pubDate>Sat, 12 Nov 2022 14:22:22 +0800</pubDate><guid>/blog/architecture-chick-fil-a/</guid><description>簡介 Chick-fil-A 是一間總部位於美國喬治亞州 College Park 的美式連鎖速食店，以雞肉三明治為主 (圖片看起來其實是漢堡) ，目前有超過 2,200 間連鎖餐廳
 2017 架構 在這個階段已經有 MQTT 作為訊息傳遞 運用 Docker 去做大部分的事情，使用 Docker Swarm 使用 Fluentd 做 Event &amp;amp; Log Forwarding MQTT Docker log Redis cluster 作為 Persistence 層 IoT 透過 OAuth 流程，註冊 IoT (包含人工流程) 利用 Local OAuth 來達到本地認證，除了第一次啟動 IoT 設備以外，IoT 本人就不用再連接到網際網路也可以進行 refresh token 獲取 JWT Token 以後都透過 MQTT broker 進行溝通 Deployment flow 2018 架構 改用 K8s 因為 K8s 可以更簡單的用 Prometheus 做監控 用 Fleet 去做部署 Equirements 3 NCU with Quadcore processor, 8 GB RAM, SSD</description><content>&lt;h2 id="簡介">簡介&lt;/h2>
 &lt;p>Chick-fil-A 是一間總部位於美國喬治亞州 College Park 的美式連鎖速食店，以雞肉三明治為主 (圖片看起來其實是漢堡) ，目前有超過 2,200 間連鎖餐廳&lt;/p>
 &lt;h2 id="2017-架構">2017 架構&lt;/h2>
