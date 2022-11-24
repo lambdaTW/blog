@@ -3,6 +3,8 @@ title = "AWS Architecture CloudPlex Media"
 date = 2022-11-16T21:15:50+08:00
 cover = "/img/2022/11/CloudPlexMediaAWSArchitecture.svg"
 description = "Serverless 很好用，但是整套服務能都全部都用 Serverless 兜出來的服務並不多，來看看韓國雲端影片處理服務商 CloudPlex Media 如何運用 AWS serverless 完成一整套影音平台"
+categories = ["architecture"]
+tags = ["architecture"]
 +++
 
 {{< youtube zqiNLMmEeSo >}}

@@ -3,6 +3,8 @@ title = "AWS Architecture ITTStar AI Powered Search"
 date = 2022-11-14T20:44:42+08:00
 cover = "/img/2022/11/ITTStartAIpoweredSearchArchitecture.svg"
 description = "ITTStar 是一間軟體服務商，提供軟體服務給來自全球的客戶，來看看他如何運用 AWS 架構提供精品商品的交易平台更便利的服務"
+categories = ["architecture"]
+tags = ["architecture"]
 +++
 
 {{< youtube Qi9soN5bpU4 >}}

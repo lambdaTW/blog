@@ -3,6 +3,8 @@ title = "Chick-Fil-A AHA"
 date = 2022-11-13T09:59:48+08:00
 cover = "/img/2022/11/Chick-Fil-A-AHA.drawio.png"
 description = "來看看 Chick Fil A 如何運用自身企業資源讓 AI 應用硬著陸"
+categories = ["architecture"]
+tags = ["architecture"]
 +++
 ## 簡介
 Chick-fil-A 是一間總部位於美國喬治亞州 College Park 的美式連鎖速食店，以雞肉三明治為主 (圖片看起來其實是漢堡) ，目前有超過 2,200 間連鎖餐廳

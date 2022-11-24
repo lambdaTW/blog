@@ -3,6 +3,8 @@ title = "AWS Architecture Accenture"
 date = 2022-11-17T19:36:48+08:00
 description = "本篇介紹石油產業如何運用 NLP 以及 Graph Database 做資料處理以及應用"
 cover = "/img/2022/11/AccentureAWSArchitecture.svg"
+categories = ["architecture"]
+tags = ["architecture"]
 +++
 {{< youtube ekXdohpAy5U >}}
 

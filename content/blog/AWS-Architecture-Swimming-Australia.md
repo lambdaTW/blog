@@ -3,6 +3,8 @@ title = "AWS Architecture Swimming Australia"
 date = 2022-11-21T18:53:55+08:00
 cover = "/img/2022/11/AWS-Architecture-Swimming-Australia.png"
 description = "澳洲如和透過 AI 最佳化奧運游泳比賽比賽成績"
+categories = ["architecture"]
+tags = ["architecture"]
 +++
 
 {{< youtube 1VcpCVe3tLQ >}}
