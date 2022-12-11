@@ -1,4 +1,46 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blog on Lambda</title><link>/blog/</link><description>Recent content in Blog on Lambda</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 03 Dec 2022 14:11:06 +0800</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>AWS Architecture MyHeritage</title><link>/blog/aws-architecture-myheritage/</link><pubDate>Sat, 03 Dec 2022 14:11:06 +0800</pubDate><guid>/blog/aws-architecture-myheritage/</guid><description>簡介 MyHeritage 提供家族族譜分析以及家族 DNA 分析，最近推出新的服務 (Deep Nostalgia) 是讓你上傳一張祖先的照片，他們可以運用 AI 的方式令他活過來 (類似哈利波特牆上的畫像)
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blog on Lambda</title><link>/blog/</link><description>Recent content in Blog on Lambda</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 11 Dec 2022 11:51:54 +0800</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>AWS Architecture Spryker</title><link>/blog/aws-architecture-spryker/</link><pubDate>Sun, 11 Dec 2022 11:51:54 +0800</pubDate><guid>/blog/aws-architecture-spryker/</guid><description> 簡介 Spryker 專門做商業相關的軟體平台，無論 B2B, B2C, marketplace 等都有涉略
+PBC Packaged business capabilities，是某些包好的軟體提供商業使用，有點像是商業版 AWS marketplace
+APC 是 Spryker 設計出來讓 PBC 和客戶 (使用 PBC 的用戶) 開發出來的軟體可以有相同的介面可以溝通
+架構 分為兩條線，第一條綠色的是由 PBC 的軟體去通知或是呼叫客戶的軟體，另一條藍色的就反過來，是由客戶的軟體去呼叫 PBC ，概念都差不多，為了確保訊息的順序，大部分的 component 都是 FIFO
+PBC -&amp;gt; Tenant (綠色) PBC 將訊息放到自己的 SQS FIFO 將訊息打到 ACP 中給 PBC 的 API gateway Lambda 依照 DynamoDB 中的 Role 去設定 Rule 發送到 SNS FIFO，以確保收到的是使用該 PBC 的用戶 SNS 將訊息送到 Tenant 的 APP Tenant -&amp;gt; PBC (藍色) Tenat 將訊息放到自己的 SQS FIFO 將訊息打到 ACP 中給 Tenat 的 API gateway Lambda 將訊息發送到 SNS FIFO SNS 將訊息送到 PBC 的 APP Recap 利用相同的方式讓兩邊軟體可以溝通，這樣可以降低開發成本 SNS rule 可以是動態的，這樣做群發時可以利用資料庫來做 Filter，就不會讓訊息被其他不相干的人也接收到</description><content>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+&lt;iframe src="https://www.youtube.com/embed/DBmmQDlIXWM" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;/div>
+&lt;h2 id="簡介">簡介&lt;/h2>
+&lt;p>Spryker 專門做商業相關的軟體平台，無論 B2B, B2C, marketplace 等都有涉略&lt;/p>
+&lt;h3 id="pbc">PBC&lt;/h3>
+&lt;p>Packaged business capabilities，是某些包好的軟體提供商業使用，有點像是商業版 AWS marketplace&lt;/p>
+&lt;h3 id="apc">APC&lt;/h3>
+&lt;p>是 Spryker 設計出來讓 PBC 和客戶 (使用 PBC 的用戶) 開發出來的軟體可以有相同的介面可以溝通&lt;/p>
+&lt;h2 id="架構">架構&lt;/h2>
+&lt;p>分為兩條線，第一條綠色的是由 PBC 的軟體去通知或是呼叫客戶的軟體，另一條藍色的就反過來，是由客戶的軟體去呼叫 PBC ，概念都差不多，為了確保訊息的順序，大部分的 component 都是 FIFO&lt;/p>
+&lt;p>&lt;img src="/img/2022/12/Spryker-Application-Composition-Platform-Architecture.png" alt="Architecture">&lt;/p>
+&lt;ul>
+&lt;li>PBC -&amp;gt; Tenant (綠色)
+&lt;ul>
+&lt;li>PBC 將訊息放到自己的 SQS FIFO&lt;/li>
+&lt;li>將訊息打到 ACP 中給 PBC 的 API gateway&lt;/li>
+&lt;li>Lambda 依照 DynamoDB 中的 Role 去設定 Rule 發送到 SNS FIFO，以確保收到的是使用該 PBC 的用戶&lt;/li>
+&lt;li>SNS 將訊息送到 Tenant 的 APP&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;ul>
+&lt;li>Tenant -&amp;gt; PBC (藍色)
+&lt;ul>
+&lt;li>Tenat 將訊息放到自己的 SQS FIFO&lt;/li>
+&lt;li>將訊息打到 ACP 中給 Tenat 的 API gateway&lt;/li>
+&lt;li>Lambda 將訊息發送到 SNS FIFO&lt;/li>
+&lt;li>SNS 將訊息送到 PBC 的 APP&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="recap">Recap&lt;/h2>
+&lt;ul>
+&lt;li>利用相同的方式讓兩邊軟體可以溝通，這樣可以降低開發成本&lt;/li>
+&lt;li>SNS rule 可以是動態的，這樣做群發時可以利用資料庫來做 Filter，就不會讓訊息被其他不相干的人也接收到&lt;/li>
+&lt;/ul></content></item><item><title>AWS Architecture MyHeritage</title><link>/blog/aws-architecture-myheritage/</link><pubDate>Sat, 03 Dec 2022 14:11:06 +0800</pubDate><guid>/blog/aws-architecture-myheritage/</guid><description>簡介 MyHeritage 提供家族族譜分析以及家族 DNA 分析，最近推出新的服務 (Deep Nostalgia) 是讓你上傳一張祖先的照片，他們可以運用 AI 的方式令他活過來 (類似哈利波特牆上的畫像)
 架構 Single region 就正常的架構 (關注咖啡色線路)，在單一 region 時，他們使用一個 SQS 來做工作分配，以及動態的增加 GPU instances 的依據
 使用者上傳圖片到 S3 使用者呼叫 API 要求處理圖片 使用者等待工作處理完 (polling) Main queue 獲得該工作 GPU instance 從 Main queue 獲得工作 處理完成後通知 result queue 將處理後的影像放到 S3 State manager 從 Result queue 得知某工作做好了 將 DB 中的狀態改變 使用者得知工作完成，並從 API 獲得 cloudfront 中影片的位置 Multi-region 當使用者越來越多，單一 region 無法負荷其工作量， MyHeritage 多做了幾件事情
 增加一個 Lambda 分配工作 在原本的 region 增加一個 SQS 整體流程變成：</description><content>
