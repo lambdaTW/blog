@@ -2,7 +2,8 @@
 title = "AWS Architecture Spryker"
 date = "2022-12-11T11:51:54+08:00"
 cover = "/img/2022/12/Spryker-Application-Composition-Platform-Architecture.png"
-tags = [""]
+categories = ["architecture"]
+tags = ["architecture"]
 description = "做為軟體平台商，如何讓用戶以及軟體開發商做更好的銜接，是留住以及吸引開發商和用戶開發者的一大關鍵要素，來看看 Spryker 如何利用 Message 架構做到這件事情"
 +++
 {{< youtube DBmmQDlIXWM >}}

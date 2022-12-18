@@ -3,6 +3,8 @@ title="AWS Architecture MyHeritage"
 date=2022-12-03T14:11:06+08:00
 description="Region resources quota 常常是絆住整體架構的瓶頸，MyHeritage 使用 Lambda 和 SQS 突破單一 region GPU instance 上限，提供更快速的服務給使用者"
 cover="/img/2022/12/AWS-MyHeritage-Architecture.png"
+categories = ["architecture"]
+tags = ["architecture"]
 +++
 
 {{< youtube 0-db3wFRfSc>}}
