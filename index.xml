@@ -1,4 +1,28 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lambda</title><link>/</link><description>Recent content on Lambda</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 11 Dec 2022 11:51:54 +0800</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>AWS Architecture Spryker</title><link>/blog/aws-architecture-spryker/</link><pubDate>Sun, 11 Dec 2022 11:51:54 +0800</pubDate><guid>/blog/aws-architecture-spryker/</guid><description> 簡介 Spryker 專門做商業相關的軟體平台，無論 B2B, B2C, marketplace 等都有涉略
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lambda</title><link>/</link><description>Recent content on Lambda</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 18 Dec 2022 10:07:25 +0800</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>AWS Account Management Volkswagen Financial Services</title><link>/blog/aws-account-management-volkswagen-financial-services/</link><pubDate>Sun, 18 Dec 2022 10:07:25 +0800</pubDate><guid>/blog/aws-account-management-volkswagen-financial-services/</guid><description>簡介 Volkswagen 汽車集團，旗下有十個汽車品牌，包含 Volkswagen, Audi, LAMBORGHINI&amp;hellip; 等等，Volkswagen Financial Services 的服務包含旗下集團使用的金融，租借，移動服務，以及保險等，服務全球 48 個目標市場
+遇到的問題 Volkswagen Financial Services 開發團隊，從 2017 開始使用 AWS ，從一個單一帳號開始，裏面有包含各個服務的開發環境，整合環境，以及正式環境，開發人員如果沒有被限制，就有可能刪除掉別人的服務，甚至是線上的服務
+解決流程 分散 workload 到不同的 workload account 導入 staging 的概念，讓每個 workload 擁有 4 個 workload account 管理問題 在超多個 AWS account 下，管理變成很大的問題，他們利用 AWS IAM 讓開發人員可以用 SAML 登入各個 workload，並且管理使用類似暫時性 Token 的方式讓開發人員可以進入線上服務，而且所有動作是被監控的，另外，他們叫他們自己家建立的 Red Hat SSO 為 Bifrost (在漫威裡面的彩虹橋)，讓不同的 AWS account 可以互相連接
+Compliance &amp;amp; Auditing Compliance Volkswagen Financial Services 利用單一個 AWS 帳號使用 AWS Config 中心化追蹤所有帳號的資源設定變化，並在去年導入 AWS Inspector ，讓他們可以知道某些設定的更改到底會對哪些資源造成影響</description><content>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+&lt;iframe src="https://www.youtube.com/embed/r3g1Nym-ebY" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;/div>
+&lt;h2 id="簡介">簡介&lt;/h2>
+&lt;p>Volkswagen 汽車集團，旗下有十個汽車品牌，包含 Volkswagen, Audi, LAMBORGHINI&amp;hellip; 等等，Volkswagen Financial Services 的服務包含旗下集團使用的金融，租借，移動服務，以及保險等，服務全球 48 個目標市場&lt;/p>
+&lt;h2 id="遇到的問題">遇到的問題&lt;/h2>
+&lt;p>Volkswagen Financial Services 開發團隊，從 2017 開始使用 AWS ，從一個單一帳號開始，裏面有包含各個服務的開發環境，整合環境，以及正式環境，開發人員如果沒有被限制，就有可能刪除掉別人的服務，甚至是線上的服務&lt;/p>
+&lt;h2 id="解決流程">解決流程&lt;/h2>
+&lt;ul>
+&lt;li>分散 workload 到不同的 workload account&lt;/li>
+&lt;li>導入 staging 的概念，讓每個 workload 擁有 4 個 workload account&lt;/li>
+&lt;/ul>
+&lt;h2 id="管理問題">管理問題&lt;/h2>
+&lt;p>在超多個 AWS account 下，管理變成很大的問題，他們利用 AWS IAM 讓開發人員可以用 SAML 登入各個 workload，並且管理使用類似暫時性 Token 的方式讓開發人員可以進入線上服務，而且所有動作是被監控的，另外，他們叫他們自己家建立的 Red Hat SSO 為 Bifrost (在漫威裡面的彩虹橋)，讓不同的 AWS account 可以互相連接&lt;/p>
+&lt;h2 id="compliance--auditing">Compliance &amp;amp; Auditing&lt;/h2>
+&lt;h3 id="compliance">Compliance&lt;/h3>
+&lt;p>Volkswagen Financial Services 利用單一個 AWS 帳號使用 AWS Config 中心化追蹤所有帳號的資源設定變化，並在去年導入 AWS Inspector ，讓他們可以知道某些設定的更改到底會對哪些資源造成影響&lt;/p>
+&lt;h3 id="auditing">Auditing&lt;/h3>
+&lt;p>Volkswagen Financial Services 運用單一個 AWS 帳號並運用 CloudTrail 來做 Auditing&lt;/p>
+&lt;h2 id="自動化">自動化&lt;/h2>
+&lt;p>為了管理大量的帳號，Volkswagen Financial Services 使用 AWS Organization 以及 CloudFormation 的服務，讓他們可以統一管理一些最基本的服務設定&lt;/p></content></item><item><title>AWS Architecture Spryker</title><link>/blog/aws-architecture-spryker/</link><pubDate>Sun, 11 Dec 2022 11:51:54 +0800</pubDate><guid>/blog/aws-architecture-spryker/</guid><description> 簡介 Spryker 專門做商業相關的軟體平台，無論 B2B, B2C, marketplace 等都有涉略
 PBC Packaged business capabilities，是某些包好的軟體提供商業使用，有點像是商業版 AWS marketplace
 APC 是 Spryker 設計出來讓 PBC 和客戶 (使用 PBC 的用戶) 開發出來的軟體可以有相同的介面可以溝通
 架構 分為兩條線，第一條綠色的是由 PBC 的軟體去通知或是呼叫客戶的軟體，另一條藍色的就反過來，是由客戶的軟體去呼叫 PBC ，概念都差不多，為了確保訊息的順序，大部分的 component 都是 FIFO
