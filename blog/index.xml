@@ -1,4 +1,24 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blog on Lambda</title><link>/blog/</link><description>Recent content in Blog on Lambda</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 24 Dec 2022 11:05:38 +0800</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>MLOps 2022</title><link>/blog/mlops-2022/</link><pubDate>Sat, 24 Dec 2022 11:05:38 +0800</pubDate><guid>/blog/mlops-2022/</guid><description>簡介 如同之前炒作起來的 DevOps 就是讓開發兼作維運，不管你近來是啥職位，你就給我通通都要會的伎倆，目標在讓公司降低成本，加速開發以及迭代的速度，其核心在於整體流程
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blog on Lambda</title><link>/blog/</link><description>Recent content in Blog on Lambda</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 15 Jan 2023 16:03:42 +0800</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>AWS MindTickle Multi Region Architecture</title><link>/blog/aws-mindtickle-multi-region-architecture/</link><pubDate>Sun, 15 Jan 2023 16:03:42 +0800</pubDate><guid>/blog/aws-mindtickle-multi-region-architecture/</guid><description>簡介 MindTickle 主要業務是處理銷售管理，以及知識管理，較為有名的客戶有 Splunk, Wipro, Johnson &amp;amp; Johnson 等等，主要服務在亞洲以及美國
+遇到的問題 如何在不同的地區都給予快取，並且在沒有快取的情況下，呼叫最近的 Region 伺服器，給予計算
+架構 使用者向 CloudFront (CDN) 發送請求 如果有快取，就回應使用者 如果沒有，呼叫 Lambda Edge Lambda Edge 會呼叫真實的服務，利用 Route 53 Firewall 限制 Lambda Edge 呼叫的 Domain 來達到呼叫指定的 Regions 解析到最後的 IP 後，向該 EKS 的 ALB 發送請求 結論 利用 Doamin 查詢限制來做到同一份程式可以部署在不同快取地點，並用 infra 來控制該快取地點可以問到的服務，再再顯示區分程式以及架構的好處，在程式好寫好開發的前提下，此架構發揮了滿好的效益</description><content>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+&lt;iframe src="https://www.youtube.com/embed/PgeQufaQy7I" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;/div>
+&lt;h2 id="簡介">簡介&lt;/h2>
+&lt;p>MindTickle 主要業務是處理銷售管理，以及知識管理，較為有名的客戶有 Splunk, Wipro, Johnson &amp;amp; Johnson 等等，主要服務在亞洲以及美國&lt;/p>
+&lt;h2 id="遇到的問題">遇到的問題&lt;/h2>
+&lt;p>如何在不同的地區都給予快取，並且在沒有快取的情況下，呼叫最近的 Region 伺服器，給予計算&lt;/p>
+&lt;h2 id="架構">架構&lt;/h2>
+&lt;p>&lt;img src="/img/2023/01/MindTickleMultiRegionArchitecture.png" alt="">&lt;/p>
+&lt;ul>
+&lt;li>使用者向 CloudFront (CDN) 發送請求&lt;/li>
+&lt;li>如果有快取，就回應使用者&lt;/li>
+&lt;li>如果沒有，呼叫 Lambda Edge&lt;/li>
+&lt;li>Lambda Edge 會呼叫真實的服務，利用 Route 53 Firewall 限制 Lambda Edge 呼叫的 Domain 來達到呼叫指定的 Regions&lt;/li>
+&lt;li>解析到最後的 IP 後，向該 EKS 的 ALB 發送請求&lt;/li>
+&lt;/ul>
+&lt;h2 id="結論">結論&lt;/h2>
+&lt;p>利用 Doamin 查詢限制來做到同一份程式可以部署在不同快取地點，並用 infra 來控制該快取地點可以問到的服務，再再顯示區分程式以及架構的好處，在程式好寫好開發的前提下，此架構發揮了滿好的效益&lt;/p></content></item><item><title>MLOps 2022</title><link>/blog/mlops-2022/</link><pubDate>Sat, 24 Dec 2022 11:05:38 +0800</pubDate><guid>/blog/mlops-2022/</guid><description>簡介 如同之前炒作起來的 DevOps 就是讓開發兼作維運，不管你近來是啥職位，你就給我通通都要會的伎倆，目標在讓公司降低成本，加速開發以及迭代的速度，其核心在於整體流程
 開發 -&amp;gt; 自動化測試 -&amp;gt; 自動化整合 -&amp;gt; 自動化部署 -&amp;gt; 回到開發 經由以上迭代的過程，將工作切小，快速把功能放到使用使用者面前，快速檢討，重新下一次的開發，也利用大量自動化的工具，減少開發人員與維運人員的溝通 (其作法就是強迫大家都要會)
 同理，MLOps 也是一樣，目標就是要讓功能 (AKA: ML 模型) 能夠自動化快速的發佈到使用者面前，好加速開發以及改進，與 DevOps 較為不同的是，在做 ML 模型時，還會牽扯到資料，所以他的 Pipeline 會切分的更多一點
 Data -&amp;gt; Model -&amp;gt; Deployment Model -&amp;gt; Data 再訓練模型時，資料來源可能又來自於使用者，其迭代循環就可能變得更複雜 (要把資料收回來)

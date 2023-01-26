@@ -1,4 +1,24 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>architecture on Lambda</title><link>/tags/architecture/</link><description>Recent content in architecture on Lambda</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 11 Dec 2022 11:51:54 +0800</lastBuildDate><atom:link href="/tags/architecture/index.xml" rel="self" type="application/rss+xml"/><item><title>AWS Architecture Spryker</title><link>/blog/aws-architecture-spryker/</link><pubDate>Sun, 11 Dec 2022 11:51:54 +0800</pubDate><guid>/blog/aws-architecture-spryker/</guid><description> 簡介 Spryker 專門做商業相關的軟體平台，無論 B2B, B2C, marketplace 等都有涉略
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>architecture on Lambda</title><link>/tags/architecture/</link><description>Recent content in architecture on Lambda</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 15 Jan 2023 16:03:42 +0800</lastBuildDate><atom:link href="/tags/architecture/index.xml" rel="self" type="application/rss+xml"/><item><title>AWS MindTickle Multi Region Architecture</title><link>/blog/aws-mindtickle-multi-region-architecture/</link><pubDate>Sun, 15 Jan 2023 16:03:42 +0800</pubDate><guid>/blog/aws-mindtickle-multi-region-architecture/</guid><description>簡介 MindTickle 主要業務是處理銷售管理，以及知識管理，較為有名的客戶有 Splunk, Wipro, Johnson &amp;amp; Johnson 等等，主要服務在亞洲以及美國
+遇到的問題 如何在不同的地區都給予快取，並且在沒有快取的情況下，呼叫最近的 Region 伺服器，給予計算
+架構 使用者向 CloudFront (CDN) 發送請求 如果有快取，就回應使用者 如果沒有，呼叫 Lambda Edge Lambda Edge 會呼叫真實的服務，利用 Route 53 Firewall 限制 Lambda Edge 呼叫的 Domain 來達到呼叫指定的 Regions 解析到最後的 IP 後，向該 EKS 的 ALB 發送請求 結論 利用 Doamin 查詢限制來做到同一份程式可以部署在不同快取地點，並用 infra 來控制該快取地點可以問到的服務，再再顯示區分程式以及架構的好處，在程式好寫好開發的前提下，此架構發揮了滿好的效益</description><content>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+&lt;iframe src="https://www.youtube.com/embed/PgeQufaQy7I" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;/div>
+&lt;h2 id="簡介">簡介&lt;/h2>
+&lt;p>MindTickle 主要業務是處理銷售管理，以及知識管理，較為有名的客戶有 Splunk, Wipro, Johnson &amp;amp; Johnson 等等，主要服務在亞洲以及美國&lt;/p>
+&lt;h2 id="遇到的問題">遇到的問題&lt;/h2>
+&lt;p>如何在不同的地區都給予快取，並且在沒有快取的情況下，呼叫最近的 Region 伺服器，給予計算&lt;/p>
+&lt;h2 id="架構">架構&lt;/h2>
+&lt;p>&lt;img src="/img/2023/01/MindTickleMultiRegionArchitecture.png" alt="">&lt;/p>
+&lt;ul>
+&lt;li>使用者向 CloudFront (CDN) 發送請求&lt;/li>
+&lt;li>如果有快取，就回應使用者&lt;/li>
+&lt;li>如果沒有，呼叫 Lambda Edge&lt;/li>
+&lt;li>Lambda Edge 會呼叫真實的服務，利用 Route 53 Firewall 限制 Lambda Edge 呼叫的 Domain 來達到呼叫指定的 Regions&lt;/li>
+&lt;li>解析到最後的 IP 後，向該 EKS 的 ALB 發送請求&lt;/li>
+&lt;/ul>
+&lt;h2 id="結論">結論&lt;/h2>
+&lt;p>利用 Doamin 查詢限制來做到同一份程式可以部署在不同快取地點，並用 infra 來控制該快取地點可以問到的服務，再再顯示區分程式以及架構的好處，在程式好寫好開發的前提下，此架構發揮了滿好的效益&lt;/p></content></item><item><title>AWS Architecture Spryker</title><link>/blog/aws-architecture-spryker/</link><pubDate>Sun, 11 Dec 2022 11:51:54 +0800</pubDate><guid>/blog/aws-architecture-spryker/</guid><description> 簡介 Spryker 專門做商業相關的軟體平台，無論 B2B, B2C, marketplace 等都有涉略
 PBC Packaged business capabilities，是某些包好的軟體提供商業使用，有點像是商業版 AWS marketplace
 APC 是 Spryker 設計出來讓 PBC 和客戶 (使用 PBC 的用戶) 開發出來的軟體可以有相同的介面可以溝通
 架構 分為兩條線，第一條綠色的是由 PBC 的軟體去通知或是呼叫客戶的軟體，另一條藍色的就反過來，是由客戶的軟體去呼叫 PBC ，概念都差不多，為了確保訊息的順序，大部分的 component 都是 FIFO
